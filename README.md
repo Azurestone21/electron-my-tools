@@ -1,4 +1,4 @@
-# mytoolbox
+# electron-my-tools
 
 An Electron application with Vue and TypeScript
 
