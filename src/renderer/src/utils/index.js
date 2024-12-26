@@ -58,12 +58,33 @@ export function stringify(obj, sep, eq) {
 }
 
 export function parse(str) {
-  var obj = new Object()
-  strs = str.split('&')
-  for (var i = 0; i < strs.length; i++) {
-    let index = strs[i].indexOf('=')
-    obj[strs[i].slice(0, index)] = unescape(strs[i].slice(index + 1))
+  let obj = new Object()
+  let strArr = str.split('&')
+  for (var i = 0; i < strArr.length; i++) {
+    let index = strArr[i].indexOf('=')
+    obj[strArr[i].slice(0, index)] = unescape(strArr[i].slice(index + 1))
   }
   return obj
 }
 
+// 音乐歌词时间
+// str: 00:10:00, return 10s
+export function parseTime(str) {
+  let [min, s, ms] = str.split(':')
+  return min * 60 + s * 1 + ~~(ms / 0.6) / 100
+}
+
+/**
+ * 秒转分钟
+ * @param {*} seconds
+ * @returns '00:00'
+ */
+export function secondsTimeFormat(seconds) {
+  if (seconds) {
+    let minutes =
+      Math.floor(seconds / 60) > 10 ? Math.floor(seconds / 60) : `0${Math.floor(seconds / 60)}`
+    let remainingSeconds = seconds % 60 > 10 ? Math.floor(seconds % 60) : `0${Math.floor(seconds % 60)}`
+    return  `${minutes}:${remainingSeconds}`
+  }
+  return '00:00'
+}
