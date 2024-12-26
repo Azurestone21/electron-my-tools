@@ -33,6 +33,12 @@ $ npm run build:mac
 $ npm run build:linux
 ```
 
+## Effect Picture
+
+![home](./src/renderer/src/assets/effectPicture/home.png)
+
+![music](./src/renderer/src/assets/effectPicture/music.png)
+
 ## Problem
 
 **SyntaxError: The requested module '/node_modules/.vite/deps/swiper.js?v=74bd4e06' does not provide an export named 'Pagination'**
