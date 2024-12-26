@@ -1,31 +1,30 @@
 <!-- 框架 -->
 <script setup lang="ts">
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import menuList from '@renderer/router/menu'
-import { useRouter } from 'vue-router'
-const router = useRouter()
 import { useIndexStore } from '@renderer/store'
 const indexStore = useIndexStore()
 
-
 const fullScreen = () => {
-  myHandle.handleScreen('full')
+  window.myHandle.handleScreen('full')
 }
 const minScreen = () => {
-  myHandle.handleScreen('min')
+  window.myHandle.handleScreen('min')
 }
 const closeScreen = () => {
-  myHandle.handleScreen('close')
+  window.myHandle.handleScreen('close')
 }
 const clickMenuItem = () => {
   indexStore.clearPage()
 }
 
-const isCollapse = ref(true)
-const showPageHeader = ref(false)
-const breadcrumb = ref([])
+const isCollapse = ref<boolean>(true)
+onMounted(() => {
+  indexStore.clearPage()
+})
 
-onMounted(() => {})
+const showPageHeader = ref<boolean>(false)
+const breadcrumb = ref<Array<{ path: string; name: string }>>([])
 watchEffect(() => {
   if (indexStore.pageStack.length > 1) {
     showPageHeader.value = true
@@ -35,16 +34,12 @@ watchEffect(() => {
     breadcrumb.value = []
   }
 })
-
 </script>
 
 <template>
   <el-container class="layout-container">
     <el-container class="content">
       <el-aside class="aside" :class="{ asideCollapse: isCollapse }">
-        <div class="avatar">
-          <el-avatar :icon="UserFilled" />
-        </div>
         <el-scrollbar class="scrollbar">
           <el-menu
             :default-active="$route.path"
@@ -70,7 +65,7 @@ watchEffect(() => {
       </el-aside>
       <el-container class="container">
         <el-scrollbar class="scrollbar">
-          <el-main class="main">
+          <div class="main">
             <div class="handleWindow drag">
               <div class="minWindow no_drag">
                 <el-icon @click="minScreen"><Minus /></el-icon>
@@ -92,7 +87,7 @@ watchEffect(() => {
               </el-breadcrumb>
             </template>
             <router-view></router-view>
-          </el-main>
+          </div>
         </el-scrollbar>
       </el-container>
     </el-container>
@@ -116,8 +111,9 @@ watchEffect(() => {
 
   .aside {
     position: relative;
-    background-color: #eaf1fc;
+    background-color: var(--theme-color);
     width: 180px;
+    padding-top: 20px;
 
     .scrollbar {
       height: auto;
@@ -146,6 +142,7 @@ watchEffect(() => {
     .main {
       position: relative;
       padding-top: 40px;
+      height: 100%;
 
       .handleWindow {
         display: flex;
@@ -154,7 +151,7 @@ watchEffect(() => {
         top: 0;
         right: 0;
         padding: 10px 20px;
-        width: calc(100% - 180px);
+        width: calc(100% - 64px);
         background-color: #fff;
 
         div {
@@ -162,6 +159,15 @@ watchEffect(() => {
           display: flex;
           justify-content: flex-end;
         }
+      }
+    }
+  }
+
+  /deep/ .el-scrollbar {
+    .el-scrollbar__wrap {
+      overflow: unset !important;
+      .el-scrollbar__view {
+        height: 100%;
       }
     }
   }
