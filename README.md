@@ -33,7 +33,7 @@ $ npm run build:mac
 $ npm run build:linux
 ```
 
-## 遇到的问题
+## Problem
 
 **SyntaxError: The requested module '/node_modules/.vite/deps/swiper.js?v=74bd4e06' does not provide an export named 'Pagination'**
 
@@ -43,7 +43,7 @@ TODO
 
 传入的值类型不对
 
-## TS报错
+## TS Error
 
 **xxx.value is possibly null**
 
