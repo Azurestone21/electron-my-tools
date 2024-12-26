@@ -1,38 +1,45 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
+import { app, shell, BrowserWindow, ipcMain, Tray, Menu } from 'electron'
+import path from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import getLocalMusic from './modules/localMusic'
+import { handleMusicLyric } from './modules/musicLyric'
 
 const login_width = 900
-const login_height = 670
+const login_height = 650
 const normal_width = 1000
-const normal_height = 750
+const normal_height = 700
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: login_width,
-    height: login_height,
+    width: normal_width,
+    height: normal_height,
     show: false,
     autoHideMenuBar: true, // 隐藏工具栏
     titleBarStyle: 'hidden', // 隐藏头部
     resizable: true, // 是否允许缩放
-    maximizable: false,  // 是否允许最大化
+    maximizable: false, // 是否允许最大化
     // frame: true, //
     // transparent: true, // 背景透明
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      preload: path.join(__dirname, '../preload/index.js'),
+      sandbox: false,
+      webSecurity: false, // 关闭 Electron 的 Web 安全策略，允许加载本地资源。
+      // nodeIntegration: true, // 渲染进程能够使用node模块的能力
     }
   })
+
+  // 设置最小窗口尺寸
+  mainWindow.setMinimumSize(1000, 700)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
 
   // 监听登录，登录后允许改变窗口大小，设置可以缩放、最大化
-  ipcMain.on('login', (event, isLogin) => {
+  ipcMain.on('login', (_event, isLogin) => {
     if (isLogin) {
       mainWindow.setSize(normal_width, normal_height)
       mainWindow.setResizable(true)
@@ -43,18 +50,28 @@ function createWindow(): void {
       mainWindow.setMaximizable(false)
     }
   })
-  ipcMain.on('handleScreen', (event, type) => {
+  ipcMain.on('handleScreen', (_event, type) => {
     switch (type) {
       case 'full':
-        mainWindow.maximize();
-        break;
+        mainWindow.maximize()
+        break
       case 'min':
-        mainWindow.minimize();
-        break;
+        mainWindow.minimize()
+        break
       case 'close':
-        mainWindow.close();
-        break;
+        mainWindow.close()
+        break
     }
+  })
+  // 获取本地音乐
+  ipcMain.handle('getMusicList', async (_event, basePath) => {
+    const data = getLocalMusic(basePath)
+    return data
+  })
+  // 获取本地音乐歌词
+  ipcMain.handle('getLyric', async (_event, filePath) => {
+    const data = handleMusicLyric(filePath)
+    return data
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -67,17 +84,44 @@ function createWindow(): void {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
   }
 
   // 修改 CSP 以允许从特定源加载资源（请求数据）
-  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': ["default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://8.138.20.29:3000"],
-      },
-    });
+  // mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+  //   callback({
+  //     responseHeaders: {
+  //       ...details.responseHeaders,
+  //       'Content-Security-Policy': ["default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://8.138.20.29:3000"],
+  //     },
+  //   });
+  // })
+  // 关闭窗口时触发
+  mainWindow.on('close', (event) => {
+    mainWindow.hide()
+    mainWindow.setSkipTaskbar(true)
+    event.preventDefault()
+  })
+
+  // 最小化托盘
+  let iconPath = path.join(__dirname, '../../resources/icon.ico')
+  let tray = new Tray(iconPath)
+  // 右键菜单
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '退出',
+      click: () => {
+        mainWindow.destroy()
+        app.quit()
+      }
+    }
+  ])
+  tray.setToolTip('toolBox')
+  tray.setContextMenu(contextMenu)
+  tray.on('click', () => {
+    // 点击托盘图标显示窗口
+    mainWindow.show()
+    mainWindow.setSkipTaskbar(false)
   })
 }
 
