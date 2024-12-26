@@ -13,7 +13,7 @@ const defaultFromData = {
   password: '',
   repassword: ''
 }
-interface Ruleform {
+interface RuleformInterface {
   username: string
   password: string
   repassword?: string
@@ -21,7 +21,7 @@ interface Ruleform {
 
 const registerFormRef = ref()
 const loginFormRef = ref()
-const formData = ref<Ruleform>(_.cloneDeep(defaultFromData))
+const formData = ref<RuleformInterface>(_.cloneDeep(defaultFromData))
 // 表单校验
 const rules = {
   username: [
@@ -44,7 +44,7 @@ const rules = {
       trigger: 'blur'
     },
     {
-      validator: (rule, value, callback) => {
+      validator: (_rule, value, callback) => {
         if (value !== formData.value.password) {
           callback(new Error('两次输入密码不一致'))
         } else {
@@ -63,20 +63,18 @@ const register = async () => {
   await registerFormRef.value.validate()
   isRegister.value = false
   ElMessage.success('注册成功')
-  console.log('formData', formData.value)
 }
 // 登录
 const login = async () => {
   await loginFormRef.value.validate()
-  console.log('formData', formData.value)
   // loginRequest(formData.value)
-  myHandle.login(true)
+  window.myHandle.login(true)
   router.push('/layout')
 }
 </script>
 
 <template>
-  <div class="container drag">
+  <div class="page drag">
     <el-row>
       <el-col :span="12">
         <div class="left"></div>
@@ -97,14 +95,12 @@ const login = async () => {
           <el-form-item prop="username">
             <el-input
               v-model="formData.username"
-              :prefix-icon="User"
               placeholder="请输入用户名"
             ></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input
               v-model="formData.password"
-              :prefix-icon="Lock"
               type="password"
               placeholder="请输入密码"
             ></el-input>
@@ -112,7 +108,6 @@ const login = async () => {
           <el-form-item prop="repassword">
             <el-input
               v-model="formData.repassword"
-              :prefix-icon="Lock"
               type="password"
               placeholder="请输入再次密码"
             ></el-input>
@@ -141,14 +136,12 @@ const login = async () => {
           <el-form-item prop="username">
             <el-input
               v-model="formData.username"
-              :prefix-icon="User"
               placeholder="请输入用户名"
             ></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input
               v-model="formData.password"
-              :prefix-icon="Lock"
               type="password"
               placeholder="请输入密码"
             ></el-input>
