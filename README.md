@@ -45,7 +45,7 @@ TODO
 
 ## TS报错
 
-**ts报错：xxx.value is possibly null**
+**xxx.value is possibly null**
 
 ```json
 "compilerOptions": {
@@ -53,11 +53,11 @@ TODO
 }
 ```
 
-**ts报错：类型“HTMLElement”上不存在属性“value”**
+**类型“HTMLElement”上不存在属性“value”**
 
 需要将document.getElementById返回的HTMLElement转换为HTMLInputElement
 
-**ts报错：error TS2304: Cannot find name 'myHandle'.**
+**error TS2304: Cannot find name 'myHandle'.**
 
 类型“Window & typeof globalThis”上不存在属性“myHandle”
 
@@ -94,9 +94,3 @@ declare module '@vue/runtime-core' {
 **error TS2339: Property '$route' does not exist on type 'CreateComponentPublicInstanceWithMixins<ToResolvedProps<{}, {}>, { menuList: typeof menuList; fullScreen: typeof fullScreen; minScreen: typeof minScreen; closeScreen: typeof closeScreen; clickMenuItem: typeof clickMenuItem; isCollapse: typeof isCollapse; showPageHeader: typeof showPageHeader; breadcrumb: typeof brea...'.**
 
 同上
-
-### 打包后
-
-**音频播放不了**
-
-**节日格式不正常，显示[ "", " 春节", "" ]**
