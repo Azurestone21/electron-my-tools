@@ -19,6 +19,10 @@ if (process.contextIsolated) {
         ipcRenderer.send('handleScreen', type)
       }
     })
+    contextBridge.exposeInMainWorld('musicApi', {
+      getMusicData: (basePath:string) => ipcRenderer.invoke('getMusicList', basePath),
+      getLyric: (filePath:string) => ipcRenderer.invoke('getLyric', filePath)
+    })
   } catch (error) {
     console.error(error)
   }

@@ -5,8 +5,13 @@ const menuList = [
     icon: 'HomeFilled'
   },
   {
-    path: '/article',
-    pathName: '文章',
+    path: '/music',
+    pathName: '音乐',
+    icon: 'Headset'
+  },
+  {
+    path: '/tool/index',
+    pathName: '工具',
     icon: 'Promotion'
   }
 ]

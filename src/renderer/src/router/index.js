@@ -26,9 +26,9 @@ const router = createRouter({
           component: () => import('@renderer/pages/home.vue')
         },
         {
-          path: '/article',
-          name: '文章',
-          component: () => import('@renderer/pages/article.vue')
+          path: '/tool/index',
+          name: '工具',
+          component: () => import('@renderer/pages/toolPages/ToolMgmt.vue')
         },
         {
           path: '/tool/color',
@@ -49,6 +49,14 @@ const router = createRouter({
           path: '/tool/photoCompression',
           name: '图片压缩',
           component: () => import('@renderer/pages/toolPages/PhotoCompression.vue')
+        },
+        {
+          path: '/music',
+          name: '音乐',
+          component: () => import('@renderer/pages/musicPages/musicPlay/MusicPlay.vue'),
+          meta: {
+            keepAlive: true
+          }
         }
       ]
     }
@@ -59,14 +67,14 @@ router.beforeEach((to, from, next) => {
   // console.log("router.beforeEach", to.path)
   const indexStore = useIndexStore() // 不能写在外面，会报错
   // 记录进入的路由
-  let index = indexStore.pageStack.findIndex(x => x.path == to.path)
+  let index = indexStore.pageStack.findIndex((x) => x.path == to.path)
   if (index != -1) {
-    indexStore.setPage = indexStore.pageStack.splice(index+1);
+    indexStore.setPage = indexStore.pageStack.splice(index + 1)
   } else {
     indexStore.pushPage({
       path: to.path,
       name: to.name
-    });
+    })
   }
   next()
 })
