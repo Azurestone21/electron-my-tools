@@ -1,136 +1,81 @@
 <!-- 首页 -->
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-const router = useRouter()
-import request from '@renderer/utils/request'
-import moment from 'moment'
-import calendar from '@renderer/utils/calendar-converter.js'
-
-// 是否节假日
-function isFestival(slotData) {
-  let solarDayArr = slotData.day.split('-')
-  let lunarDay = calendar.solar2lunar(solarDayArr[0], solarDayArr[1], solarDayArr[2])
-
-  // 公历节日\农历节日\农历节气
-  let festAndTerm = []
-  festAndTerm.push(lunarDay.festival == null ? '' : ' ' + lunarDay.festival)
-  festAndTerm.push(lunarDay.lunarFestival == null ? '' : '' + lunarDay.lunarFestival)
-  // festAndTerm.push(lunarDay.Term == null ? '' : '' + lunarDay.Term)
-  festAndTerm = festAndTerm.join('')
-
-  return festAndTerm != ''
-}
-// 公历转农历
-function solarToLunar(slotData) {
-  let solarDayArr = slotData.day.split('-')
-  let lunarDay = calendar.solar2lunar(solarDayArr[0], solarDayArr[1], solarDayArr[2])
-
-  // 农历日期
-  let lunarMD = ''
-  if (lunarDay.IDayCn == '初一') {
-    lunarMD = lunarDay.IMonthCn
-  } else {
-    lunarMD = lunarDay.IDayCn
-  }
-
-  // 公历节日\农历节日\农历节气
-  let festAndTerm = []
-  festAndTerm.push(lunarDay.festival == null ? '' : ' ' + lunarDay.festival)
-  festAndTerm.push(lunarDay.lunarFestival == null ? '' : ' ' + lunarDay.lunarFestival)
-  festAndTerm.push(lunarDay.Term == null ? '' : ' ' + lunarDay.Term)
-  festAndTerm = festAndTerm.join('')
-
-  return festAndTerm == '' ? lunarMD : festAndTerm
-}
-const value = ref(new Date())
-
-const articlesList = ref([])
-const getArticlesList = async () => {
-  try {
-    let { status, data } = await request({
-      url: 'article/list',
-      method: 'get',
-      data: {
-        pageNum: 1,
-        pageSize: 10
-      }
-    })
-    if (status == 1) {
-      data.list = data.list?.map((x) => {
-        return {
-          ...x,
-          create_time: moment(x.create_time).format('YYYY-MM-DD')
-        }
-      })
-      console.log('data.list', data.list)
-
-      articlesList.value = data.list
-    }
-  } catch (error) {
-    console.log('error:', error)
-  }
-}
-
-const jumpTo = (e) => {
-  router.push(e)
-}
-onMounted(() => {
-  // getArticlesList()
-})
+import { isFestival, solarToLunar } from '@renderer/utils/festival.js'
+import { useIndexStore } from '@renderer/store'
+const indexStore = useIndexStore()
+import { storeToRefs } from 'pinia'
+const { remark } = storeToRefs(indexStore)
 </script>
 
 <template>
-  <div class="container drag">
-    <div class="no_drag">
-      <div class="flex-between">
-        <div></div>
-        <div class="calendar">
-          <el-calendar>
-            <template #date-cell="{ data }">
-              <div>
-                <div class="solar">{{ data.day.split('-')[2] }}</div>
-                <div class="lunar" :class="{ festival: isFestival(data) }">
-                  {{ solarToLunar(data) }}
-                </div>
-              </div>
-            </template>
-          </el-calendar>
-        </div>
+  <div class="page home flex-between">
+    <div class="remark">
+      <div class="flex-row-between-center">
+        <div class="title">备注</div>
       </div>
-
-      <div class="title">实用工具</div>
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <el-card style="width: 100%" shadow="hover" @click="jumpTo('/tool/music')"
-            >音乐解码</el-card
-          >
-        </el-col>
-        <el-col :span="6">
-          <el-card style="width: 100%" shadow="hover" @click="jumpTo('/tool/color')"
-            >颜色转换</el-card
-          >
-        </el-col>
-        <el-col :span="6">
-          <el-card style="width: 100%" shadow="hover" @click="jumpTo('/tool/data')"
-            >数据转换</el-card
-          >
-        </el-col>
-        <el-col :span="6">
-          <el-card style="width: 100%" shadow="hover" @click="jumpTo('/tool/photoCompression')"
-            >图片压缩</el-card
-          >
-        </el-col>
-      </el-row>
+      <textarea type="text" placeholder="今日无备注~" class="remark_input" v-model="remark"></textarea>
+    </div>
+    <div class="calendar">
+      <el-calendar>
+        <template #date-cell="{ data }">
+          <div>
+            <div class="solar">{{ data.day.split('-')[2] }}</div>
+            <div class="lunar" :class="{ festival: isFestival(data) }">
+              {{ solarToLunar(data) }}
+            </div>
+          </div>
+        </template>
+      </el-calendar>
     </div>
   </div>
 </template>
 
 <style lang="less" scoped>
+.icon_delete {
+  margin-left: 5px;
+}
+.remark {
+  background-color: rgb(240, 249, 255);
+  flex: 1;
+  padding: 0 10px;
+  margin-bottom: 20px;
+
+  .remark_input {
+    width: 100%;
+    padding: 5px;
+    border-radius: 8px;
+    border-radius: 1px dashed #ccc;
+    margin-bottom: 10px;
+  }
+
+  /* 备注文本框 */
+  .remark_input {
+    height: 100%;
+    max-height: 90%;
+    color: #686a67;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    outline: none;
+    resize: none;
+    overflow: hidden;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  /* 获得焦点时 */
+  .remark_input:focus {
+    border: 1px dashed #ccc;
+  }
+  /* 占位符（输入文本前的文本显示） */
+  .remark_input::placeholder {
+    color: #a6a6a6;
+  }
+}
+
+// 日历
 .calendar {
   width: 460px;
   height: 400px;
-
   /deep/ .el-calendar {
     width: 100%;
     height: 100%;

@@ -7,7 +7,7 @@ import { ref } from 'vue'
  * 将RGB颜色转换为16进制格式
  * @param {string} rgb 格式的颜色值字符串，如 rgb(52, 180, 137)
  */
-function rgbToHex(rgb) {
+function rgbToHex(rgb:string):string {
   // 正则表达式匹配rgb格式
   const regex = /^\s*rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+)\)\s*$/
   const match = regex.exec(rgb)
@@ -33,7 +33,7 @@ function rgbToHex(rgb) {
  * @param {string} hexColor 16进制的颜色值，如 #FF0000 或 FF0000
  * @param {number} [a=1] 透明度，取值 0 - 1，默认 1，若 a 的值 大于 1 或者 小于 0 则将返回 RGB 格式的值
  */
-function hexToRgba(hexColor, a = 1) {
+function hexToRgba(hexColor:string, a:number = 1):string {
   var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
   if (hexColor && reg.test(hexColor)) {
     // 移除前缀#符号
@@ -53,10 +53,10 @@ function hexToRgba(hexColor, a = 1) {
   }
 }
 
-const rgbColor = ref('')
-const rgbChangeRes = ref('')
-const hexColor = ref('')
-const hexChangeRes = ref('')
+const rgbColor = ref<string>('')
+const rgbChangeRes = ref<string>('')
+const hexColor = ref<string>('')
+const hexChangeRes = ref<string>('')
 
 const rgbChange = () => {
   if (rgbColor.value) {
@@ -74,16 +74,16 @@ const hexChange = () => {
     ElMessage.warning('请输入HEX颜色')
   }
 }
-const rgbPicker = (value) => {
+const rgbPicker = (value:string):void => {
   rgbColor.value = value
 }
-const hexPicker = (value) => {
+const hexPicker = (value:string):void => {
   hexColor.value = value
 }
 </script>
 
 <template>
-  <div class="container">
+  <div class="page">
     <div class="flex item">
       <span>RGB->HEX：</span>
       <el-input v-model="rgbColor" style="width: 180px" placeholder="请输入RGB颜色" />

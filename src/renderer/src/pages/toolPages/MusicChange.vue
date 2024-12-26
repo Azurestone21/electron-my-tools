@@ -4,7 +4,7 @@
 </script>
 
 <template>
-<div class='container'></div>
+<div class='page'></div>
 </template>
 
 <style lang='less' scoped>
