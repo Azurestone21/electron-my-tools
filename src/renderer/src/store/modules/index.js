@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia'
 import { isObject } from '@renderer/utils/index'
 
 export const useIndexStore = defineStore('index', {
@@ -17,11 +16,7 @@ export const useIndexStore = defineStore('index', {
 
     remark: []
   }),
-  getters: {
-    doubleCount(state) {
-      return state.count * 2
-    }
-  },
+  getters: {},
 
   actions: {
     setStore(payload) {
