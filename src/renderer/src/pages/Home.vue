@@ -13,7 +13,12 @@ const { remark } = storeToRefs(indexStore)
       <div class="flex-row-between-center">
         <div class="title">备注</div>
       </div>
-      <textarea type="text" placeholder="今日无备注~" class="remark_input" v-model="remark"></textarea>
+      <textarea
+        type="text"
+        placeholder="今日无备注~"
+        class="remark_input"
+        v-model="remark"
+      ></textarea>
     </div>
     <div class="calendar">
       <el-calendar>
@@ -40,27 +45,23 @@ const { remark } = storeToRefs(indexStore)
   padding: 0 10px;
   margin-bottom: 20px;
 
-  .remark_input {
-    width: 100%;
-    padding: 5px;
-    border-radius: 8px;
-    border-radius: 1px dashed #ccc;
-    margin-bottom: 10px;
-  }
-
   /* 备注文本框 */
   .remark_input {
+    width: 100%;
     height: 100%;
     max-height: 90%;
-    color: #686a67;
-    border: none;
-    border-radius: 10px;
-    background: transparent;
+    padding: 10px;
+    border-radius: 8px;
     outline: none;
     resize: none;
-    overflow: hidden;
+    overflow: auto;
+    border: 1px dashed rgb(240, 249, 255);
+    background: transparent;
     font-size: 16px;
     font-weight: 600;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   /* 获得焦点时 */
   .remark_input:focus {
@@ -76,7 +77,7 @@ const { remark } = storeToRefs(indexStore)
 .calendar {
   width: 460px;
   height: 400px;
-  /deep/ .el-calendar {
+  :deep(.el-calendar) {
     width: 100%;
     height: 100%;
     font-size: 12px;

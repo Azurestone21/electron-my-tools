@@ -1,4 +1,4 @@
-<!-- 列表 -->
+<!-- 音乐列表 -->
 <script setup lang="ts">
 import { computed, getCurrentInstance } from 'vue'
 const { proxy } = getCurrentInstance();
@@ -6,6 +6,7 @@ import { useIndexStore } from '@renderer/store'
 import { storeToRefs } from 'pinia'
 const indexStore = useIndexStore()
 const { playingSong, musicList } = storeToRefs(indexStore)
+
 const activeNames = computed(() => {
   return playingSong.value.parentIndex + ''
 })
@@ -33,7 +34,7 @@ const changePlayingSong = (song) => {
           class="song_item flex-row-between-center"
           v-for="song in item.songs"
           :key="song.id"
-          @click="changePlayingSong(song)"
+          @dblclick="changePlayingSong(song)"
         >
           <div :class="{ song_name: true, active: playingSong.songname == song.songname }">
             {{ song.id + 1 }} {{ song.songname }} - {{ song.songer }}
@@ -52,22 +53,22 @@ const changePlayingSong = (song) => {
   &::-webkit-scrollbar {
     display: none;
   }
-  /deep/ .el-collapse {
+  :deep(.el-collapse)  {
     background-color: transparent !important;
     border: none !important;
   }
-  /deep/ .el-collapse-item__header {
+  :deep(.el-collapse-item__header) {
     background-color: transparent !important;
     border: none !important;
     color: #ccc;
     height: 30px;
     // padding: 0 10px;
   }
-  /deep/ .el-collapse-item__wrap {
+  :deep(.el-collapse-item__wrap) {
     background-color: transparent !important;
     border: none !important;
   }
-  /deep/ .el-collapse-item__content {
+  :deep(.el-collapse-item__content) {
     padding-bottom: 0;
   }
   .song_item {

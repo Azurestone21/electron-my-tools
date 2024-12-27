@@ -163,7 +163,7 @@ watchEffect(() => {
     }
   }
 
-  /deep/ .el-scrollbar {
+  :deep(.el-scrollbar) {
     .el-scrollbar__wrap {
       overflow: unset !important;
       .el-scrollbar__view {
