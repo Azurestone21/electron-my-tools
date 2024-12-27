@@ -1,10 +1,7 @@
 import calendar from '@renderer/utils/calendar-converter.js'
 
-interface slotDataInterface {
-  day: string
-}
 // 是否节假日
-export function isFestival(slotData: slotDataInterface): boolean {
+export function isFestival(slotData) {
   let solarDayArr = slotData.day.split('-')
   let lunarDay = calendar.solar2lunar(solarDayArr[0], solarDayArr[1], solarDayArr[2])
 
@@ -17,7 +14,7 @@ export function isFestival(slotData: slotDataInterface): boolean {
   return festAndTerm.join('') != ''
 }
 // 公历转农历
-export function solarToLunar(slotData: slotDataInterface): string | Array<string> {
+export function solarToLunar(slotData) {
   let solarDayArr = slotData.day.split('-')
   let lunarDay = calendar.solar2lunar(solarDayArr[0], solarDayArr[1], solarDayArr[2])
 
