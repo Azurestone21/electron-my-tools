@@ -106,6 +106,10 @@ const hexPicker = (value:string):void => {
 <style lang="less" scoped>
 .item {
   margin-top: 20px;
+  span {
+    display: flex;
+    align-items: center;
+  }
 }
 .btn {
   margin: 0 20px;
