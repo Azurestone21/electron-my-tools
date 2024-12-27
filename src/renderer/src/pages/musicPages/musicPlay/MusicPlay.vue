@@ -1,10 +1,7 @@
 <!-- 音乐播放页 -->
 <script setup lang="ts">
-import { onMounted, ref, getCurrentInstance, onBeforeUnmount } from 'vue'
 const { proxy } = getCurrentInstance()
-import { useIndexStore } from '@renderer/store'
 const indexStore = useIndexStore()
-import { storeToRefs } from 'pinia'
 const { playingSong, basePath } = storeToRefs(indexStore)
 
 import BottomBar from './components/BottomBar.vue'
@@ -82,7 +79,7 @@ onBeforeUnmount(() => {
   img {
     width: 100%;
     height: 100%;
-    filter: blur(8px);
+    filter: blur(5px);
   }
   &::before {
     content: '';
@@ -91,7 +88,7 @@ onBeforeUnmount(() => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* 设置蒙版颜色和透明度 */
+    background-color: rgba(0, 0, 0, 0.6); /* 设置蒙版颜色和透明度 */
     z-index: 1;
   }
 }

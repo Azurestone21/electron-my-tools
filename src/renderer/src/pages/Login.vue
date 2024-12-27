@@ -1,7 +1,5 @@
 <!-- 登录页 -->
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 const router = useRouter()
 import _ from 'lodash'
 import { ElMessage } from 'element-plus';

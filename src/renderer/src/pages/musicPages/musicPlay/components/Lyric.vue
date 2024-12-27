@@ -1,9 +1,6 @@
 <!-- 歌词 -->
 <script setup lang="ts">
-import { computed, onMounted, ref, watchEffect } from 'vue'
-import { useIndexStore } from '@renderer/store'
 const indexStore = useIndexStore()
-import { storeToRefs } from 'pinia'
 const { playingSong, currentTime } = storeToRefs(indexStore)
 import { parseTime } from '@renderer/utils/index'
 // 当前歌词

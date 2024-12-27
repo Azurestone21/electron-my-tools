@@ -1,10 +1,7 @@
 <!-- 底部 -->
 <script setup lang="ts">
-import { computed, onMounted, ref, getCurrentInstance } from 'vue'
 const { proxy } = getCurrentInstance()
-import { useIndexStore } from '@renderer/store'
 const indexStore = useIndexStore()
-import { storeToRefs } from 'pinia'
 const { playingSong, isVideoPlay, currentTime, musicList, playPattern } = storeToRefs(indexStore)
 const emits = defineEmits(['onPropsExpandList'])
 import { secondsTimeFormat } from '@renderer/utils'

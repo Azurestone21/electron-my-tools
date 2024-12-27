@@ -1,9 +1,7 @@
 <!-- 首页 -->
 <script setup lang="ts">
 import { isFestival, solarToLunar } from '@renderer/utils/festival.js'
-import { useIndexStore } from '@renderer/store'
 const indexStore = useIndexStore()
-import { storeToRefs } from 'pinia'
 const { remark } = storeToRefs(indexStore)
 </script>
 

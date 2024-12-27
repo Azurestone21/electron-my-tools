@@ -2,6 +2,7 @@ import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import vue from '@vitejs/plugin-vue'
 import babel from "vite-plugin-babel";
+import ViteAutoImport from 'unplugin-auto-import/vite'
 
 export default defineConfig({
   main: {
@@ -19,6 +20,11 @@ export default defineConfig({
     plugins: [
       vue(),
       babel(),
+      ViteAutoImport({
+        imports: ['vue', 'vue-router', 'pinia'],
+        dirs: ['./src/store'],
+        dts: "./src/auto-imports.d.ts",
+      }), // 自动导入
     ],
     css: {
       preprocessorOptions: {

@@ -1,8 +1,6 @@
 <!-- 框架 -->
 <script setup lang="ts">
-import { onMounted, ref, watchEffect } from 'vue'
 import menuList from '@renderer/router/menu'
-import { useIndexStore } from '@renderer/store'
 const indexStore = useIndexStore()
 
 const fullScreen = () => {

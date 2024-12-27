@@ -1,10 +1,7 @@
 <!-- 音乐设置 -->
 <script setup lang="ts">
-import { reactive, getCurrentInstance } from 'vue'
 const { proxy } = getCurrentInstance()
-import { useIndexStore } from '@renderer/store'
 const indexStore = useIndexStore()
-import { storeToRefs } from 'pinia'
 const { basePath } = storeToRefs(indexStore)
 const formLabelWidth = '60px'
 

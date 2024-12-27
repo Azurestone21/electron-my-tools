@@ -1,9 +1,6 @@
 <!-- 音乐列表 -->
 <script setup lang="ts">
-import { computed, getCurrentInstance } from 'vue'
 const { proxy } = getCurrentInstance();
-import { useIndexStore } from '@renderer/store'
-import { storeToRefs } from 'pinia'
 const indexStore = useIndexStore()
 const { playingSong, musicList } = storeToRefs(indexStore)
 
