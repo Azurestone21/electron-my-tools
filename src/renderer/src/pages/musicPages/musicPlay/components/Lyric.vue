@@ -19,8 +19,8 @@ const activityLyric = computed(() => {
 })
 // 获取歌词
 const getLyric = async () => {
-  if (indexStore.playingSong.lyric) {
-    lyricArr.value = (await window.musicApi.getLyric(indexStore.playingSong.lyric)) || []
+  if (playingSong.value.lyric) {
+    lyricArr.value = (await window.musicApi.getLyric(playingSong.value.lyric)) || []
   }
   if (lyricArr.value.length == 0) {
     lyricArr.value.push({

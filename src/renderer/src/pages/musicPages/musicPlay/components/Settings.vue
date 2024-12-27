@@ -14,13 +14,13 @@ defineProps({
 const emits = defineEmits(['onCancel'])
 
 const form = reactive({
-  basePath: basePath.value,
+  basePath: basePath.value
 })
 
 function cancelClick() {
   emits('onCancel')
 }
-function submit(type:string) {
+function submit(type: string) {
   indexStore.setStore({
     [type]: form[type]
   })
@@ -44,12 +44,7 @@ function submit(type:string) {
         </el-form>
       </div>
     </template>
-    <template #footer>
-      <div style="flex: auto">
-        <!-- <el-button @click="cancelClick">取消</el-button>
-        <el-button type="primary" @click="confirmClick">确定</el-button> -->
-      </div>
-    </template>
+    <template #footer> </template>
   </el-drawer>
 </template>
 
