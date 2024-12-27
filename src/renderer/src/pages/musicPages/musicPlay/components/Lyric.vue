@@ -1,10 +1,11 @@
 <!-- 歌词 -->
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useIndexStore } from '@renderer/store'
 const indexStore = useIndexStore()
+import { storeToRefs } from 'pinia'
+const { playingSong, currentTime } = storeToRefs(indexStore)
 import { parseTime } from '@renderer/utils/index'
-
 // 当前歌词
 const lyricArr = ref([])
 const activityLyric = computed(() => {
@@ -22,7 +23,7 @@ const activityLyric = computed(() => {
 // 获取歌词
 const getLyric = async () => {
   if (indexStore.playingSong.lyric) {
-    lyricArr.value = (await musicApi.getLyric(indexStore.playingSong.lyric)) || []
+    lyricArr.value = (await window.musicApi.getLyric(indexStore.playingSong.lyric)) || []
   }
   if (lyricArr.value.length == 0) {
     lyricArr.value.push({
@@ -31,48 +32,70 @@ const getLyric = async () => {
     })
   }
 }
+
+// 歌词滚动
+let lyricEl = ref()
+let ulEl = ref()
+const setLyricOffset = () => {
+  let maxOffset = 0
+  let liHeight = 30
+  let clientHeighHalf = 240
+  if (lyricEl.value || ulEl.value) {
+    clientHeighHalf = lyricEl.value.clientHeight / 2
+    maxOffset = ulEl.value.clientHeight - lyricEl.value.clientHeight
+  }
+  let index: number = activityLyric.value
+  let offset =
+    liHeight * index + liHeight / 2 - clientHeighHalf
+  if (offset < 0) offset = 0
+  if (offset > maxOffset) offset = maxOffset
+  if (ulEl.value) {
+    ulEl.value.style.transform = `translateY(-${offset}px)`
+  }
+}
+const myScroll = (e) => {
+  // console.log('滑动', e.target.scrollTop)
+}
+
 onMounted(() => {
   getLyric()
 })
 watchEffect(() => {
-  if (indexStore.playingSong.lyric) {
+  if (playingSong.value.lyric) {
     getLyric()
   }
+  if (currentTime.value) {
+    setLyricOffset()
+  }
 })
-
-const myScroll = (e) => {
-  // 保留scrollTop
-  // console.log('正在滑动', e.target.scrollTop)
-  // 显示timer
-  // this.requireShowTimerAndHr = true
-}
 </script>
 
 <template>
-  <div class="no-copy">
-    <div v-if="lyricArr" class="lyricArr" @scroll="myScroll($event)">
-      <ul>
-        <li
-          v-for="(row, index) in lyricArr"
-          :key="index"
-          :class="{ lyric: true, active: index == activityLyric }"
-        >
-          {{ row.lyric }}
-        </li>
-      </ul>
-    </div>
+  <div ref="lyricEl" v-if="lyricArr" class="lyric_container no-copy" @scroll="myScroll($event)">
+    <ul ref="ulEl">
+      <li
+        v-for="(row, index) in lyricArr"
+        :key="index"
+        :class="{ lyric: true, active: index == activityLyric }"
+      >
+        {{ row.lyric }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <style lang="less" scoped>
-.lyricArr {
+.lyric_container {
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
   text-align: center;
   line-height: 30px;
 
   &::-webkit-scrollbar {
     display: none;
+  }
+  ul {
+    padding: 0;
   }
   .lyric {
     font-size: 12px;
@@ -81,9 +104,6 @@ const myScroll = (e) => {
   .active {
     font-size: 16px;
     color: var(--theme-color-music);
-  }
-  ul {
-    padding: 0;
   }
 }
 </style>

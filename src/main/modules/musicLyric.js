@@ -12,7 +12,6 @@ import { readFileSync } from 'fs'
  * @returns
  */
 const handleMusicLyric = function (path) {
-  // 结构
   let arr = [
     // {
     //   time: '00:00.00',
@@ -27,7 +26,7 @@ const handleMusicLyric = function (path) {
     rows.forEach((row, index) => {
       let lyric = row
       const regex = /\[([0123]\d|[0-9]):([0-9]\d)(:|.)([0-9]\d)\]/g
-      const timeArr = row.match(regex)  // 匹配所有[00:02.33]时间格式的字符串
+      const timeArr = row.match(regex) // 匹配所有[00:02.33]时间格式的字符串
       if (timeArr && timeArr.length) {
         timeArr.forEach((t) => {
           lyric = lyric.replace(t, '') // 每一行歌词去掉所有[00:02.33]时间格式的字符串
@@ -37,7 +36,7 @@ const handleMusicLyric = function (path) {
           lyric
         }
       } else {
-         arr[index] = {
+        arr[index] = {
           time: '',
           lyric
         }
@@ -45,8 +44,7 @@ const handleMusicLyric = function (path) {
     })
     return arr
   } catch (error) {
-    console.log("handleMusicLyric ~ error:", error)
-    return []
+    console.log('handleMusicLyric ~ error:', error)
   }
 }
 
@@ -56,15 +54,4 @@ const parseTime = (str) => {
   return min * 60 + s * 1 + ~~(ms / 0.6) / 100
 }
 
-// return false为失败,lineNum为从0开始的列数
-const getLineNumByTime = (lyricArr, time) => {
-  let result = false
-  lyricArr.forEach((col, index) => {
-    if (parseTime(col.time) <= time) {
-      result = index
-    }
-  })
-  return result
-}
-
-export { handleMusicLyric, parseTime, getLineNumByTime }
+export { handleMusicLyric, parseTime }
