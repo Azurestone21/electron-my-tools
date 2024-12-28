@@ -2,12 +2,12 @@
 import { ElConfigProvider } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 const locale = zhCn
-import { useIndexStore } from '@renderer/store'
-const indexStore = useIndexStore()
+const musicStore = useMusicStore()
+const { playingSong } = storeToRefs(musicStore)
 
 // 音频当前播放时间
 const timeupdate = (e) => {
-  indexStore.setStore({
+  musicStore.setStore({
     currentTime: e.target.currentTime || 0
   })
 }
@@ -22,7 +22,7 @@ const timeupdate = (e) => {
   </el-config-provider>
 
   <audio id="myAudio" @timeupdate="timeupdate">
-    <source :src="indexStore.playingSong.songURL" type="audio/mpeg" />
+    <source :src="playingSong.songURL" type="audio/mpeg" />
     您的浏览器不支持 audio 元素。
   </audio>
 </template>

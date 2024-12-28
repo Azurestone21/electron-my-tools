@@ -1,8 +1,8 @@
 <!-- 音乐播放页 -->
 <script setup lang="ts">
 const { proxy } = getCurrentInstance()
-const indexStore = useIndexStore()
-const { playingSong, basePath } = storeToRefs(indexStore)
+const musicStore = useMusicStore()
+const { playingSong, basePath } = storeToRefs(musicStore)
 
 import BottomBar from './components/BottomBar.vue'
 import Lyric from './components/Lyric.vue'
@@ -18,14 +18,14 @@ const handleSetting = () => {
   openSetting.value = !openSetting.value
 }
 const getMusicList = async () => {
-  const data = await window.musicApi.getMusicData(basePath.value || 'D:/My/music')
-  indexStore.setStore({
+  const data = await window.musicApi.getMusicData(basePath.value)
+  musicStore.setStore({
     musicList: data
   })
 }
 onMounted(() => {
   getMusicList()
-  indexStore.setStore({
+  musicStore.setStore({
     isVideoPlay: false
   })
 })

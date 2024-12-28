@@ -5,16 +5,10 @@ export const useIndexStore = defineStore('index', {
     location: null,
     city: null,
     todayWeather: {},
+
     pageStack: [], // 路由栈
 
-    basePath: '',
-    musicList: [],
-    playingSong: {},
-    currentTime: 0,
-    isVideoPlay: false,
-    playPattern: 'normal', // normal:顺序 loop:单曲循环
-
-    remark: []
+    remark: [] // 备注
   }),
   getters: {},
 
@@ -44,24 +38,6 @@ export const useIndexStore = defineStore('index', {
     },
     clearPage() {
       this.pageStack = []
-    },
-    // 修改播放模式
-    changePlayPattern() {
-      let arr = ['normal', 'loop']
-      let i = arr.findIndex((x) => x == this.playPattern)
-      if (i < arr.length - 1) {
-        this.playPattern = arr[i + 1]
-      } else {
-        this.playPattern = arr[0]
-      }
-    },
-    // 备注
-    handleRemark(type, index) {
-      if (type == 'plus') {
-        this.remark.push('')
-      } else {
-        this.remark.splice(index, 1)
-      }
     }
   },
   persist: true // 持久化

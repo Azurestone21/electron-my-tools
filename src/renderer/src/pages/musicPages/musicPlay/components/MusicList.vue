@@ -1,14 +1,14 @@
 <!-- 音乐列表 -->
 <script setup lang="ts">
 const { proxy } = getCurrentInstance();
-const indexStore = useIndexStore()
-const { playingSong, musicList } = storeToRefs(indexStore)
+const musicStore = useMusicStore()
+const { playingSong, musicList } = storeToRefs(musicStore)
 
 const activeNames = computed(() => {
   return playingSong.value.parentIndex + ''
 })
 const changePlayingSong = (song) => {
-  indexStore.setStore({
+  musicStore.setStore({
     playingSong: song,
     currentTime: 0,
     isVideoPlay: false

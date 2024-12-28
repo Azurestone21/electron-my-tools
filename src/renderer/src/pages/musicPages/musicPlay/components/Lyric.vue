@@ -1,15 +1,15 @@
 <!-- 歌词 -->
 <script setup lang="ts">
-const indexStore = useIndexStore()
-const { playingSong, currentTime } = storeToRefs(indexStore)
-import { parseTime } from '@renderer/utils/index'
+const musicStore = useMusicStore()
+const { playingSong, currentTime } = storeToRefs(musicStore)
+import { parseTime } from '@renderer/utils/music-play'
 // 当前歌词
 const lyricArr = ref([])
 const activityLyric = computed(() => {
-  if (lyricArr.value.length && indexStore.currentTime) {
+  if (lyricArr.value.length && musicStore.currentTime) {
     let i = 0
     lyricArr.value.forEach((item, index) => {
-      if (parseTime(item.time) <= indexStore.currentTime) {
+      if (parseTime(item.time) <= musicStore.currentTime) {
         i = index
       }
     })
@@ -50,7 +50,7 @@ const setLyricOffset = () => {
     ulEl.value.style.transform = `translateY(-${offset}px)`
   }
 }
-const myScroll = (e) => {
+const myScroll = (_e) => {
   // console.log('滑动', e.target.scrollTop)
 }
 

@@ -1,8 +1,8 @@
 <!-- 音乐设置 -->
 <script setup lang="ts">
 const { proxy } = getCurrentInstance()
-const indexStore = useIndexStore()
-const { basePath } = storeToRefs(indexStore)
+const musicStore = useMusicStore()
+const { basePath } = storeToRefs(musicStore)
 const formLabelWidth = '60px'
 
 defineProps({
@@ -21,7 +21,7 @@ function cancelClick() {
   emits('onCancel')
 }
 function submit(type: string) {
-  indexStore.setStore({
+  musicStore.setStore({
     [type]: form[type]
   })
   if (type == 'basePath') {

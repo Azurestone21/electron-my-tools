@@ -8,3 +8,4 @@ export default pinia
 
 export * from './modules/index'
 export * from './modules/user'
+export * from './modules/music'
