@@ -21,7 +21,8 @@ if (process.contextIsolated) {
     })
     contextBridge.exposeInMainWorld('musicApi', {
       getMusicData: (basePath:string) => ipcRenderer.invoke('getMusicList', basePath),
-      getLyric: (filePath:string) => ipcRenderer.invoke('getLyric', filePath)
+      getLyric: (filePath:string) => ipcRenderer.invoke('getLyric', filePath),
+      onHandleMusicPlay: (callback) => ipcRenderer.on('handleMusicPlay', (_event, value) => callback(value)),
     })
   } catch (error) {
     console.error(error)

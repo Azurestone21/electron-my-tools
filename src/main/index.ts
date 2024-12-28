@@ -10,6 +10,13 @@ const login_height = 650
 const normal_width = 1000
 const normal_height = 700
 
+enum MusicPlayType {
+  play = 'play',
+  pause = 'pause',
+  before = 'before',
+  next = 'next'
+}
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -50,6 +57,7 @@ function createWindow(): void {
       mainWindow.setMaximizable(false)
     }
   })
+  // 屏幕 最大化/最小化/关闭
   ipcMain.on('handleScreen', (_event, type) => {
     switch (type) {
       case 'full':
@@ -108,6 +116,25 @@ function createWindow(): void {
   let tray = new Tray(iconPath)
   // 右键菜单
   const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '播放/暂停',
+      click: () => {
+        mainWindow.webContents.send('handleMusicPlay', MusicPlayType.play)
+      }
+    },
+    {
+      label: '上一首',
+      click: () => {
+        mainWindow.webContents.send('handleMusicPlay', MusicPlayType.before)
+      }
+    },
+    {
+      label: '下一首',
+      click: () => {
+        mainWindow.webContents.send('handleMusicPlay', MusicPlayType.next)
+      }
+    },
+    { type: 'separator' },
     {
       label: '退出',
       click: () => {

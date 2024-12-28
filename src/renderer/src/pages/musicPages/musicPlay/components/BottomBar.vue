@@ -1,33 +1,37 @@
-<!-- 底部 -->
+<!-- 底部 音乐播放控制 -->
 <script setup lang="ts">
 const { proxy } = getCurrentInstance()
-const indexStore = useIndexStore()
-const { playingSong, isVideoPlay, currentTime, musicList, playPattern } = storeToRefs(indexStore)
+const musicStore = useMusicStore()
+const { playingSong, isVideoPlay, currentTime, musicList, playPattern } = storeToRefs(musicStore)
+import { secondsTimeFormat, MusicPlayType, KeyCodeType, getPlayMusic } from '@renderer/utils/music-play'
 const emits = defineEmits(['onPropsExpandList'])
-import { secondsTimeFormat } from '@renderer/utils'
 
-const barWidth = 600
 let myAudio = null // audio
-let duration = 0 // 当前音频时长
+let duration = 0 // 音频时长
+const barWidth = 600  // 进度条宽度
+const musicTime = ref<string>('00:00') // 音频时间
 
-const musicTime = ref<string>('00:00')
-const isExpand = ref<boolean>(false)
+// 打开设置弹窗
+const openSetting = () => {
+  proxy.$eventBus.emit('openSetting')
+}
 
 // 展开音乐列表
+const isExpand = ref<boolean>(false)
 const onExpandList = () => {
   isExpand.value = !isExpand.value
   emits('onPropsExpandList')
 }
 // 改变播放模式
 const changePlayPattern = () => {
-  indexStore.changePlayPattern()
+  musicStore.changePlayPattern()
   if (myAudio && playPattern.value) {
     myAudio.loop = playPattern.value == 'loop'
   }
 }
 // 音频当前播放时间
 // const timeupdate = (e) => {
-//   indexStore.setStore({
+//   musicStore.setStore({
 //     currentTime: e.target.currentTime || 0
 //   })
 // }
@@ -40,7 +44,7 @@ const play = (refresh) => {
   if (refresh) {
     myAudio.load()
     myAudio.currentTime = 0
-    indexStore.setStore({
+    musicStore.setStore({
       currentTime: 0
     })
   }
@@ -50,56 +54,34 @@ const play = (refresh) => {
   } else {
     myAudio.pause()
   }
-  indexStore.setStore({
+  musicStore.setStore({
     isVideoPlay: !myAudio.paused
   })
 }
 // 上一首 / 下一首
 const changeMusic = (type: string) => {
-  let songIndex = playingSong.value.songIndex
-  let parentIndex = playingSong.value.parentIndex
-  let currntSortLength = musicList.value[parentIndex]?.songs?.length
-  let parentLength = musicList.value.length
-  let newIndex = songIndex
-  if (type == 'before') {
-    if (songIndex != 0) {
-      newIndex = songIndex - 1
-    }
-  } else {
-    if (songIndex < currntSortLength - 1) {
-      newIndex = songIndex + 1
-    } else if (parentIndex < parentLength - 1) {
-      newIndex = 0
-    }
-  }
-
-  indexStore.setStore({
-    playingSong: {
-      ...musicList.value[parentIndex]?.songs[newIndex]
-    }
+  const song =  getPlayMusic(type, musicList.value, playingSong.value)
+  musicStore.setStore({
+    playingSong: song
   })
   play(true)
-}
-// 当前音频播放结束，播放下一首
-const audioEnded = () => {
-  changeMusic('next')
 }
 
 onMounted(() => {
   myAudio = document.getElementById('myAudio') as HTMLAudioElement
-  const volumeControl = document.getElementById('volumeControl') as HTMLInputElement
+
   // 监听播放完成事件
   myAudio.addEventListener(
     'ended',
     function () {
-      audioEnded()
+      changeMusic('next')
     },
     false
   )
   // 浏览器可以开始播放时，在dom挂载完直接获取duration会返回NaN
   myAudio.addEventListener('canplay', function () {
     duration = myAudio.duration // 时长
-    myAudio.volume = 0.1 // 音量
+    myAudio.volume = 0.05 // 音量
     myAudio.loop = playPattern.value == 'loop' // 单曲循环
     musicTime.value = secondsTimeFormat(myAudio.duration)
   })
@@ -109,19 +91,28 @@ onMounted(() => {
     if (myAudio.duration) {
       let t = Math.floor((event.layerX / barWidth) * myAudio.duration)
       myAudio.currentTime = t
-      indexStore.setStore({
+      musicStore.setStore({
         currentTime: t
       })
     }
   })
   // 监听滑块的变化改变音量
+  const volumeControl = document.getElementById('volumeControl') as HTMLInputElement
   volumeControl.addEventListener('input', function () {
     myAudio.volume = this.value
   })
+  // 监听键盘事件
   window.addEventListener('keydown', (e) => {
     switch (e.code) {
-      case 'Space':
+      case KeyCodeType.Space:
         play(false)
+        break
+      case KeyCodeType.ArrowLeft:
+        changeMusic('before')
+        break
+      case KeyCodeType.ArrowRight:
+        changeMusic('next')
+        break
     }
   })
 })
@@ -129,10 +120,14 @@ onMounted(() => {
 proxy.$eventBus.on('changePlayingSong', () => {
   play(true)
 })
-// 设置弹窗
-const openSetting = () => {
-  proxy.$eventBus.emit('openSetting')
-}
+// 监听主线程的事件
+window.musicApi.onHandleMusicPlay((value:string) => {
+  if (value == MusicPlayType.play || value == MusicPlayType.pause) {
+    play(false)
+  } else {
+    changeMusic(value)
+  }
+})
 </script>
 
 <template>
