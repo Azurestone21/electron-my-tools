@@ -9,11 +9,11 @@ const { remark } = storeToRefs(indexStore)
   <div class="page home flex-between">
     <div class="remark">
       <div class="flex-row-between-center">
-        <div class="title">备注</div>
+        <div class="title">小记</div>
       </div>
       <textarea
         type="text"
-        placeholder="今日无备注~"
+        placeholder=""
         class="remark_input"
         v-model="remark"
       ></textarea>
