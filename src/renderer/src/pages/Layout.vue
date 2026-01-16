@@ -61,7 +61,7 @@ watchEffect(() => {
           </el-menu>
         </el-scrollbar>
       </el-aside>
-      <el-container class="container">
+      <el-container class="containers">
         <el-scrollbar class="scrollbar">
           <div class="main">
             <div class="handleWindow drag">
@@ -76,7 +76,7 @@ watchEffect(() => {
               </div>
             </div>
             <template v-if="showPageHeader">
-              <el-breadcrumb separator="/">
+              <el-breadcrumb separator="/" style="padding: 0 20px;">
                 <template v-for="item in breadcrumb" key="index">
                   <el-breadcrumb-item :to="{ path: item.path }">
                     {{ item.name }}
@@ -132,7 +132,7 @@ watchEffect(() => {
     }
   }
 
-  .container {
+  .containers {
     .scrollbar {
       width: 100%;
       height: 100%;

@@ -7,14 +7,6 @@
   --music-bar-active: #a7d4ff !important;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
-}
-
 ul {
   list-style: none;
 }
@@ -77,11 +69,4 @@ body {
 }
 .no-copy {
   user-select: none;
-}
-
-.pdlr20 {
-  padding: 0 20px;
-}
-.mgl20 {
-  margin-left: 15px;
 }

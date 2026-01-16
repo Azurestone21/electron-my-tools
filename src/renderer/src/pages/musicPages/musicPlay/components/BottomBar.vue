@@ -175,17 +175,17 @@ window.musicApi.onHandleMusicPlay((value:string) => {
               <input id="volumeControl" type="range" min="0" max="1" step="0.01" value="0.1" />
             </div>
             <!-- 切换播放模式 -->
-            <div class="mgl20 cursor_pointer flex-center" @click="changePlayPattern">
+            <div class="cursor_pointer flex-center ml-[20px]" @click="changePlayPattern">
               <text v-if="playPattern == 'normal'">顺</text>
               <text v-if="playPattern == 'loop'">单</text>
             </div>
-            <div class="mgl20 cursor_pointer">词</div>
+            <div class="cursor_pointer ml-[20px]">词</div>
             <!-- 展开/收起列表 -->
-            <div class="mgl20 cursor_pointer flex-center" @click="onExpandList">
+            <div class="cursor_pointer flex-center ml-[20px]" @click="onExpandList">
               <el-icon size="24" color="#fff" v-if="isExpand"><Expand /></el-icon>
               <el-icon size="24" color="#fff" v-else><Fold /></el-icon>
             </div>
-            <div class="mgl20 cursor_pointer" @click="openSetting">
+            <div class="cursor_pointer ml-[20px]" @click="openSetting">
               <el-icon size="24" color="#fff"><Setting /></el-icon>
             </div>
           </div>
@@ -237,6 +237,9 @@ window.musicApi.onHandleMusicPlay((value:string) => {
       margin-left: 20px;
       font-size: 12px;
     }
+  }
+  #volumeControl {
+    background-color: #fff;
   }
   .handle {
     // 上一首 / 播放/暂停 / 下一首
