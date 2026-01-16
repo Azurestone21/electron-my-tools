@@ -23,12 +23,17 @@ const router = createRouter({
         {
           path: '/home',
           name: '首页',
-          component: () => import('@renderer/pages/home.vue')
+          component: () => import('@renderer/pages/Home.vue')
         },
         {
           path: '/tool/index',
           name: '工具',
           component: () => import('@renderer/pages/toolPages/ToolMgmt.vue')
+        },
+        {
+          path: '/tool/schedule',
+          name: '日程通知',
+          component: () => import('@renderer/pages/toolPages/ScheduleNotify.vue')
         },
         {
           path: '/tool/color',

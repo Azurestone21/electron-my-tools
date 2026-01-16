@@ -9,6 +9,14 @@ const jumpTo = (e) => {
 
 <template>
   <div class="page">
+    <div class="title">日程</div>
+    <el-row :gutter="20">
+      <el-col :span="6">
+        <el-card style="width: 100%" shadow="hover" @click="jumpTo('/tool/schedule')"
+          >日程通知</el-card
+        >
+      </el-col>
+    </el-row>
     <div class="title">实用工具</div>
     <el-row :gutter="20">
       <el-col :span="6">
@@ -34,4 +42,7 @@ const jumpTo = (e) => {
 </template>
 
 <style lang="less" scoped>
+.title {
+  margin-top: 20px;
+}
 </style>

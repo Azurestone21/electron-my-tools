@@ -1,0 +1,37 @@
+import { isObject } from '@renderer/utils/index'
+
+export const useToolStore = defineStore('tool', {
+  state: () => ({
+    scheduleList: [] // 日程
+  }),
+  getters: {},
+
+  actions: {
+    addSchedule(obj) {
+      this.scheduleList.push(obj)
+    },
+    editSchedule(obj) {
+      let i = this.scheduleList.findIndex(x => x.id === obj.id)
+      this.scheduleList[i] = {
+        ...obj
+      }
+    },
+    deleteSchedule(i) {
+      this.scheduleList.splice(i, 1)
+    },
+    setStore(payload) {
+      let keys = Object.keys(payload)
+      keys.forEach((item) => {
+        if (isObject(payload[item])) {
+          this[item] =
+            Object.keys(payload[item]).length > 0
+              ? Object.assign({}, this[item], payload[item])
+              : payload[item]
+        } else {
+          this[item] = payload[item]
+        }
+      })
+    }
+  },
+  persist: true // 持久化
+})
