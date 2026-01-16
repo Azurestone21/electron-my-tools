@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, Tray, Menu } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } from 'electron'
 import path from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -33,7 +33,7 @@ function createWindow(): void {
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
       sandbox: false,
-      webSecurity: false, // 关闭 Electron 的 Web 安全策略，允许加载本地资源。
+      webSecurity: false // 关闭 Electron 的 Web 安全策略，允许加载本地资源。
       // nodeIntegration: true, // 渲染进程能够使用node模块的能力
     }
   })
@@ -167,6 +167,14 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+
+  // 注册快捷键 Alt+Shift+I 打开控制台
+  globalShortcut.register('Alt+Shift+I', () => {
+    const focusedWindow = BrowserWindow.getFocusedWindow()
+    if (focusedWindow) {
+      focusedWindow.webContents.openDevTools()
+    }
+  })
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
