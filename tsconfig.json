@@ -1,4 +1,9 @@
 {
   "files": [],
-  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
+  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }],
+  "compilerOptions": {
+    "moduleResolution": "bundler", // 或 "nodenext"、"bundler"
+    "module": "ESNext", // 确保 module 也是 ESNext
+    "target": "ES2022",
+  }
 }

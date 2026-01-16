@@ -3,6 +3,7 @@ import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import vue from '@vitejs/plugin-vue'
 import babel from "vite-plugin-babel";
 import ViteAutoImport from 'unplugin-auto-import/vite'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   main: {
@@ -19,7 +20,7 @@ export default defineConfig({
     },
     plugins: [
       vue(),
-      babel(),
+      tailwindcss(),
       ViteAutoImport({
         imports: ['vue', 'vue-router', 'pinia'],
         dirs: ['./src/store'],
