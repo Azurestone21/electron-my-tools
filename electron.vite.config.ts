@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import vue from '@vitejs/plugin-vue'
-import babel from "vite-plugin-babel";
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import ViteAutoImport from 'unplugin-auto-import/vite'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -20,12 +20,13 @@ export default defineConfig({
     },
     plugins: [
       vue(),
+      vueJsx(),
       tailwindcss(),
       ViteAutoImport({
         imports: ['vue', 'vue-router', 'pinia'],
         dirs: ['./src/store'],
-        dts: "./src/auto-imports.d.ts",
-      }), // 自动导入
+        dts: './src/auto-imports.d.ts'
+      }) // 自动导入
     ],
     css: {
       preprocessorOptions: {

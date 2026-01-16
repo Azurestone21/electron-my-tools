@@ -14,6 +14,8 @@
         "src/renderer/src/*"
       ]
     },
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "jsx": "preserve",
+    "jsxImportSource": "vue"
   }
 }
