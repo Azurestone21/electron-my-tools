@@ -1,6 +1,6 @@
 <!-- 数据转换 -->
 <script setup lang="ts">
-import JSONViewer from './components/JSONViewer.jsx'
+import JSONViewer from './components/JSONViewer'
 import { ref, watch, onUnmounted } from 'vue'
 const originText = ref<string>('')
 const targetJson = ref<any>('')

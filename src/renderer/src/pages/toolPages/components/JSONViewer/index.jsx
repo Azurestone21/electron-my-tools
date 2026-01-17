@@ -1,5 +1,5 @@
 import { defineComponent, ref } from 'vue'
-import './JSONViewer.less'
+import './index.less'
 
 // 检查值的类型
 const getValueType = (value) => {
