@@ -1,17 +1,16 @@
+import { IScheduleItem } from '@renderer/types/schedule'
 import { isObject } from '@renderer/utils/index'
 
 export const useToolStore = defineStore('tool', {
   state: () => ({
-    scheduleList: [] // 日程
+    scheduleList: [] as IScheduleItem[] // 日程
   }),
-  getters: {},
-
   actions: {
-    addSchedule(obj) {
+    addSchedule(obj: IScheduleItem) {
       this.scheduleList.push(obj)
     },
-    editSchedule(obj) {
-      let i = this.scheduleList.findIndex(x => x.id === obj.id)
+    editSchedule(obj: IScheduleItem) {
+      let i = this.scheduleList.findIndex((x) => x.id === obj.id)
       this.scheduleList[i] = {
         ...obj
       }
