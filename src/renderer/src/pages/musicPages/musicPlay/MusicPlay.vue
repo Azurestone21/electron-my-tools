@@ -25,9 +25,6 @@ const getMusicList = async () => {
 }
 onMounted(() => {
   getMusicList()
-  musicStore.setStore({
-    isVideoPlay: false
-  })
 })
 proxy.$eventBus.on('openSetting', () => {
   handleSetting()

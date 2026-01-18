@@ -1,15 +1,14 @@
 <!-- 底部 音乐播放控制 -->
 <script setup lang="ts">
+import { secondsTimeFormat, MusicPlayType, KeyCodeType, getPlayMusic } from '@renderer/utils/music-play'
+import { storeToRefs } from 'pinia'
 const { proxy } = getCurrentInstance()
 const musicStore = useMusicStore()
-const { playingSong, isVideoPlay, currentTime, musicList, playPattern } = storeToRefs(musicStore)
-import { secondsTimeFormat, MusicPlayType, KeyCodeType, getPlayMusic } from '@renderer/utils/music-play'
+const { playingSong, isVideoPlay, duration, currentTime, musicList, playPattern } = storeToRefs(musicStore)
 const emits = defineEmits(['onPropsExpandList'])
 
 let myAudio = null // audio
-let duration = 0 // 音频时长
 const barWidth = 600  // 进度条宽度
-const musicTime = ref<string>('00:00') // 音频时间
 
 // 打开设置弹窗
 const openSetting = () => {
@@ -37,7 +36,7 @@ const changePlayPattern = () => {
 // }
 // 音频进度百分比
 const percentage = computed<number>(() => {
-  return currentTime.value && duration ? Math.floor((currentTime.value / duration) * barWidth) : 0
+  return currentTime.value && duration.value ? Math.floor((currentTime.value / duration.value) * barWidth) : 0
 })
 // 播放/暂停音乐
 const play = (refresh) => {
@@ -80,10 +79,11 @@ onMounted(() => {
   )
   // 浏览器可以开始播放时，在dom挂载完直接获取duration会返回NaN
   myAudio.addEventListener('canplay', function () {
-    duration = myAudio.duration // 时长
+    musicStore.setStore({
+      duration: myAudio.duration
+    })
     myAudio.volume = 0.05 // 音量
     myAudio.loop = playPattern.value == 'loop' // 单曲循环
-    musicTime.value = secondsTimeFormat(myAudio.duration)
   })
   // 获取鼠标点击的位置，改变播放进度
   const progressEl = document.getElementById('myProgress')
@@ -154,7 +154,7 @@ window.musicApi.onHandleMusicPlay((value:string) => {
               }"
             ></div>
           </div>
-          <div class="totalTime">{{ musicTime }}</div>
+          <div class="totalTime">{{ secondsTimeFormat(duration) }}</div>
         </div>
         <div class="handle flex-row-between-center">
           <!-- 上一首 / 播放/暂停 / 下一首 -->
