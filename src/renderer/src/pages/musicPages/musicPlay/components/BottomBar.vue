@@ -212,8 +212,8 @@ window.musicApi.onHandleMusicPlay((value: string) => {
               <el-icon size="24" color="#fff" v-if="isExpand"><Expand /></el-icon>
               <el-icon size="24" color="#fff" v-else><Fold /></el-icon>
             </div>
-            <div class="cursor_pointer ml-[20px]" @click="openSetting">
-              <el-icon size="24" color="#fff"><Setting /></el-icon>
+            <div class="cursor_pointer flex-center ml-[20px]" @click="openSetting">
+              <el-icon size="20" color="#fff"><Setting /></el-icon>
             </div>
           </div>
         </div>
