@@ -6,5 +6,6 @@ declare global {
     api: unknown,
     myHandle: any,
     musicApi: any,
+    scheduleHandle: any,
   }
 }
