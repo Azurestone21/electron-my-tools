@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import getLocalMusic from './modules/localMusic'
 import { handleMusicLyric } from './modules/musicLyric'
+import { scheduleManager } from './modules/schedule'
 
 const login_width = 900
 const login_height = 650
@@ -80,6 +81,27 @@ function createWindow(): void {
   ipcMain.handle('getLyric', async (_event, filePath) => {
     const data = handleMusicLyric(filePath)
     return data
+  })
+
+  // 日程管理相关的IPC事件
+  ipcMain.handle('initSchedules', async (_event, schedules) => {
+    scheduleManager.initSchedules(schedules)
+    return true
+  })
+
+  ipcMain.handle('addSchedule', async (_event, schedule) => {
+    scheduleManager.addSchedule(schedule)
+    return true
+  })
+
+  ipcMain.handle('updateSchedule', async (_event, schedule) => {
+    scheduleManager.updateSchedule(schedule)
+    return true
+  })
+
+  ipcMain.handle('deleteSchedule', async (_event, scheduleId) => {
+    scheduleManager.deleteSchedule(scheduleId)
+    return true
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
