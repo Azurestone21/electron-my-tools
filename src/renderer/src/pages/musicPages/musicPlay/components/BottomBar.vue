@@ -4,7 +4,8 @@ import { secondsTimeFormat, MusicPlayType, KeyCodeType, getPlayMusic } from '@re
 import { storeToRefs } from 'pinia'
 const { proxy } = getCurrentInstance()
 const musicStore = useMusicStore()
-const { playingSong, isVideoPlay, duration, currentTime, musicList, playPattern } = storeToRefs(musicStore)
+const { playingSong, isVideoPlay, duration, currentTime, musicList, playPattern, volume } =
+  storeToRefs(musicStore)
 const emits = defineEmits(['onPropsExpandList'])
 
 let myAudio = null // audio
@@ -66,6 +67,16 @@ const changeMusic = (type: string) => {
   play(true)
 }
 
+// 调节音量
+const changeVolume = (e) => {
+  musicStore.setStore({
+    volume: e.target.value
+  })
+  if (myAudio) {
+    myAudio.volume = e.target.value
+  }
+}
+
 onMounted(() => {
   myAudio = document.getElementById('myAudio') as HTMLAudioElement
 
@@ -82,7 +93,7 @@ onMounted(() => {
     musicStore.setStore({
       duration: myAudio.duration
     })
-    myAudio.volume = 0.05 // 音量
+    myAudio.volume = volume.value // 音量
     myAudio.loop = playPattern.value == 'loop' // 单曲循环
   })
   // 获取鼠标点击的位置，改变播放进度
@@ -171,8 +182,17 @@ window.musicApi.onHandleMusicPlay((value:string) => {
             </div>
           </div>
           <div class="video_list">
+            <!-- 音量 -->
             <div class="volume">
-              <input id="volumeControl" type="range" min="0" max="1" step="0.01" value="0.1" />
+              <input
+                id="volumeControl"
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                :value="volume"
+                @input="changeVolume"
+              />
             </div>
             <!-- 切换播放模式 -->
             <div class="cursor_pointer flex-center ml-[20px]" @click="changePlayPattern">

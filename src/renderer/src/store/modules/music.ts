@@ -9,7 +9,8 @@ export const useMusicStore = defineStore('music', {
     duration: 0, // 音频时长
     currentTime: 0, // 当前播放事件
     isVideoPlay: false, // 是否正在播放
-    playPattern: 'normal' // normal:顺序播放 loop:单曲循环
+    playPattern: 'normal', // normal:顺序播放 loop:单曲循环
+    volume: 0.05 // 音量
   }),
   getters: {},
 
