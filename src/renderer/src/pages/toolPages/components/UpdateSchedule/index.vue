@@ -7,6 +7,8 @@ const toolStore = useToolStore()
 import type { FormInstance, FormRules } from 'element-plus'
 import { IScheduleItem } from '@renderer/types/schedule'
 import { options } from './config'
+import { addMainProcessSchedules, updateMainProcessSchedules } from '@renderer/utils/schedules'
+import { cloneDeep } from 'lodash'
 
 const defaultFormData = {
   id: '',
@@ -76,15 +78,17 @@ const deleteTime = (index) => {
 // 提交
 const onSubmit = async () => {
   if (!formRef) return
-  await formRef.value.validate((valid, fields) => {
+  await formRef.value.validate((valid) => {
     if (valid) {
-      if (!formData.id) {
-        formData.id = new Date().getTime().toString()
-        toolStore.addSchedule(formData)
+      const data = cloneDeep(formData)
+      if (!data.id) {
+        data.id = new Date().getTime().toString()
+        toolStore.addSchedule(data)
+        addMainProcessSchedules(data)
       } else {
-        toolStore.editSchedule(formData)
+        toolStore.editSchedule(data)
+        updateMainProcessSchedules(data)
       }
-      emit('submitCb')
       onClose()
     }
   })

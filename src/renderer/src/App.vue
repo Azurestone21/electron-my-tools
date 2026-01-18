@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ElConfigProvider } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import { useMusicStore } from './store/modules/music'
+import { storeToRefs } from 'pinia'
+import { initMainProcessSchedules } from './utils/schedules'
 const locale = zhCn
 const musicStore = useMusicStore()
 const { playingSong } = storeToRefs(musicStore)
@@ -11,6 +14,11 @@ const timeupdate = (e) => {
     currentTime: e.target.currentTime || 0
   })
 }
+
+onMounted(() => {
+  // 监听主进程发送的通知
+  initMainProcessSchedules()
+})
 </script>
 
 <template>

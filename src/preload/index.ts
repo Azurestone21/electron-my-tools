@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { IScheduleItem } from './types/schedule'
 
 // Custom APIs for renderer
 const api = {}
@@ -23,6 +24,13 @@ if (process.contextIsolated) {
       getMusicData: (basePath:string) => ipcRenderer.invoke('getMusicList', basePath),
       getLyric: (filePath:string) => ipcRenderer.invoke('getLyric', filePath),
       onHandleMusicPlay: (callback) => ipcRenderer.on('handleMusicPlay', (_event, value) => callback(value)),
+    })
+
+    contextBridge.exposeInMainWorld('scheduleHandle', {
+      initSchedules: (schedules: IScheduleItem[]) => ipcRenderer.invoke('initSchedules', schedules),
+      addSchedule: (schedule: IScheduleItem) => ipcRenderer.invoke('addSchedule', schedule),
+      updateSchedule: (schedule: IScheduleItem) => ipcRenderer.invoke('updateSchedule', schedule),
+      deleteSchedule: (scheduleId: string) => ipcRenderer.invoke('deleteSchedule', scheduleId),
     })
   } catch (error) {
     console.error(error)
