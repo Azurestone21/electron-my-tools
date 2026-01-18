@@ -1,6 +1,11 @@
 <!-- 底部 音乐播放控制 -->
 <script setup lang="ts">
-import { secondsTimeFormat, MusicPlayType, KeyCodeType, getPlayMusic } from '@renderer/utils/music-play'
+import {
+  secondsTimeFormat,
+  MusicPlayType,
+  KeyCodeType,
+  getPlayMusic
+} from '@renderer/utils/music-play'
 import { storeToRefs } from 'pinia'
 const { proxy } = getCurrentInstance()
 const musicStore = useMusicStore()
@@ -9,7 +14,7 @@ const { playingSong, isVideoPlay, duration, currentTime, musicList, playPattern,
 const emits = defineEmits(['onPropsExpandList'])
 
 let myAudio = null // audio
-const barWidth = 600  // 进度条宽度
+const barWidth = 600 // 进度条宽度
 
 // 打开设置弹窗
 const openSetting = () => {
@@ -37,7 +42,9 @@ const changePlayPattern = () => {
 // }
 // 音频进度百分比
 const percentage = computed<number>(() => {
-  return currentTime.value && duration.value ? Math.floor((currentTime.value / duration.value) * barWidth) : 0
+  return currentTime.value && duration.value
+    ? Math.floor((currentTime.value / duration.value) * barWidth)
+    : 0
 })
 // 播放/暂停音乐
 const play = (refresh) => {
@@ -60,7 +67,7 @@ const play = (refresh) => {
 }
 // 上一首 / 下一首
 const changeMusic = (type: string) => {
-  const song =  getPlayMusic(type, musicList.value, playingSong.value)
+  const song = getPlayMusic(type, musicList.value, playingSong.value)
   musicStore.setStore({
     playingSong: song
   })
@@ -132,7 +139,7 @@ proxy.$eventBus.on('changePlayingSong', () => {
   play(true)
 })
 // 监听主线程的事件
-window.musicApi.onHandleMusicPlay((value:string) => {
+window.musicApi.onHandleMusicPlay((value: string) => {
   if (value == MusicPlayType.play || value == MusicPlayType.pause) {
     play(false)
   } else {
