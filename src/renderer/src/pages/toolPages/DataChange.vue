@@ -96,8 +96,7 @@ watch(originText, (newVal, oldVal) => {
 
 <style lang="less" scoped>
 .page {
-  height: 100%;
-  padding: 20px;
+  padding: 20px 20px 34px 20px;
 }
 .content {
   width: 100%;

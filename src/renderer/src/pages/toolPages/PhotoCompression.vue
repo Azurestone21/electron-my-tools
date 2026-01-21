@@ -277,6 +277,7 @@ const handleDownload = () => {
 <style lang="less" scoped>
 .page {
   box-sizing: border-box;
+  padding: 20px 20px 34px 20px;
 
   .page-content {
     height: 100%;

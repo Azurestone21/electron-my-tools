@@ -84,7 +84,7 @@ watchEffect(() => {
                 </template>
               </el-breadcrumb>
             </template>
-            <div class="page-content">
+            <div class="router-view">
               <router-view></router-view>
             </div>
           </div>
@@ -172,8 +172,8 @@ watchEffect(() => {
     }
   }
 
-  .page-content {
-    height: calc(100% - 14px);
+  .router-view {
+    height: 100%;
   }
 }
 </style>

@@ -11,12 +11,7 @@ const { remark } = storeToRefs(indexStore)
       <div class="flex-row-between-center">
         <div class="title">小记</div>
       </div>
-      <textarea
-        type="text"
-        placeholder=""
-        class="remark_input"
-        v-model="remark"
-      ></textarea>
+      <textarea type="text" placeholder="" class="remark_input" v-model="remark"></textarea>
     </div>
     <div class="calendar">
       <el-calendar>
@@ -41,7 +36,6 @@ const { remark } = storeToRefs(indexStore)
   background-color: rgb(240, 249, 255);
   flex: 1;
   padding: 0 10px;
-  margin-bottom: 20px;
 
   /* 备注文本框 */
   .remark_input {
