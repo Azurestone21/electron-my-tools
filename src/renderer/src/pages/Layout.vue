@@ -1,6 +1,9 @@
 <!-- 框架 -->
 <script setup lang="ts">
 import menuList from '@renderer/router/menu'
+import { Setting, Monitor, Expand, Fold } from '@element-plus/icons-vue'
+const router = useRouter()
+const route = useRoute()
 const indexStore = useIndexStore()
 
 const fullScreen = () => {
@@ -12,11 +15,12 @@ const minScreen = () => {
 const closeScreen = () => {
   window.myHandle.handleScreen('close')
 }
-const clickMenuItem = () => {
+const clickMenuItem = (path) => {
   indexStore.clearPage()
+  router.push(path)
 }
 
-const isCollapse = ref<boolean>(true)
+const isCollapse = ref<boolean>(false)
 onMounted(() => {
   indexStore.clearPage()
 })
@@ -35,62 +39,60 @@ watchEffect(() => {
 </script>
 
 <template>
-  <el-container class="layout-container">
-    <el-container class="content">
-      <el-aside class="aside" :class="{ asideCollapse: isCollapse }">
-        <el-scrollbar class="scrollbar">
-          <el-menu
-            :default-active="$route.path"
-            active-text-color="#409EFF"
-            text-color="#333333"
-            router
-            :collapse="isCollapse"
+  <div class="layout-container">
+    <div class="content">
+      <aside class="aside">
+        <div class="aside-header">
+          <div class="avatar"></div>
+        </div>
+        <div class="menu-bar">
+          <div
+            class="menu-item"
+            v-for="(item, index) in menuList"
+            :key="index"
+            :class="{ active: route.path === item.path }"
+            @click="clickMenuItem(item.path)"
           >
-            <el-menu-item
-              v-for="(item, index) in menuList"
-              :key="index"
-              :index="item.path"
-              @click="clickMenuItem"
-            >
-              <el-icon>
-                <component :is="item.icon"></component>
-              </el-icon>
-              <span>{{ item.pathName }}</span>
-            </el-menu-item>
-          </el-menu>
-        </el-scrollbar>
-      </el-aside>
-      <el-container class="containers">
-        <el-scrollbar class="scrollbar">
-          <div class="main">
-            <div class="handleWindow drag">
-              <div class="minWindow no_drag">
-                <el-icon @click="minScreen"><Minus /></el-icon>
-              </div>
-              <div class="maxWindow no_drag">
-                <el-icon @click="fullScreen"><FullScreen /></el-icon>
-              </div>
-              <div class="closeWindow no_drag">
-                <el-icon @click="closeScreen"><Close /></el-icon>
-              </div>
-            </div>
-            <template v-if="showPageHeader">
-              <el-breadcrumb separator="/" style="padding: 0 20px;">
-                <template v-for="item in breadcrumb" key="index">
-                  <el-breadcrumb-item :to="{ path: item.path }">
-                    {{ item.name }}
-                  </el-breadcrumb-item>
-                </template>
-              </el-breadcrumb>
-            </template>
-            <div class="router-view">
-              <router-view></router-view>
-            </div>
+            <el-icon size="20">
+              <component :is="item.icon"></component>
+            </el-icon>
           </div>
-        </el-scrollbar>
-      </el-container>
-    </el-container>
-  </el-container>
+        </div>
+        <div class="aside-footer">
+          <div class="setting-btn">
+            <el-icon size="20"><Setting /></el-icon>
+          </div>
+        </div>
+      </aside>
+      <div class="containers">
+        <div class="tool-bar drag">
+          <div class="minWindow no_drag">
+            <el-icon @click="minScreen"><Minus /></el-icon>
+          </div>
+          <div class="maxWindow no_drag">
+            <el-icon @click="fullScreen"><FullScreen /></el-icon>
+          </div>
+          <div class="closeWindow no_drag">
+            <el-icon @click="closeScreen"><Close /></el-icon>
+          </div>
+        </div>
+        <div class="main">
+          <template v-if="showPageHeader">
+            <el-breadcrumb separator="/" style="padding: 0 20px">
+              <template v-for="item in breadcrumb" key="index">
+                <el-breadcrumb-item :to="{ path: item.path }">
+                  {{ item.name }}
+                </el-breadcrumb-item>
+              </template>
+            </el-breadcrumb>
+          </template>
+          <div class="router-view">
+            <router-view></router-view>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="less" scoped>
@@ -98,11 +100,8 @@ watchEffect(() => {
   height: 100vh;
 
   .content {
-  }
-
-  .avatar {
-    width: 100%;
-    height: 100px;
+    height: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -110,61 +109,110 @@ watchEffect(() => {
 
   .aside {
     position: relative;
-    // background-color: var(--theme-color);
     border-right: 1px solid #e4e7ed;
-    width: 180px;
-    // padding-top: 20px;
+    width: 64px;
+    height: 100%;
 
-    .scrollbar {
-      height: auto;
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 
-    &.asideCollapse {
-      width: auto;
-    }
-
-    &__logo {
-      height: 120px;
-    }
-    .el-menu {
-      border-right: none;
-    }
-    .el-menu-item.is-active {
-      font-weight: bold;
-    }
-  }
-
-  .containers {
-    .scrollbar {
+    .aside-header {
       width: 100%;
-      height: 100%;
-    }
-    .main {
-      position: relative;
-      // padding-top: 40px;
-      height: 100%;
+      height: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-      .handleWindow {
+      .avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background-color: #e4e7ed;
+
         display: flex;
-        justify-content: flex-end;
-        padding: 10px 20px;
-        background-color: #fff;
+        justify-content: center;
+        align-items: center;
+      }
+    }
 
-        div {
-          width: 30px;
-          display: flex;
-          justify-content: flex-end;
+    .menu-bar {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      width: 100%;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .menu-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 64px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #666;
+
+        &:hover {
+          color: #409eff;
+          background-color: #f5f7fa;
+        }
+
+        &.active {
+          color: #409eff;
+        }
+      }
+    }
+
+    .aside-footer {
+      width: 100%;
+      min-height: 64px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .setting-btn {
+        width: 100%;
+        height: 64px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #666;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: #409eff;
         }
       }
     }
   }
 
-  :deep(.el-scrollbar) {
-    .el-scrollbar__wrap {
-      overflow: unset !important;
-      .el-scrollbar__view {
-        height: 100%;
+  .containers {
+    flex: 1;
+    height: 100%;
+    .tool-bar {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 20px;
+      background-color: #fff;
+
+      div {
+        width: 30px;
+        display: flex;
+        justify-content: flex-end;
       }
+    }
+    .main {
+      position: relative;
+      height: calc(100% - 36px);
+      overflow-y: auto;
     }
   }
 

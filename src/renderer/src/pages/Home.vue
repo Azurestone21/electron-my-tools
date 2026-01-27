@@ -6,12 +6,12 @@ const { remark } = storeToRefs(indexStore)
 </script>
 
 <template>
-  <div class="page home flex-between">
+  <div class="page home flex">
     <div class="remark">
       <div class="flex-row-between-center">
         <div class="title">小记</div>
       </div>
-      <textarea type="text" placeholder="" class="remark_input" v-model="remark"></textarea>
+      <textarea type="text" placeholder="" class="remark_input hide-scrollbar" v-model="remark"></textarea>
     </div>
     <div class="calendar">
       <el-calendar>
@@ -29,19 +29,16 @@ const { remark } = storeToRefs(indexStore)
 </template>
 
 <style lang="less" scoped>
-.icon_delete {
-  margin-left: 5px;
-}
 .remark {
-  background-color: rgb(240, 249, 255);
   flex: 1;
-  padding: 0 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: rgb(240, 249, 255);
 
   /* 备注文本框 */
   .remark_input {
     width: 100%;
-    height: 100%;
-    max-height: 90%;
+    height: calc(100% - 50px);
     padding: 10px;
     border-radius: 8px;
     outline: none;
@@ -51,9 +48,6 @@ const { remark } = storeToRefs(indexStore)
     background: transparent;
     font-size: 16px;
     font-weight: 600;
-    &::-webkit-scrollbar {
-      display: none;
-    }
   }
   /* 获得焦点时 */
   .remark_input:focus {

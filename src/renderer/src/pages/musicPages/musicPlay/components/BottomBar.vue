@@ -156,7 +156,7 @@ window.musicApi.onHandleMusicPlay((value: string) => {
 <template>
   <div class="BottomBar">
     <div class="content">
-      <div class="photo flex-center">
+      <div class="photo">
         <img :src="playingSong.imgSrc || ''" v-if="playingSong.imgSrc" />
         <el-icon color="#ccc" size="40" v-else><Headset /></el-icon>
       </div>
@@ -167,7 +167,7 @@ window.musicApi.onHandleMusicPlay((value: string) => {
           您的浏览器不支持 audio 元素。
         </audio> -->
         <div class="name">{{ playingSong.songname }} - {{ playingSong.songer }}</div>
-        <div class="flex-algin-center">
+        <div class="progress-bar">
           <!-- 进度条 -->
           <div class="progress_bg" :style="{ width: `${barWidth}px` }" id="myProgress">
             <div
@@ -179,17 +179,17 @@ window.musicApi.onHandleMusicPlay((value: string) => {
           </div>
           <div class="totalTime">{{ secondsTimeFormat(duration) }}</div>
         </div>
-        <div class="handle flex-row-between-center">
+        <div class="handle">
           <!-- 上一首 / 播放/暂停 / 下一首 -->
-          <div class="video_handle flex-row-between-center">
-            <div class="before cursor_pointer flex-center" @click="changeMusic('before')">
+          <div class="video_handle">
+            <div class="before cursor_pointer" @click="changeMusic('before')">
               <el-icon size="24"><CaretLeft /></el-icon>
             </div>
-            <div class="launch cursor_pointer flex-center" @click="play(false)">
+            <div class="launch cursor_pointer" @click="play(false)">
               <el-icon size="34" v-if="isVideoPlay"><VideoPause /></el-icon>
               <el-icon size="34" v-else><VideoPlay /></el-icon>
             </div>
-            <div class="next cursor_pointer flex-center" @click="changeMusic('next')">
+            <div class="next cursor_pointer" @click="changeMusic('next')">
               <el-icon size="24"><CaretRight /></el-icon>
             </div>
           </div>
@@ -207,17 +207,19 @@ window.musicApi.onHandleMusicPlay((value: string) => {
               />
             </div>
             <!-- 切换播放模式 -->
-            <div class="cursor_pointer flex-center ml-[20px]" @click="changePlayPattern">
+            <div class="cursor_pointer flex justify-center ml-[20px]" @click="changePlayPattern">
               <text v-if="playPattern == 'normal'">顺</text>
               <text v-if="playPattern == 'loop'">单</text>
             </div>
-            <div class="cursor_pointer ml-[20px]" @click="toggleLyricDesktop">词</div>
+            <div class="cursor_pointer flex justify-center ml-[20px]" @click="toggleLyricDesktop">
+              词
+            </div>
             <!-- 展开/收起列表 -->
-            <div class="cursor_pointer flex-center ml-[20px]" @click="onExpandList">
+            <div class="cursor_pointer flex ml-[20px]" @click="onExpandList">
               <el-icon size="24" color="#fff" v-if="isExpand"><Expand /></el-icon>
               <el-icon size="24" color="#fff" v-else><Fold /></el-icon>
             </div>
-            <div class="cursor_pointer flex-center ml-[20px]" @click="openSetting">
+            <div class="cursor_pointer flex ml-[20px]" @click="openSetting">
               <el-icon size="20" color="#fff"><Setting /></el-icon>
             </div>
           </div>
@@ -240,6 +242,9 @@ window.musicApi.onHandleMusicPlay((value: string) => {
     height: 80px;
     background-color: rgb(105, 105, 105);
     margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     img {
       width: 100%;
       height: 100%;
@@ -250,6 +255,10 @@ window.musicApi.onHandleMusicPlay((value: string) => {
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
+    .progress-bar {
+      display: flex;
+      align-items: center;
+    }
     .progress_bg {
       height: 4px;
       border-radius: 2px;
@@ -274,22 +283,28 @@ window.musicApi.onHandleMusicPlay((value: string) => {
     background-color: #fff;
   }
   .handle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     // 上一首 / 播放/暂停 / 下一首
     .video_handle {
       width: 120px;
+      display: flex;
+      align-items: center;
       .before,
       .next {
-        width: 30px;
-        height: 30px;
         color: #fff;
         border: 2px solid #fff;
         border-radius: 50%;
+        display: flex;
+        align-items: center;
       }
       .launch {
-        width: 30px;
-        height: 30px;
         border-radius: 50%;
         color: #fff;
+        margin: 0 16px;
+        display: flex;
+        align-items: center;
       }
     }
     .video_list {

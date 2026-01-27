@@ -43,8 +43,8 @@ onBeforeUnmount(() => {
   <div class="page">
     <div class="musicPlay">
       <div class="content">
-        <div class="left"><Lyric /></div>
-        <div class="right" v-if="isShowList"><MusicList /></div>
+        <div class="left hide-scrollbar"><Lyric /></div>
+        <div class="right hide-scrollbar" v-if="isShowList"><MusicList /></div>
       </div>
       <div class="footer">
         <BottomBar @onPropsExpandList="onExpandList" />
@@ -97,9 +97,6 @@ onBeforeUnmount(() => {
     flex: 1;
     flex-shrink: 0;
     overflow: auto;
-    &::-webkit-scrollbar {
-    display: none;
-  }
   }
   .right {
     flex: 1;

@@ -34,28 +34,6 @@ body {
   -webkit-app-region: no-drag;
 }
 
-.flex {
-  display: flex;
-}
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.flex-row-between-center {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.flex-between {
-  display: flex;
-  justify-content: space-between;
-}
-.flex-algin-center {
-  display: flex;
-  align-items: center;
-}
-
 .title {
   height: 38px;
   line-height: 38px;
@@ -69,4 +47,36 @@ body {
 }
 .no-copy {
   user-select: none;
+}
+
+/* 全局滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
+
+/* 隐藏滚动条 */
+.hide-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
