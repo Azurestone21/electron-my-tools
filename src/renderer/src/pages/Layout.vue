@@ -42,7 +42,6 @@ watchEffect(() => {
           <el-menu
             :default-active="$route.path"
             active-text-color="#409EFF"
-            background-color="#eaf1fc"
             text-color="#333333"
             router
             :collapse="isCollapse"
@@ -111,9 +110,10 @@ watchEffect(() => {
 
   .aside {
     position: relative;
-    background-color: var(--theme-color);
+    // background-color: var(--theme-color);
+    border-right: 1px solid #e4e7ed;
     width: 180px;
-    padding-top: 20px;
+    // padding-top: 20px;
 
     .scrollbar {
       height: auto;
@@ -141,17 +141,13 @@ watchEffect(() => {
     }
     .main {
       position: relative;
-      padding-top: 40px;
+      // padding-top: 40px;
       height: 100%;
 
       .handleWindow {
         display: flex;
         justify-content: flex-end;
-        position: fixed;
-        top: 0;
-        right: 0;
         padding: 10px 20px;
-        width: calc(100% - 64px);
         background-color: #fff;
 
         div {

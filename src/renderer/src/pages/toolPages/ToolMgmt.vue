@@ -83,7 +83,7 @@ const jumpTo = (e) => {
 <style lang="less" scoped>
 .page {
   height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #f5f7fa 100%);
+  // background: linear-gradient(135deg, #f5f7fa 0%, #f5f7fa 100%);
 
   /* 标题样式 */
   .title {
