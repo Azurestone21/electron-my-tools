@@ -89,6 +89,35 @@ const changeVolume = (e) => {
   }
 }
 
+// 调整音量（增加或减少）
+const adjustVolume = (delta: number) => {
+  // 确保当前音量是有效的数字
+  let currentVolume = typeof volume.value === 'number' && isFinite(volume.value) ? volume.value : 0
+  let newVolume = currentVolume + delta
+  // 限制音量范围在0到1之间
+  if (newVolume < 0) newVolume = 0
+  if (newVolume > 1) newVolume = 1
+  // 确保新音量是有效的数字
+  if (!isFinite(newVolume)) {
+    newVolume = 0
+  }
+
+  musicStore.setStore({
+    volume: newVolume
+  })
+  if (myAudio) {
+    myAudio.volume = newVolume
+  }
+}
+
+// 处理音量区域的鼠标滚轮事件
+const handleVolumeWheel = (e: WheelEvent) => {
+  e.preventDefault()
+  // 滚轮向上滚动增加音量，向下滚动减少音量
+  const delta = e.deltaY < 0 ? 0.05 : -0.05
+  adjustVolume(delta)
+}
+
 onMounted(() => {
   myAudio = document.getElementById('myAudio') as HTMLAudioElement
 
@@ -105,7 +134,9 @@ onMounted(() => {
     musicStore.setStore({
       duration: myAudio.duration
     })
-    myAudio.volume = volume.value // 音量
+    // 确保音量是有效的数字
+    const validVolume = typeof volume.value === 'number' && isFinite(volume.value) ? volume.value : 0.05
+    myAudio.volume = validVolume // 音量
     myAudio.loop = playPattern.value == 'loop' // 单曲循环
   })
   // 获取鼠标点击的位置，改变播放进度
@@ -124,6 +155,8 @@ onMounted(() => {
   volumeControl.addEventListener('input', function () {
     myAudio.volume = this.value
   })
+  // 监听音量区域的鼠标滚轮事件
+  volumeControl.addEventListener('wheel', handleVolumeWheel)
   // 监听键盘事件
   window.addEventListener('keydown', (e) => {
     switch (e.code) {
