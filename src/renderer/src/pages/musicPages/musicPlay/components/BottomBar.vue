@@ -27,12 +27,17 @@ const onExpandList = () => {
   isExpand.value = !isExpand.value
   emits('onPropsExpandList')
 }
-// 改变播放模式
+// 切换播放模式
 const changePlayPattern = () => {
   musicStore.changePlayPattern()
   if (myAudio && playPattern.value) {
     myAudio.loop = playPattern.value == 'loop'
   }
+}
+
+// 切换桌面歌词显示/隐藏
+const toggleLyricDesktop = async () => {
+  await window.musicApi.toggleLyricDesktop()
 }
 // 音频当前播放时间
 // const timeupdate = (e) => {
@@ -206,7 +211,7 @@ window.musicApi.onHandleMusicPlay((value: string) => {
               <text v-if="playPattern == 'normal'">顺</text>
               <text v-if="playPattern == 'loop'">单</text>
             </div>
-            <div class="cursor_pointer ml-[20px]">词</div>
+            <div class="cursor_pointer ml-[20px]" @click="toggleLyricDesktop">词</div>
             <!-- 展开/收起列表 -->
             <div class="cursor_pointer flex-center ml-[20px]" @click="onExpandList">
               <el-icon size="24" color="#fff" v-if="isExpand"><Expand /></el-icon>

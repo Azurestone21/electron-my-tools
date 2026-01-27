@@ -64,6 +64,14 @@ const router = createRouter({
           }
         }
       ]
+    },
+    {
+      path: '/musicPlay/lyric-desktop',
+      name: '桌面歌词',
+      component: () => import('@renderer/pages/musicPages/musicPlay/LyricDesktop.vue'),
+      meta: {
+        keepAlive: false
+      }
     }
   ]
 })

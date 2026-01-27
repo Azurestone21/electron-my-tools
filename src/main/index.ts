@@ -5,6 +5,7 @@ import icon from '../../resources/icon.png?asset'
 import getLocalMusic from './modules/localMusic'
 import { handleMusicLyric } from './modules/musicLyric'
 import { scheduleManager } from './modules/schedule'
+import { initLyricDesktopIPC } from './modules/lyricDesktop'
 
 const login_width = 900
 const login_height = 650
@@ -103,6 +104,9 @@ function createWindow(): void {
     scheduleManager.deleteSchedule(scheduleId)
     return true
   })
+
+  // 初始化桌面歌词相关的IPC事件
+  initLyricDesktopIPC()
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
