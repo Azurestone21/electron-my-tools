@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia'
 import { useMusicStore } from '../store/modules/music'
 const musicStore = useMusicStore()
 const { playingSong, currentTime } = storeToRefs(musicStore)
-import { getVolume } from '@renderer/utils/music/volume'
+import { getVolume } from '@renderer/hooks/music/volume'
 
 let myAudio = ref<HTMLAudioElement | null>(null)
 
@@ -55,6 +55,12 @@ watchEffect(() => {
 onMounted(async () => {
   // 获取音频元素
   myAudio.value = document.getElementById('myAudio') as HTMLAudioElement
+  // 监听音量变化（跨窗口同步）
+  window.musicApi.onUpdateVolume((volume) => {
+    musicStore.setStore({
+      volume: volume
+    })
+  })
 })
 </script>
 
