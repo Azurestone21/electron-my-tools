@@ -271,7 +271,8 @@ onBeforeUnmount(() => {
 
 /* 脉冲动画 */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     text-shadow: 0 4px 8px rgba(0, 119, 255, 0.5);
   }
   50% {
