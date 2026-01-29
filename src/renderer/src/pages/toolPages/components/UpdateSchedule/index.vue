@@ -7,7 +7,7 @@ const toolStore = useToolStore()
 import type { FormInstance, FormRules } from 'element-plus'
 import { IScheduleItem } from '@renderer/types/schedule'
 import { options } from './config'
-import { addMainProcessSchedules, updateMainProcessSchedules } from '@renderer/utils/schedules'
+import { addMainProcessSchedules, updateMainProcessSchedules } from '@renderer/hooks/schedules/schedules'
 import { cloneDeep } from 'lodash'
 
 const defaultFormData = {

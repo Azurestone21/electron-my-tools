@@ -11,7 +11,7 @@ import { options } from './components/UpdateSchedule/config'
 // 设置日程表单组件
 const updateScheduleRef = ref<any>()
 import UpdateSchedule from './components/UpdateSchedule/index.vue'
-import { deleteMainProcessSchedules } from '@renderer/utils/schedules'
+import { deleteMainProcessSchedules } from '@renderer/hooks/schedules/schedules'
 
 const getWeekLabel = (week: string[]) => {
   return week.map((w) => options.find((o) => o.value === w)?.label).join('、')

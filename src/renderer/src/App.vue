@@ -4,7 +4,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 const locale = zhCn
 import { ElConfigProvider } from 'element-plus'
 import AppAudio from './components/AppAudio.vue'
-import { initMainProcessSchedules } from './utils/schedules'
+import { initMainProcessSchedules } from './hooks/schedules/schedules'
 
 onMounted(async () => {
   // 监听主进程发送的通知
