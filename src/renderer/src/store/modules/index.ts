@@ -1,4 +1,4 @@
-import { isObject } from '@renderer/utils/index'
+import { isObject } from "lodash"
 
 export const useIndexStore = defineStore('index', {
   state: () => ({

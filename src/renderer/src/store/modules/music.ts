@@ -1,5 +1,5 @@
 import { IPlayingSong } from '@renderer/types/music'
-import { isObject } from '@renderer/utils/index'
+import { isObject } from "lodash"
 
 export const useMusicStore = defineStore('music', {
   state: () => ({
