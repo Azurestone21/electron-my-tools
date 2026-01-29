@@ -117,27 +117,6 @@ export const initLyricDesktopIPC = () => {
     return true
   })
 
-  // 保存桌面歌词配置
-  ipcMain.handle('saveLyricDesktopConfig', (_event, config) => {
-    // 这里可以保存配置到本地文件
-    console.log('保存桌面歌词配置:', config)
-    return true
-  })
-
-  // 加载桌面歌词配置
-  ipcMain.handle('loadLyricDesktopConfig', () => {
-    // 这里可以从本地文件加载配置
-    return {
-      position: { x: 100, y: 100 },
-      size: { width: 400, height: 100 },
-      opacity: 0.8,
-      fontSize: 16,
-      fontColor: '#ffffff',
-      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-      isShow: true
-    }
-  })
-
   // 移动桌面歌词窗口
   ipcMain.handle('moveLyricDesktopWindow', (_event, position) => {
     if (lyricDesktopWindow) {

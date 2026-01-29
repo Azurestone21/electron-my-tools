@@ -13,8 +13,7 @@ export default {
     ipcRenderer.invoke('sendLyricData', lyricData, currentTime, isPlaying),
   sendPlayStatus: (currentTime: number, isPlaying: boolean) =>
     ipcRenderer.invoke('sendPlayStatus', currentTime, isPlaying),
-  loadLyricDesktopConfig: () => ipcRenderer.invoke('loadLyricDesktopConfig'),
-  saveLyricDesktopConfig: (config: any) => ipcRenderer.invoke('saveLyricDesktopConfig', config),
+  // 移动桌面歌词窗口
   moveLyricDesktopWindow: (position: { x: number; y: number }) =>
     ipcRenderer.invoke('moveLyricDesktopWindow', position),
   onUpdateLyricData: (callback) =>

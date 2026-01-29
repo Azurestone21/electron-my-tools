@@ -35,27 +35,6 @@ const activityLyric = computed(() => {
   return 0
 })
 
-// 加载歌词配置
-const loadLyricConfig = async () => {
-  try {
-    const config = await window.musicApi.loadLyricDesktopConfig()
-    if (config) {
-      lyricConfig.value = config
-    }
-  } catch (error) {
-    console.error('加载歌词配置失败:', error)
-  }
-}
-
-// 保存歌词配置
-const saveLyricConfig = async () => {
-  try {
-    await window.musicApi.saveLyricDesktopConfig(lyricConfig.value)
-  } catch (error) {
-    console.error('保存歌词配置失败:', error)
-  }
-}
-
 // 处理窗口拖动
 const handleMouseDown = (event) => {
   console.log('🚀 ~ handleMouseDown ~ event:', event)
@@ -85,7 +64,7 @@ const handleMouseUp = () => {
   console.log('🚀 ~ handleMouseUp ~ isDragging.value:', isDragging.value)
   if (isDragging.value) {
     isDragging.value = false
-    saveLyricConfig()
+    // saveLyricConfig()
   }
   // 移除临时的鼠标移动和释放事件监听器
   document.removeEventListener('mousemove', handleMouseMove)
@@ -99,7 +78,6 @@ const handleResize = (event) => {
     width: event.target.offsetWidth,
     height: event.target.offsetHeight
   }
-  saveLyricConfig()
 }
 
 // 关闭桌面歌词
@@ -110,8 +88,6 @@ const closeLyricDesktop = async () => {
 
 // 监听IPC事件
 onMounted(async () => {
-  loadLyricConfig()
-
   // 监听歌词数据更新
   await window.musicApi.onUpdateLyricData((data) => {
     console.log('🚀 ~ data:', data)
