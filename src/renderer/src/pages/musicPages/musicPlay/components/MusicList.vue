@@ -4,9 +4,11 @@ const { proxy } = getCurrentInstance();
 const musicStore = useMusicStore()
 const { playingSong, musicList } = storeToRefs(musicStore)
 
+// 计算当前播放的专辑索引
 const activeNames = computed(() => {
   return playingSong.value.parentIndex + ''
 })
+// 切换播放歌曲
 const changePlayingSong = (song) => {
   musicStore.setStore({
     playingSong: song,
