@@ -11,29 +11,41 @@ import Lyric from './components/Lyric.vue'
 import MusicList from './components/MusicList.vue'
 import Settings from './components/Settings.vue'
 
+// 音乐列表是否显示
 const isShowList = ref<boolean>(false)
 const onExpandList = () => {
   isShowList.value = !isShowList.value
 }
+// 设置抽屉是否显示
 const openSetting = ref<boolean>(false)
 const handleSetting = () => {
   openSetting.value = !openSetting.value
 }
+// 初始化音乐列表
 const getMusicList = async () => {
   const data = await window.musicApi.getMusicData(basePath.value)
   musicStore.setStore({
     musicList: data
   })
 }
-onMounted(() => {
-  getMusicList()
-})
+
+// 监听打开设置抽屉事件
 proxy.$eventBus.on('openSetting', () => {
   handleSetting()
 })
+// 监听刷新音乐列表事件
 proxy.$eventBus.on('refreshMusic', () => {
   getMusicList()
 })
+// 接收列表点击切换歌曲的事件
+proxy.$eventBus.on('changePlayingSong', () => {
+  play(true)
+})
+
+onMounted(() => {
+  getMusicList()
+})
+
 onBeforeUnmount(() => {
   proxy.$eventBus.off('changePlayingSong')
   proxy.$eventBus.off('openSetting')
@@ -43,7 +55,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="page">
-    <div class="musicPlay">
+    <div id="musicPlay" class="musicPlay">
       <div class="content">
         <div class="left hide-scrollbar"><Lyric /></div>
         <div class="right hide-scrollbar" v-if="isShowList"><MusicList /></div>
@@ -55,11 +67,14 @@ onBeforeUnmount(() => {
     <div class="bg">
       <img :src="playingSong.imgSrc || ''" />
     </div>
-    <Settings :open="openSetting" @onCancel="handleSetting"/>
+    <Settings :open="openSetting" @onCancel="handleSetting" />
   </div>
 </template>
 
 <style lang="less" scoped>
+div {
+  user-select: none;
+}
 .page {
   padding: 0;
 }
@@ -112,5 +127,4 @@ onBeforeUnmount(() => {
   width: calc(100% - 64px);
   height: 100px;
 }
-
 </style>
