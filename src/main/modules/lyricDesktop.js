@@ -124,6 +124,25 @@ export const initLyricDesktopIPC = () => {
     }
     return true
   })
+
+  ipcMain.handle('changeVolume', (_event, volume) => {
+    // 向所有窗口发送音量更新事件
+    const windows = BrowserWindow.getAllWindows()
+    windows.forEach((window) => {
+      window.webContents.send('updateVolume', volume)
+    })
+    return true
+  })
+
+  // 处理音乐播放控制
+  ipcMain.handle('handleMusicPlay', (_event, action) => {
+    // 向所有窗口发送音乐播放控制事件
+    const windows = BrowserWindow.getAllWindows()
+    windows.forEach((window) => {
+      window.webContents.send('handleMusicPlay', action)
+    })
+    return true
+  })
 }
 
 /**
