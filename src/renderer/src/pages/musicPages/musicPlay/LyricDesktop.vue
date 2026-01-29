@@ -37,7 +37,6 @@ const activityLyric = computed(() => {
 
 // 处理窗口拖动
 const handleMouseDown = (event) => {
-  console.log('🚀 ~ handleMouseDown ~ event:', event)
   isDragging.value = true
   startPos.value = {
     x: event.clientX - lyricConfig.value.position.x,
@@ -46,7 +45,6 @@ const handleMouseDown = (event) => {
   // 添加临时的鼠标移动和释放事件监听器
   document.addEventListener('mousemove', handleMouseMove)
   document.addEventListener('mouseup', handleMouseUp)
-  // console.log('🚀 ~ handleMouseDown ~ 事件监听器已添加')
 }
 
 const handleMouseMove = async (event) => {
@@ -61,7 +59,6 @@ const handleMouseMove = async (event) => {
 }
 
 const handleMouseUp = () => {
-  console.log('🚀 ~ handleMouseUp ~ isDragging.value:', isDragging.value)
   if (isDragging.value) {
     isDragging.value = false
     // saveLyricConfig()
@@ -69,7 +66,6 @@ const handleMouseUp = () => {
   // 移除临时的鼠标移动和释放事件监听器
   document.removeEventListener('mousemove', handleMouseMove)
   document.removeEventListener('mouseup', handleMouseUp)
-  // console.log('🚀 ~ handleMouseUp ~ 事件监听器已移除')
 }
 
 // 处理窗口大小调整
@@ -82,7 +78,6 @@ const handleResize = (event) => {
 
 // 关闭桌面歌词
 const closeLyricDesktop = async () => {
-  console.log('🚀 ~ 关闭桌面歌词:')
   await window.musicApi.toggleLyricDesktop()
 }
 
@@ -90,7 +85,6 @@ const closeLyricDesktop = async () => {
 onMounted(async () => {
   // 监听歌词数据更新
   await window.musicApi.onUpdateLyricData((data) => {
-    console.log('🚀 ~ data:', data)
     lyricArr.value = data.lyricData || []
     currentTime.value = data.currentTime || 0
     isPlaying.value = data.isPlaying || false
@@ -107,9 +101,6 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-  // 事件监听器在handleMouseUp中已经移除
-  console.log('🚀 ~ onBeforeUnmount ~ 组件卸载完成')
-
   // 移除IPC事件监听
   window.musicApi.offUpdateLyricData()
   window.musicApi.offUpdatePlayStatus()
