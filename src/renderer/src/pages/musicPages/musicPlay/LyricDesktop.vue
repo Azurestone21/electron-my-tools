@@ -96,14 +96,19 @@ onMounted(async () => {
     isPlaying.value = data.isPlaying || false
   })
 
-  // 鼠标事件监听器在handleMouseDown中动态添加
-  console.log('🚀 ~ onMounted ~ 组件挂载完成')
+  lyricDesktopEl = document.getElementById('lyric-desktop') as HTMLInputElement
+  // 监听音量区域的鼠标滚轮事件
+  lyricDesktopEl.addEventListener('wheel', handleVolumeWheel)
 })
 
 onBeforeUnmount(() => {
   // 移除IPC事件监听
   window.musicApi.offUpdateLyricData()
   window.musicApi.offUpdatePlayStatus()
+  // 移除音量事件监听
+  if (lyricDesktopEl) {
+    lyricDesktopEl.removeEventListener('wheel', handleVolumeWheel)
+  }
 })
 </script>
 
