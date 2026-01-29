@@ -108,6 +108,7 @@ watchEffect(() => {
   }
 
   .aside {
+    flex-shrink: 0;
     position: relative;
     border-right: 1px solid #e4e7ed;
     width: 64px;
