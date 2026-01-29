@@ -1,17 +1,17 @@
 <!-- 底部 音乐播放控制 -->
 <script setup lang="ts">
-import {
-  secondsTimeFormat,
-  MusicPlayType,
-  KeyCodeType,
-  getPlayMusic
-} from '@renderer/utils/music-play'
 import { storeToRefs } from 'pinia'
+import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
+const { play, playNext, playPrev } = useMusicPlayer()
+import { secondsTimeFormat } from '@renderer/hooks/music/common'
+import { handleVolumeWheel } from '../../../../hooks/music/volume'
+
 const { proxy } = getCurrentInstance()
-const musicStore = useMusicStore()
-const { playingSong, isVideoPlay, duration, currentTime, musicList, playPattern, volume } =
-  storeToRefs(musicStore)
 const emits = defineEmits(['onPropsExpandList'])
+
+const musicStore = useMusicStore()
+const { playingSong, isVideoPlay, duration, currentTime, playPattern, volume } =
+  storeToRefs(musicStore)
 
 let myAudio = null // audio
 const barWidth = 600 // 进度条宽度
@@ -51,33 +51,6 @@ const percentage = computed<number>(() => {
     ? Math.floor((currentTime.value / duration.value) * barWidth)
     : 0
 })
-// 播放/暂停音乐
-const play = (refresh) => {
-  if (refresh) {
-    myAudio.load()
-    myAudio.currentTime = 0
-    musicStore.setStore({
-      currentTime: 0
-    })
-  }
-  if (myAudio.paused) {
-    myAudio.currentTime = currentTime.value
-    myAudio.play()
-  } else {
-    myAudio.pause()
-  }
-  musicStore.setStore({
-    isVideoPlay: !myAudio.paused
-  })
-}
-// 上一首 / 下一首
-const changeMusic = (type: string) => {
-  const song = getPlayMusic(type, musicList.value, playingSong.value)
-  musicStore.setStore({
-    playingSong: song
-  })
-  play(true)
-}
 
 // 调节音量
 const changeVolume = (e) => {
@@ -89,56 +62,31 @@ const changeVolume = (e) => {
   }
 }
 
-// 调整音量（增加或减少）
-const adjustVolume = (delta: number) => {
-  // 确保当前音量是有效的数字
-  let currentVolume = typeof volume.value === 'number' && isFinite(volume.value) ? volume.value : 0
-  let newVolume = currentVolume + delta
-  // 限制音量范围在0到1之间
-  if (newVolume < 0) newVolume = 0
-  if (newVolume > 1) newVolume = 1
-  // 确保新音量是有效的数字
-  if (!isFinite(newVolume)) {
-    newVolume = 0
-  }
-
-  musicStore.setStore({
-    volume: newVolume
-  })
-  if (myAudio) {
-    myAudio.volume = newVolume
-  }
-}
-
-// 处理音量区域的鼠标滚轮事件
-const handleVolumeWheel = (e: WheelEvent) => {
-  e.preventDefault()
-  // 滚轮向上滚动增加音量，向下滚动减少音量
-  const delta = e.deltaY < 0 ? 0.05 : -0.05
-  adjustVolume(delta)
-}
-
 onMounted(() => {
-  myAudio = document.getElementById('myAudio') as HTMLAudioElement
+  // myAudio = document.getElementById('myAudio') as HTMLAudioElement
+  // initAudio(myAudio)
 
   // 监听播放完成事件
-  myAudio.addEventListener(
-    'ended',
-    function () {
-      changeMusic('next')
-    },
-    false
-  )
+  // myAudio.addEventListener(
+  //   'ended',
+  //   function () {
+  //     changeMusic('next')
+  //   },
+  //   false
+  // )
+
   // 浏览器可以开始播放时，在dom挂载完直接获取duration会返回NaN
-  myAudio.addEventListener('canplay', function () {
-    musicStore.setStore({
-      duration: myAudio.duration
-    })
-    // 确保音量是有效的数字
-    const validVolume = typeof volume.value === 'number' && isFinite(volume.value) ? volume.value : 0.05
-    myAudio.volume = validVolume // 音量
-    myAudio.loop = playPattern.value == 'loop' // 单曲循环
-  })
+  // myAudio.addEventListener('canplay', function () {
+  //   musicStore.setStore({
+  //     duration: myAudio.duration
+  //   })
+  //   // 确保音量是有效的数字
+  //   const validVolume =
+  //     typeof volume.value === 'number' && isFinite(volume.value) ? volume.value : 0.05
+  //   myAudio.volume = validVolume // 音量
+  //   myAudio.loop = playPattern.value == 'loop' // 单曲循环
+  // })
+
   // 获取鼠标点击的位置，改变播放进度
   const progressEl = document.getElementById('myProgress')
   progressEl.addEventListener('click', function (event) {
@@ -150,39 +98,10 @@ onMounted(() => {
       })
     }
   })
-  // 监听滑块的变化改变音量
-  const volumeControl = document.getElementById('volumeControl') as HTMLInputElement
-  volumeControl.addEventListener('input', function () {
-    myAudio.volume = this.value
-  })
+
+  const volumeControlEl = document.getElementById('volumeControl') as HTMLInputElement
   // 监听音量区域的鼠标滚轮事件
-  volumeControl.addEventListener('wheel', handleVolumeWheel)
-  // 监听键盘事件
-  window.addEventListener('keydown', (e) => {
-    switch (e.code) {
-      case KeyCodeType.Space:
-        play(false)
-        break
-      case KeyCodeType.ArrowLeft:
-        changeMusic('before')
-        break
-      case KeyCodeType.ArrowRight:
-        changeMusic('next')
-        break
-    }
-  })
-})
-// 接收列表点击切换歌曲的事件
-proxy.$eventBus.on('changePlayingSong', () => {
-  play(true)
-})
-// 监听主线程的事件
-window.musicApi.onHandleMusicPlay((value: string) => {
-  if (value == MusicPlayType.play || value == MusicPlayType.pause) {
-    play(false)
-  } else {
-    changeMusic(value)
-  }
+  volumeControlEl.addEventListener('wheel', handleVolumeWheel)
 })
 </script>
 
@@ -215,14 +134,14 @@ window.musicApi.onHandleMusicPlay((value: string) => {
         <div class="handle">
           <!-- 上一首 / 播放/暂停 / 下一首 -->
           <div class="video_handle">
-            <div class="before cursor_pointer" @click="changeMusic('before')">
+            <div class="before cursor_pointer" @click="playPrev">
               <el-icon size="24"><CaretLeft /></el-icon>
             </div>
             <div class="launch cursor_pointer" @click="play(false)">
               <el-icon size="34" v-if="isVideoPlay"><VideoPause /></el-icon>
               <el-icon size="34" v-else><VideoPlay /></el-icon>
             </div>
-            <div class="next cursor_pointer" @click="changeMusic('next')">
+            <div class="next cursor_pointer" @click="playNext">
               <el-icon size="24"><CaretRight /></el-icon>
             </div>
           </div>
