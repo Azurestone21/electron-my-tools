@@ -3,6 +3,8 @@
 const { proxy } = getCurrentInstance()
 const musicStore = useMusicStore()
 const { playingSong, basePath } = storeToRefs(musicStore)
+import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
+const { play } = useMusicPlayer()
 
 import BottomBar from './components/BottomBar.vue'
 import Lyric from './components/Lyric.vue'
