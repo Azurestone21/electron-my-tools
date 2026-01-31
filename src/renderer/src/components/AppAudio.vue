@@ -66,9 +66,6 @@ onMounted(async () => {
   })
 })
 
-// 播放完成事件监听
-useEventListener('ended', playNext, 'myAudio')
-
 // 可播放事件监听
 useEventListener(
   'canplay',
