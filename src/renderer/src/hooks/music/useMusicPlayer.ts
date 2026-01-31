@@ -1,6 +1,6 @@
 import { onMounted, onUnmounted } from 'vue'
 import { IMusic, IPlayingSong, TMusicPlayType } from '@renderer/types/music'
-import { getVolume } from './volume'
+import { useEventListener } from '../useEventListener'
 
 // 音频实例全局维护
 let myAudio: HTMLAudioElement | null = null
@@ -122,33 +122,15 @@ export function useMusicPlayer() {
     const { playPattern } = musicStore
     initAudio() // 初始化音频实例
     listenIPCMusicPlay() // 注册 IPC 监听
-    window.addEventListener('keydown', handleKeyDown) // 注册键盘事件
-    // 监听播放完成事件
-    myAudio.addEventListener(
-      'ended',
-      function () {
-        changeMusic('next')
-      },
-      false
-    )
-    myAudio.addEventListener('canplay', function () {
-      musicStore.setStore({
-        duration: myAudio.duration
-      })
-      // 确保音量是有效的数字
-      myAudio.volume = getVolume() // 音量
-      myAudio.loop = playPattern == 'loop' // 单曲循环
-    })
   })
+
+  // 键盘事件监听
+  useEventListener('keydown', handleKeyDown, window)
 
   // 卸载时清理副作用
-  onUnmounted(() => {
-    // 移除键盘事件监听
-    window.removeEventListener('keydown', handleKeyDown)
-    // 若 IPC 有移除监听的方法，需在此处调用（示例：window.musicApi.offHandleMusicPlay()）
-  })
+  onUnmounted(() => {})
 
-  // 对外暴露的 API（组件仅需使用这些方法/状态）
+  // 对外暴露的 API
   return {
     play, // 播放/暂停（传入 true 则刷新并重新播放）
     playPrev: () => changeMusic('before'), // 快捷上一首

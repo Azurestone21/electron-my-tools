@@ -62,47 +62,10 @@ const changeVolume = (e) => {
   }
 }
 
-onMounted(() => {
-  // myAudio = document.getElementById('myAudio') as HTMLAudioElement
-  // initAudio(myAudio)
+onMounted(() => {})
 
-  // 监听播放完成事件
-  // myAudio.addEventListener(
-  //   'ended',
-  //   function () {
-  //     changeMusic('next')
-  //   },
-  //   false
-  // )
-
-  // 浏览器可以开始播放时，在dom挂载完直接获取duration会返回NaN
-  // myAudio.addEventListener('canplay', function () {
-  //   musicStore.setStore({
-  //     duration: myAudio.duration
-  //   })
-  //   // 确保音量是有效的数字
-  //   const validVolume =
-  //     typeof volume.value === 'number' && isFinite(volume.value) ? volume.value : 0.05
-  //   myAudio.volume = validVolume // 音量
-  //   myAudio.loop = playPattern.value == 'loop' // 单曲循环
-  // })
-
-  // 获取鼠标点击的位置，改变播放进度
-  const progressEl = document.getElementById('myProgress')
-  progressEl.addEventListener('click', function (event) {
-    if (myAudio.duration) {
-      let t = Math.floor((event.layerX / barWidth) * myAudio.duration)
-      myAudio.currentTime = t
-      musicStore.setStore({
-        currentTime: t
-      })
-    }
-  })
-
-  const volumeControlEl = document.getElementById('volumeControl') as HTMLInputElement
-  // 监听音量区域的鼠标滚轮事件
-  volumeControlEl.addEventListener('wheel', handleVolumeWheel)
-})
+useEventListener('click', (event) => changePlayProgress((event as MouseEvent).layerX), 'myProgress')
+useEventListener('wheel', handleVolumeWheel, 'volumeControl')
 </script>
 
 <template>
@@ -121,7 +84,11 @@ onMounted(() => {
         <div class="name">{{ playingSong.songname }} - {{ playingSong.songer }}</div>
         <div class="progress-bar">
           <!-- 进度条 -->
-          <div class="progress_bg" :style="{ width: `${barWidth}px` }" id="myProgress">
+          <div
+            id="myProgress"
+            class="progress_bg"
+            :style="{ width: `${MUSIC_PROGRESS_BAR_WIDTH}px` }"
+          >
             <div
               class="progress"
               :style="{

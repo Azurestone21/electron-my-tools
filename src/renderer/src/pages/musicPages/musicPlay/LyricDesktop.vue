@@ -1,7 +1,11 @@
 <!-- 桌面歌词 -->
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { parseTime } from '@renderer/utils/music-play'
+import { parseTime } from '@renderer/hooks/music/common'
+import { handleVolumeWheel } from '../../../hooks/music/volume'
+import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
+import { useEventListener } from '@renderer/hooks/useEventListener'
+useMusicPlayer()
 
 // 状态管理
 const lyricArr = ref([])
@@ -95,25 +99,19 @@ onMounted(async () => {
     currentTime.value = data.currentTime || 0
     isPlaying.value = data.isPlaying || false
   })
-
-  lyricDesktopEl = document.getElementById('lyric-desktop') as HTMLInputElement
-  // 监听音量区域的鼠标滚轮事件
-  lyricDesktopEl.addEventListener('wheel', handleVolumeWheel)
 })
-
 onBeforeUnmount(() => {
   // 移除IPC事件监听
   window.musicApi.offUpdateLyricData()
   window.musicApi.offUpdatePlayStatus()
-  // 移除音量事件监听
-  if (lyricDesktopEl) {
-    lyricDesktopEl.removeEventListener('wheel', handleVolumeWheel)
-  }
 })
+
+useEventListener('wheel', handleVolumeWheel, 'lyric-desktop')
 </script>
 
 <template>
   <div
+    id="lyric-desktop"
     class="lyric-desktop"
     :style="{
       opacity: lyricConfig.opacity,
