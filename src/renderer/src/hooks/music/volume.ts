@@ -9,7 +9,7 @@ export const getVolume = () => {
 export const adjustVolume = (delta: number) => {
   // 确保当前音量是有效的数字
   let currentVolume = getVolume()
-  let newVolume = currentVolume + delta
+  let newVolume = currentVolume + Number(delta || 0)
   // 限制音量范围在0到1之间
   if (newVolume < 0) newVolume = 0
   if (newVolume > 1) newVolume = 1
