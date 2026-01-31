@@ -1,4 +1,5 @@
-import { isObject } from "lodash"
+import { IPageStack } from '@renderer/types/global'
+import { isObject } from 'lodash'
 
 export const useIndexStore = defineStore('index', {
   state: () => ({
@@ -6,7 +7,7 @@ export const useIndexStore = defineStore('index', {
     city: null,
     todayWeather: {},
 
-    pageStack: [], // 路由栈
+    pageStack: [] as IPageStack[], // 路由栈
 
     remark: [] // 备注
   }),
@@ -27,10 +28,10 @@ export const useIndexStore = defineStore('index', {
       })
     },
     // 路由
-    setPage(route) {
+    setPage(route: IPageStack[]) {
       this.pageStack = route
     },
-    pushPage(route) {
+    pushPage(route: IPageStack) {
       this.pageStack.push(route)
     },
     popPage() {

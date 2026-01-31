@@ -4,7 +4,7 @@ import { isObject } from "lodash"
 export const useMusicStore = defineStore('music', {
   state: () => ({
     basePath: '', // 音乐根目录
-    musicList: [], // 音乐列表
+    musicList: [] as IPlayingSong[], // 音乐列表
     playingSong: {} as IPlayingSong, // 当前播放音乐
     duration: 0, // 音频时长
     currentTime: 0, // 当前播放事件

@@ -3,7 +3,7 @@ import path from 'path'
 import { is } from '@electron-toolkit/utils'
 
 // 桌面歌词窗口实例
-let lyricDesktopWindow = null
+let lyricDesktopWindow: BrowserWindow | null = null
 
 /**
  * 创建桌面歌词窗口
@@ -11,7 +11,7 @@ let lyricDesktopWindow = null
 export const createLyricDesktopWindow = () => {
   // 如果窗口已存在，直接显示
   if (lyricDesktopWindow) {
-    lyricDesktopWindow.show()
+    lyricDesktopWindow?.show()
     return lyricDesktopWindow
   }
 

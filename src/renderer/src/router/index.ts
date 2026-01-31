@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { useIndexStore } from '@renderer/store'
 
 const router = createRouter({
-  mode: 'hash',
+  // mode: 'hash',
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -82,11 +82,11 @@ router.beforeEach((to, from, next) => {
   // 记录进入的路由
   let index = indexStore.pageStack.findIndex((x) => x.path == to.path)
   if (index != -1) {
-    indexStore.setPage = indexStore.pageStack.splice(index + 1)
+    indexStore.setPage(indexStore.pageStack.splice(index + 1))
   } else {
     indexStore.pushPage({
       path: to.path,
-      name: to.name
+      name: to.name as string
     })
   }
   next()

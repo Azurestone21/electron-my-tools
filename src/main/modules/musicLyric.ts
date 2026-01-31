@@ -12,7 +12,7 @@ import { readFileSync } from 'fs'
  * @returns
  */
 const handleMusicLyric = function (path) {
-  let arr = [
+  let arr: { time: string; lyric: string }[] = [
     // {
     //   time: '00:00.00',
     //   lyric: '啦啦啦啦啦啦'

@@ -1,5 +1,5 @@
 // 处理url参数
-export function stringify(obj, sep, eq) {
+export function stringify(obj, sep?: string, eq?: string) {
   sep = sep || '&'
   eq = eq || '='
   let str = ''
@@ -10,7 +10,7 @@ export function stringify(obj, sep, eq) {
 }
 
 // 处理url参数
-export function parse(str) {
+export function parse(str: string) {
   let obj = new Object()
   let strArr = str.split('&')
   for (var i = 0; i < strArr.length; i++) {
