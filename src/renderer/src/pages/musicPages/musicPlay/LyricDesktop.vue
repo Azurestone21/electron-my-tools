@@ -65,7 +65,6 @@ const handleMouseMove = async (event) => {
 const handleMouseUp = () => {
   if (isDragging.value) {
     isDragging.value = false
-    // saveLyricConfig()
   }
   // 移除临时的鼠标移动和释放事件监听器
   document.removeEventListener('mousemove', handleMouseMove)
