@@ -3,7 +3,7 @@
 const { proxy } = getCurrentInstance()
 const musicStore = useMusicStore()
 const { basePath } = storeToRefs(musicStore)
-const formLabelWidth = '60px'
+const formLabelWidth = '80px'
 
 defineProps({
   open: {
@@ -38,7 +38,7 @@ function submit(type: string) {
     <template #default>
       <div class="demo-drawer__content">
         <el-form :model="form">
-          <el-form-item label="根目录" :label-width="formLabelWidth">
+          <el-form-item label="本地目录" :label-width="formLabelWidth">
             <el-input v-model="form.basePath" autocomplete="off" @blur="submit('basePath')" />
           </el-form-item>
         </el-form>
