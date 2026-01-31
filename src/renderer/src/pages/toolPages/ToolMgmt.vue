@@ -31,7 +31,7 @@ const jumpTo = (e) => {
     <div class="tool-group">
       <div class="title">实用工具</div>
       <el-row :gutter="20">
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-card shadow="hover" @click="jumpTo('/tool/music')">
             <div class="tool-card">
               <div class="tool-icon">
@@ -41,8 +41,8 @@ const jumpTo = (e) => {
               <div class="tool-desc">音频文件解码和播放</div>
             </div>
           </el-card>
-        </el-col>
-        <el-col :span="6">
+        </el-col> -->
+        <!-- <el-col :span="6">
           <el-card shadow="hover" @click="jumpTo('/tool/color')">
             <div class="tool-card">
               <div class="tool-icon">
@@ -52,7 +52,7 @@ const jumpTo = (e) => {
               <div class="tool-desc">颜色格式转换和预览</div>
             </div>
           </el-card>
-        </el-col>
+        </el-col> -->
         <el-col :span="6">
           <el-card shadow="hover" @click="jumpTo('/tool/data')">
             <div class="tool-card">
