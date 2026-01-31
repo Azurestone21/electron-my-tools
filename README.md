@@ -1,6 +1,6 @@
 # electron-my-tools
 
-An Electron application with Vue and TypeScript
+项目使用 Electron 框架，Vue 3 作为前端框架，TypeScript 作为开发语言。
 
 ## Recommended IDE Setup
 
@@ -11,26 +11,26 @@ An Electron application with Vue and TypeScript
 ### Install
 
 ```bash
-$ npm install
+npm install
 ```
 
 ### Development
 
 ```bash
-$ npm run dev
+npm run dev
 ```
 
 ### Build
 
 ```bash
 # For windows
-$ npm run build:win
+npm run build:win
 
 # For macOS
-$ npm run build:mac
+npm run build:mac
 
 # For Linux
-$ npm run build:linux
+npm run build:linux
 ```
 
 ## Effect Picture
@@ -39,64 +39,24 @@ $ npm run build:linux
 
 ![music](./src/renderer/src/assets/effectPicture/music.png)
 
-## Problem
+![tools](./src/renderer/src/assets/effectPicture/tools.png)
 
-**SyntaxError: The requested module '/node_modules/.vite/deps/swiper.js?v=74bd4e06' does not provide an export named 'Pagination'**
+## Feature
 
-TODO
+**全局**
 
-**TypeError: Failed to set the 'currentTime' property on 'HTMLMediaElement': The provided double value is non-finite.**
+- [ ] 深色模式
 
-传入的值类型不对
+**音乐相关**
 
-## TS Error
+- [x] 本地音乐播放
+- [x] 桌面歌词
 
-**xxx.value is possibly null**
+**工具相关**
 
-```json
-"compilerOptions": {
-  "strictNullChecks": false // 限制对空值的检查
-}
-```
+- [x] 日程通知
+- [ ] 待办事项列表
+- [x] JSON数据格式化
+- [x] 图片压缩
 
-**类型“HTMLElement”上不存在属性“value”**
-
-需要将document.getElementById返回的HTMLElement转换为HTMLInputElement
-
-**error TS2304: Cannot find name 'myHandle'.**
-
-类型“Window & typeof globalThis”上不存在属性“myHandle”
-
-- 在 preload/index.d.ts 里面
-
-```js
-interface Window {
-  myHandle: any // 加
-}
-```
-- 断言
-
-```js
-(window as any).myHandle
-```
-
-**error TS2339: Property 'proxy' does not exist on type 'ComponentInternalInstance | null'.**
-
-
-**error TS2339: Property '$eventBus' does not exist on type 'ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string, {}, {}, {}, string, ComponentProvideOptions>, ... 4 more ..., any>'.**
-
-全局挂载事件总线，ts报错
-
-src下 .d.ts 文件（没有就新增）
-
-```js
-import { ComponentCustomProperties } from '@/vue'
-declare module '@vue/runtime-core' {
-  interface ComponentCustomProperties {
-    $eventBus: any
-  }
-}
-```
-**error TS2339: Property '$route' does not exist on type 'CreateComponentPublicInstanceWithMixins<ToResolvedProps<{}, {}>, { menuList: typeof menuList; fullScreen: typeof fullScreen; minScreen: typeof minScreen; closeScreen: typeof closeScreen; clickMenuItem: typeof clickMenuItem; isCollapse: typeof isCollapse; showPageHeader: typeof showPageHeader; breadcrumb: typeof brea...'.**
-
-同上
+**其他**
