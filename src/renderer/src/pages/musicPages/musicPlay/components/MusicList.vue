@@ -1,8 +1,8 @@
 <!-- 音乐列表 -->
 <script setup lang="ts">
-const { proxy } = getCurrentInstance();
 const musicStore = useMusicStore()
 const { playingSong, musicList } = storeToRefs(musicStore)
+const emits = defineEmits(['changePlayingSong'])
 
 // 计算当前播放的专辑索引
 const activeNames = computed(() => {
@@ -10,12 +10,7 @@ const activeNames = computed(() => {
 })
 // 切换播放歌曲
 const changePlayingSong = (song) => {
-  musicStore.setStore({
-    playingSong: song,
-    currentTime: 0,
-    isVideoPlay: false
-  })
-  proxy.$eventBus.emit('changePlayingSong')
+  emits('changePlayingSong', song)
 }
 </script>
 
@@ -52,7 +47,7 @@ const changePlayingSong = (song) => {
   &::-webkit-scrollbar {
     display: none;
   }
-  :deep(.el-collapse)  {
+  :deep(.el-collapse) {
     background-color: transparent !important;
     border: none !important;
   }

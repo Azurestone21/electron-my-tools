@@ -1,43 +1,49 @@
 <!-- 底部 音乐播放控制 -->
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useMusicStore } from '@renderer/store/modules/music'
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
-const { play, playNext, playPrev } = useMusicPlayer()
 import { secondsTimeFormat } from '@renderer/hooks/music/common'
-import { handleVolumeWheel } from '../../../../hooks/music/volume'
-
-const { proxy } = getCurrentInstance()
-const emits = defineEmits(['onPropsExpandList'])
+import { adjustVolume, handleVolumeWheel } from '../../../../hooks/music/volume'
+import { MUSIC_PROGRESS_BAR_WIDTH } from '@renderer/config/music'
+import { useEventListener } from '@renderer/hooks/useEventListener'
+import {
+  Headset,
+  CaretLeft,
+  VideoPlay,
+  VideoPause,
+  CaretRight,
+  Expand,
+  Fold,
+  Setting
+} from '@element-plus/icons-vue'
 
 const musicStore = useMusicStore()
-const { playingSong, isVideoPlay, duration, currentTime, playPattern, volume } =
-  storeToRefs(musicStore)
+const { playingSong, isPlay, duration, currentTime, playPattern, volume } = storeToRefs(musicStore)
 
-let myAudio = null // audio
-const barWidth = 600 // 进度条宽度
+const { play, playNext, playPrev, changePlayProgress, changePlayPattern } = useMusicPlayer()
+
+defineProps({
+  isShowMusicList: {
+    type: Boolean,
+    default: false
+  }
+})
+const emits = defineEmits(['onToggleMusicList', 'onToggleSetting', 'onToggleDesktopLyric'])
 
 // 打开设置弹窗
 const openSetting = () => {
-  proxy.$eventBus.emit('openSetting')
+  emits('onToggleSetting')
 }
 
 // 展开音乐列表
-const isExpand = ref<boolean>(false)
-const onExpandList = () => {
-  isExpand.value = !isExpand.value
-  emits('onPropsExpandList')
-}
-// 切换播放模式
-const changePlayPattern = () => {
-  musicStore.changePlayPattern()
-  if (myAudio && playPattern.value) {
-    myAudio.loop = playPattern.value == 'loop'
-  }
+const onToggleMusicList = () => {
+  emits('onToggleMusicList')
 }
 
 // 切换桌面歌词显示/隐藏
-const toggleLyricDesktop = async () => {
-  await window.musicApi.toggleLyricDesktop()
+const toggleLyricDesktop = () => {
+  emits('onToggleDesktopLyric')
 }
 // 音频当前播放时间
 // const timeupdate = (e) => {
@@ -48,7 +54,7 @@ const toggleLyricDesktop = async () => {
 // 音频进度百分比
 const percentage = computed<number>(() => {
   return currentTime.value && duration.value
-    ? Math.floor((currentTime.value / duration.value) * barWidth)
+    ? Math.floor((currentTime.value / duration.value) * MUSIC_PROGRESS_BAR_WIDTH)
     : 0
 })
 
@@ -57,9 +63,7 @@ const changeVolume = (e) => {
   musicStore.setStore({
     volume: e.target.value
   })
-  if (myAudio) {
-    myAudio.volume = e.target.value
-  }
+  adjustVolume(e.target.value)
 }
 
 onMounted(() => {})
@@ -134,8 +138,8 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
               词
             </div>
             <!-- 展开/收起列表 -->
-            <div class="cursor_pointer flex ml-[20px]" @click="onExpandList">
-              <el-icon size="24" color="#fff" v-if="isExpand"><Expand /></el-icon>
+            <div class="cursor_pointer flex ml-[20px]" @click="onToggleMusicList">
+              <el-icon size="24" color="#fff" v-if="isShowMusicList"><Expand /></el-icon>
               <el-icon size="24" color="#fff" v-else><Fold /></el-icon>
             </div>
             <div class="cursor_pointer flex ml-[20px]" @click="openSetting">

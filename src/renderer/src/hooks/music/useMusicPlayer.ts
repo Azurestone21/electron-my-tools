@@ -103,23 +103,39 @@ export function useMusicPlayer() {
 
   // 监听主进程 IPC 音乐播放事件
   const listenIPCMusicPlay = async () => {
-    if (!window.musicApi?.onHandleMusicPlay) {
-      console.warn('未检测到 musicApi，IPC 通信初始化失败')
-      return
-    }
     // 监听音乐播放控制事件（播放/暂停/上一首/下一首）
-    await window.musicApi.onHandleMusicPlay((value: TMusicPlayType) => {
-      if (value === 'play' || value === 'pause') {
+    await window.musicApi.onHandleMusicPlay((action: TMusicPlayType) => {
+      if (action === 'play' || action === 'pause') {
         play(false)
       } else {
-        changeMusic(value)
+        changeMusic(action)
       }
     })
   }
 
+  // 改变播放时间
+  const changePlayProgress = (layerX: number) => {
+    if (!myAudio) return // 音频未初始化则忽略
+    if (myAudio.duration) {
+      let t = Math.floor((layerX / 600) * myAudio.duration)
+      myAudio.currentTime = t
+      musicStore.setStore({
+        currentTime: t
+      })
+    }
+  }
+
+  // 切换播放模式
+  const changePlayPattern = () => {
+    const { playPattern } = musicStore
+    musicStore.changePlayPattern()
+    if (myAudio && playPattern) {
+      myAudio.loop = playPattern === 'loop'
+    }
+  }
+
   // 生命周期：挂载时初始化
   onMounted(() => {
-    const { playPattern } = musicStore
     initAudio() // 初始化音频实例
     listenIPCMusicPlay() // 注册 IPC 监听
   })
@@ -134,6 +150,8 @@ export function useMusicPlayer() {
   return {
     play, // 播放/暂停（传入 true 则刷新并重新播放）
     playPrev: () => changeMusic('before'), // 快捷上一首
-    playNext: () => changeMusic('next') // 快捷下一首
+    playNext: () => changeMusic('next'), // 快捷下一首
+    changePlayProgress, // 改变播放时间
+    changePlayPattern // 切换播放模式
   }
 }

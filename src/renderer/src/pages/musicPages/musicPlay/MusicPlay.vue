@@ -11,16 +11,6 @@ import Lyric from './components/Lyric.vue'
 import MusicList from './components/MusicList.vue'
 import Settings from './components/Settings.vue'
 
-// 音乐列表是否显示
-const isShowList = ref<boolean>(false)
-const onExpandList = () => {
-  isShowList.value = !isShowList.value
-}
-// 设置抽屉是否显示
-const openSetting = ref<boolean>(false)
-const handleSetting = () => {
-  openSetting.value = !openSetting.value
-}
 // 初始化音乐列表
 const getMusicList = async () => {
   const data = await window.musicApi.getMusicData(basePath.value)
@@ -28,27 +18,39 @@ const getMusicList = async () => {
     musicList: data
   })
 }
-
-// 监听打开设置抽屉事件
-proxy.$eventBus.on('openSetting', () => {
-  handleSetting()
-})
-// 监听刷新音乐列表事件
-proxy.$eventBus.on('refreshMusic', () => {
-  getMusicList()
-})
-// 接收列表点击切换歌曲的事件
-proxy.$eventBus.on('changePlayingSong', () => {
+// 切换播放歌曲
+const changePlayingSong = (song) => {
+  musicStore.setStore({
+    playingSong: song,
+    currentTime: 0,
+    isPlay: false
+  })
   play(true)
-})
+}
+// 音乐列表是否显示
+const isShowMusicList = ref<boolean>(false)
+const onToggleMusicList = () => {
+  isShowMusicList.value = !isShowMusicList.value
+}
+// 设置抽屉是否显示
+const openSetting = ref<boolean>(false)
+const toggleSetting = () => {
+  openSetting.value = !openSetting.value
+}
+// 桌面歌词
+const toggleLyricDesktop = async () => {
+  await window.musicApi.toggleLyricDesktop()
+}
 
 onMounted(() => {
   getMusicList()
 })
 
+// 监听刷新音乐列表事件
+proxy.$eventBus.on('refreshMusic', () => {
+  getMusicList()
+})
 onBeforeUnmount(() => {
-  proxy.$eventBus.off('changePlayingSong')
-  proxy.$eventBus.off('openSetting')
   proxy.$eventBus.off('refreshMusic')
 })
 </script>
@@ -58,16 +60,23 @@ onBeforeUnmount(() => {
     <div id="musicPlay" class="musicPlay">
       <div class="content">
         <div class="left hide-scrollbar"><Lyric /></div>
-        <div class="right hide-scrollbar" v-if="isShowList"><MusicList /></div>
+        <div class="right hide-scrollbar" v-if="isShowMusicList">
+          <MusicList @changePlayingSong="changePlayingSong" />
+        </div>
       </div>
       <div class="footer">
-        <BottomBar @onPropsExpandList="onExpandList" />
+        <BottomBar
+          :isShowMusicList="isShowMusicList"
+          @onToggleMusicList="onToggleMusicList"
+          @onToggleSetting="toggleSetting"
+          @onToggleDesktopLyric="toggleLyricDesktop"
+        />
       </div>
     </div>
     <div class="bg">
       <img :src="playingSong.imgSrc || ''" />
     </div>
-    <Settings :open="openSetting" @onCancel="handleSetting" />
+    <Settings :open="openSetting" @onCancel="toggleSetting" />
   </div>
 </template>
 
