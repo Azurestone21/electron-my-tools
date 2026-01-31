@@ -1,14 +1,16 @@
-import { IPageStack } from '@renderer/types/global'
+import { IAppSettings, IPageStack } from '@renderer/types/global'
 import { isObject } from 'lodash'
 
 export const useIndexStore = defineStore('index', {
   state: () => ({
+    appSettingsVisible: false,
+    appSettings: {
+      theme: 'light'
+    } as IAppSettings,
     location: null,
     city: null,
     todayWeather: {},
-
     pageStack: [] as IPageStack[], // 路由栈
-
     remark: [] // 备注
   }),
   getters: {},
@@ -39,6 +41,9 @@ export const useIndexStore = defineStore('index', {
     },
     clearPage() {
       this.pageStack = []
+    },
+    setAppSettings(setting: IAppSettings) {
+      this.appSettings = setting
     }
   },
   persist: true // 持久化

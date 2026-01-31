@@ -1,7 +1,7 @@
 <!-- 框架 -->
 <script setup lang="ts">
 import menuList from '@renderer/router/menu'
-import { Setting, Monitor, Expand, Fold } from '@element-plus/icons-vue'
+import { Setting } from '@element-plus/icons-vue'
 const router = useRouter()
 const route = useRoute()
 const indexStore = useIndexStore()
@@ -20,7 +20,13 @@ const clickMenuItem = (path) => {
   router.push(path)
 }
 
-const isCollapse = ref<boolean>(false)
+// 打开设置弹窗
+const openAppSettings = () => {
+  indexStore.setStore({
+    appSettingsVisible: true
+  })
+}
+
 onMounted(() => {
   indexStore.clearPage()
 })
@@ -59,7 +65,7 @@ watchEffect(() => {
           </div>
         </div>
         <div class="aside-footer">
-          <div class="setting-btn">
+          <div class="setting-btn" @click="openAppSettings">
             <el-icon size="20"><Setting /></el-icon>
           </div>
         </div>
