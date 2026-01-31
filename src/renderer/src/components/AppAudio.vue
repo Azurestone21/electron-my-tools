@@ -4,8 +4,11 @@ import { watchEffect, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMusicStore } from '../store/modules/music'
 const musicStore = useMusicStore()
-const { playingSong, currentTime } = storeToRefs(musicStore)
+const { playingSong, currentTime, playPattern } = storeToRefs(musicStore)
 import { getVolume } from '@renderer/hooks/music/volume'
+import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
+import { useEventListener } from '@renderer/hooks/useEventListener'
+const { playNext } = useMusicPlayer()
 
 let myAudio = ref<HTMLAudioElement | null>(null)
 
@@ -62,6 +65,24 @@ onMounted(async () => {
     })
   })
 })
+
+// 播放完成事件监听
+useEventListener('ended', playNext, 'myAudio')
+
+// 可播放事件监听
+useEventListener(
+  'canplay',
+  () => {
+    musicStore.setStore({
+      duration: myAudio.value?.duration || 0
+    })
+    myAudio.value.volume = getVolume()
+    myAudio.value.loop = playPattern.value === 'loop'
+  },
+  'myAudio'
+)
+// 播放完成事件监听
+useEventListener('ended', playNext, 'myAudio')
 </script>
 
 <template>
