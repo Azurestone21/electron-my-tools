@@ -56,7 +56,7 @@ export const play = (refresh: boolean = false) => {
   }
 
   musicStore.setStore({
-    isVideoPlay: !myAudio.paused
+    isPlay: !myAudio.paused
   })
 }
 

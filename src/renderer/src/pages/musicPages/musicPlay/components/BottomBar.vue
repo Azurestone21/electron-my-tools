@@ -138,7 +138,7 @@ onMounted(() => {
               <el-icon size="24"><CaretLeft /></el-icon>
             </div>
             <div class="launch cursor_pointer" @click="play(false)">
-              <el-icon size="34" v-if="isVideoPlay"><VideoPause /></el-icon>
+              <el-icon size="34" v-if="isPlay"><VideoPause /></el-icon>
               <el-icon size="34" v-else><VideoPlay /></el-icon>
             </div>
             <div class="next cursor_pointer" @click="playNext">

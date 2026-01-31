@@ -69,7 +69,7 @@ export function useMusicPlayer() {
     }
 
     musicStore.setStore({
-      isVideoPlay: !myAudio.paused
+      isPlay: !myAudio.paused
     })
   }
 

@@ -26,7 +26,7 @@ const getLyric = async () => {
       await window.musicApi.sendLyricData(
         JSON.parse(JSON.stringify(lyricArr)),
         Number(musicStore.currentTime),
-        Boolean(musicStore.isVideoPlay)
+        Boolean(musicStore.isPlay)
       )
     } catch (error) {
       console.error('获取歌词失败:', error)
@@ -41,7 +41,7 @@ watchEffect(() => {
   }
   if (currentTime.value !== undefined) {
     // 发送播放状态到桌面歌词
-    window.musicApi.sendPlayStatus(currentTime.value, musicStore.isVideoPlay)
+    window.musicApi.sendPlayStatus(currentTime.value, musicStore.isPlay)
   }
 })
 
