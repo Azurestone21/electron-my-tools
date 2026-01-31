@@ -83,6 +83,12 @@ useEventListener(
 )
 // 播放完成事件监听
 useEventListener('ended', playNext, 'myAudio')
+
+onUnmounted(() => {
+  musicStore.setStore({
+    isPlay: false
+  })
+})
 </script>
 
 <template>
