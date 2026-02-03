@@ -6,12 +6,7 @@ const { appSettingsVisible, appSettings } = storeToRefs(indexStore)
 
 const formLabelWidth = '80px'
 
-defineProps({
-  visible: {
-    type: Boolean,
-    default: false
-  }
-})
+defineProps({})
 const emits = defineEmits(['onCancel'])
 
 // 关闭设置弹窗
@@ -48,8 +43,8 @@ const onSubmit = () => {
       </el-form>
     </div>
     <template #footer>
-      <el-button @click="onClose">取消</el-button>
-      <el-button type="primary" @click="onSubmit">确认</el-button>
+      <!-- <el-button @click="onClose">取消</el-button>
+      <el-button type="primary" @click="onSubmit">确认</el-button> -->
     </template>
   </el-dialog>
 </template>
