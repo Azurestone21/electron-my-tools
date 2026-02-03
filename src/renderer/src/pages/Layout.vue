@@ -105,7 +105,7 @@ const currentTheme = computed(() => {
           <!-- 页面 -->
           <div
             class="router-view"
-            :style="{ height: `calc(100% - ${showPageHeader ? '14px' : '0'})` }"
+            :style="{ height: `calc(100% - ${showPageHeader ? '14px' : '0px'})` }"
           >
             <router-view></router-view>
           </div>
