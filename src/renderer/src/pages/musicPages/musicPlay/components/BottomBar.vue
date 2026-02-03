@@ -100,7 +100,9 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
               }"
             ></div>
           </div>
-          <div class="totalTime">{{ secondsTimeFormat(duration) }}</div>
+          <div class="totalTime">
+            {{ secondsTimeFormat(currentTime) }} / {{ secondsTimeFormat(duration) }}
+          </div>
         </div>
         <div class="handle">
           <!-- 上一首 / 播放/暂停 / 下一首 -->
