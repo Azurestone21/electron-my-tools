@@ -54,6 +54,7 @@ const currentTheme = computed(() => {
 <template>
   <div class="layout-container" :class="`theme-${currentTheme}`">
     <div class="content">
+      <!-- 侧边栏 -->
       <aside class="aside">
         <div class="aside-header">
           <div class="avatar"></div>
@@ -78,6 +79,7 @@ const currentTheme = computed(() => {
         </div>
       </aside>
       <div class="containers">
+        <!-- 工具条 -->
         <div class="tool-bar drag">
           <div class="minWindow no_drag">
             <el-icon class="icon" @click="minScreen"><Minus /></el-icon>
@@ -90,6 +92,7 @@ const currentTheme = computed(() => {
           </div>
         </div>
         <div class="main">
+          <!-- 面包屑 -->
           <template v-if="showPageHeader">
             <el-breadcrumb separator="/" style="padding: 0 20px">
               <template v-for="item in breadcrumb" key="index">
