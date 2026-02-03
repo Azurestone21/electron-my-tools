@@ -2,9 +2,11 @@
 <script setup lang="ts">
 import menuList from '@renderer/router/menu'
 import { Setting } from '@element-plus/icons-vue'
+import AppSettings from '../components/AppSettings.vue'
 const router = useRouter()
 const route = useRoute()
 const indexStore = useIndexStore()
+const { appSettings } = storeToRefs(indexStore)
 
 const fullScreen = () => {
   window.myHandle.handleScreen('full')
@@ -42,10 +44,15 @@ watchEffect(() => {
     breadcrumb.value = []
   }
 })
+
+// 计算当前主题
+const currentTheme = computed(() => {
+  return appSettings.value?.theme || 'light'
+})
 </script>
 
 <template>
-  <div class="layout-container">
+  <div class="layout-container" :class="`theme-${currentTheme}`">
     <div class="content">
       <aside class="aside">
         <div class="aside-header">
@@ -66,20 +73,20 @@ watchEffect(() => {
         </div>
         <div class="aside-footer">
           <div class="setting-btn" @click="openAppSettings">
-            <el-icon size="20"><Setting /></el-icon>
+            <el-icon class="icon" size="20"><Setting /></el-icon>
           </div>
         </div>
       </aside>
       <div class="containers">
         <div class="tool-bar drag">
           <div class="minWindow no_drag">
-            <el-icon @click="minScreen"><Minus /></el-icon>
+            <el-icon class="icon" @click="minScreen"><Minus /></el-icon>
           </div>
           <div class="maxWindow no_drag">
-            <el-icon @click="fullScreen"><FullScreen /></el-icon>
+            <el-icon class="icon" @click="fullScreen"><FullScreen /></el-icon>
           </div>
           <div class="closeWindow no_drag">
-            <el-icon @click="closeScreen"><Close /></el-icon>
+            <el-icon class="icon" @click="closeScreen"><Close /></el-icon>
           </div>
         </div>
         <div class="main">
@@ -98,6 +105,8 @@ watchEffect(() => {
         </div>
       </div>
     </div>
+
+    <app-settings />
   </div>
 </template>
 
@@ -116,9 +125,10 @@ watchEffect(() => {
   .aside {
     flex-shrink: 0;
     position: relative;
-    border-right: 1px solid #e4e7ed;
+    border-right: 1px solid var(--border);
     width: 64px;
     height: 100%;
+    background-color: var(--background);
 
     display: flex;
     flex-direction: column;
@@ -165,12 +175,12 @@ watchEffect(() => {
         color: #666;
 
         &:hover {
-          color: #409eff;
-          background-color: #f5f7fa;
+          color: var(--primary);
+          background-color: var(--accent);
         }
 
         &.active {
-          color: #409eff;
+          color: var(--primary);
         }
       }
     }
@@ -194,8 +204,12 @@ watchEffect(() => {
         align-items: center;
         justify-content: center;
 
+        .icon {
+          color: var(--foreground);
+        }
+
         &:hover {
-          color: #409eff;
+          color: var(--primary);
         }
       }
     }
@@ -204,16 +218,21 @@ watchEffect(() => {
   .containers {
     flex: 1;
     height: 100%;
+    background-color: var(--background);
+
     .tool-bar {
       display: flex;
       justify-content: flex-end;
       padding: 10px 20px;
-      background-color: #fff;
 
       div {
         width: 30px;
         display: flex;
         justify-content: flex-end;
+      }
+
+      .icon {
+        color: var(--foreground);
       }
     }
     .main {

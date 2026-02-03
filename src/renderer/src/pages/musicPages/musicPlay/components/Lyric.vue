@@ -101,7 +101,7 @@ watchEffect(() => {
   }
   .active {
     font-size: 16px;
-    color: var(--theme-color-music);
+    color: var(--primary);
   }
 }
 </style>

@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 const locale = zhCn
-import { ElConfigProvider } from 'element-plus'
 import AppAudio from './components/AppAudio.vue'
-import AppSettings from './components/AppSettings.vue'
 import { initMainProcessSchedules } from './hooks/schedules/schedules'
 
 onMounted(async () => {
@@ -22,7 +19,6 @@ onMounted(async () => {
   </el-config-provider>
 
   <app-audio />
-  <app-settings />
 </template>
 
 <style>

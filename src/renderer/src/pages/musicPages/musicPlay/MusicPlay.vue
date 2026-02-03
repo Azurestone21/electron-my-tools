@@ -89,6 +89,7 @@ div {
 }
 .musicPlay {
   position: relative;
+  z-index: 1;
   width: 100%;
   height: calc(100% - 100px);
 }
@@ -98,7 +99,7 @@ div {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: -1;
+  z-index: 0;
   img {
     width: 100%;
     height: 100%;

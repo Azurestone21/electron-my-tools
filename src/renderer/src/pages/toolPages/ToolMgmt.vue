@@ -86,10 +86,10 @@ const jumpTo = (e) => {
   .title {
     font-size: 24px;
     font-weight: 600;
-    color: #222222;
+    color: var(--foreground);
     margin-bottom: 24px;
     padding-left: 12px;
-    border-left: 4px solid #409eff;
+    border-left: 4px solid var(--primary);
     line-height: 38px;
   }
 
@@ -104,15 +104,15 @@ const jumpTo = (e) => {
 
     .el-col {
       /* 卡片容器 */
-      .el-card {
-        height: 100%;
-        border-radius: 12px;
-        overflow: hidden;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-        border: none;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        background: #fff;
+        .el-card {
+          height: 100%;
+          border-radius: 12px;
+          overflow: hidden;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+          border: none;
+          box-shadow: var(--shadow-md);
+          background: var(--card);
 
         /* 卡片内容 */
         .el-card__body {
@@ -127,8 +127,8 @@ const jumpTo = (e) => {
         /* 悬停效果 */
         &:hover {
           transform: translateY(-8px);
-          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-          border-color: #409eff;
+          box-shadow: var(--shadow-lg);
+          border-color: var(--primary);
         }
 
         /* 点击效果 */
@@ -147,12 +147,12 @@ const jumpTo = (e) => {
     /* 工具图标 */
     .tool-icon {
       font-size: 48px;
-      color: #409eff;
+      color: var(--primary);
       transition: all 0.3s ease;
 
       .el-card:hover & {
         transform: scale(1.1);
-        color: #66b1ff;
+        color: var(--primary-foreground);
       }
     }
 
@@ -160,19 +160,19 @@ const jumpTo = (e) => {
     .tool-name {
       font-size: 16px;
       font-weight: 500;
-      color: #303133;
+      color: var(--foreground);
       margin-bottom: 8px;
       transition: color 0.3s ease;
 
       .el-card:hover & {
-        color: #409eff;
+        color: var(--primary);
       }
     }
 
     /* 工具描述 */
     .tool-desc {
       font-size: 12px;
-      color: #909399;
+      color: var(--muted-foreground);
       line-height: 1.4;
     }
   }

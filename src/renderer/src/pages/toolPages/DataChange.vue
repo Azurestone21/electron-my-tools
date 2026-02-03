@@ -107,7 +107,8 @@ watch(originText, (newVal, oldVal) => {
 
   .left {
     height: 100%;
-    background-color: #f5f5f5;
+    background-color: var(--card);
+    border-radius: 8px;
     overflow: hidden;
 
     .origin_input {
@@ -115,13 +116,13 @@ watch(originText, (newVal, oldVal) => {
       height: 100%;
       max-height: 90%;
       padding: 10px;
-      border-radius: 8px;
       outline: none;
       resize: none;
       overflow: auto;
-      border: 1px dashed rgb(240, 249, 255);
+      // border: 1px dashed var(--border);
       background: transparent;
       font-size: 14px;
+      color: var(--foreground);
       font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
       &::-webkit-scrollbar {
         display: none;
@@ -132,30 +133,31 @@ watch(originText, (newVal, oldVal) => {
   .split {
     width: 5px;
     height: 100%;
-    background-color: #e0e0e0;
+    background-color: var(--border);
     cursor: e-resize;
     border-radius: 2px;
     margin: 0 5px;
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: #bdbdbd;
+      background-color: var(--accent);
     }
 
     &.dragging {
-      background-color: #9e9e9e;
+      background-color: var(--primary);
     }
   }
 
   .right {
     flex: 1;
     height: 100%;
-    background-color: #f5f5f5;
+    background-color: var(--card);
     padding: 10px;
     border-radius: 8px;
     overflow: auto;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 14px;
+    color: var(--foreground);
   }
 }
 </style>

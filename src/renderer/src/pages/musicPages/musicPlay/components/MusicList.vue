@@ -85,7 +85,7 @@ const changePlayingSong = (song) => {
     }
     .active,
     &:hover {
-      color: var(--theme-color-music);
+      color: var(--primary);
     }
     .time {
       width: 20%;

@@ -194,7 +194,7 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
         top: 0;
         height: 100%;
         cursor: pointer;
-        background-color: var(--music-bar-active);
+        background-color: var(--primary);
       }
     }
     .totalTime {
@@ -258,12 +258,12 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background-color: var(--music-bar-active);
+        background-color: var(--primary);
         border: 1px solid transparent;
         // margin-top: -13px;
         /* 使用border-image属性给圆形添加渐变边框 */
-        border-image: linear-gradient(var(--music-bar-active), var(--music-bar-active)) 0 fill / 3
-          10 3 0 / 0px 0px 0 60px;
+        border-image: linear-gradient(var(--primary), var(--primary)) 0 fill / 3 10 3 0 / 0px 0px 0
+          60px;
       }
     }
   }

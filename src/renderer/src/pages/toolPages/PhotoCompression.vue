@@ -283,9 +283,10 @@ const handleDownload = () => {
     height: 100%;
     max-width: 100%;
     margin: 0 auto;
-    background-image: linear-gradient(135deg, #f5f7fa 0%, #f5f7fa 100%);
+    // background-image: linear-gradient(135deg, #f5f7fa 0%, #f5f7fa 100%);
+    background-color: var(--card);
     border-radius: 16px;
-    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
     padding: 30px;
     gap: 30px;
   }
@@ -294,37 +295,37 @@ const handleDownload = () => {
 /* 上传区域样式 */
 .upload-container {
   .upload {
-    border: 2px dashed #e0e0e0;
+    border: 2px dashed var(--border);
     border-radius: 12px;
     padding: 40px;
     margin-bottom: 30px;
-    background: #f9f9f9;
+    background: var(--card);
     transition: all 0.3s ease;
 
     &:hover {
-      border-color: #409eff;
-      background: var(--theme-color);
+      border-color: var(--primary);
+      background: var(--accent);
     }
 
     .el-upload__text {
-      color: #606266;
+      color: var(--foreground);
       font-size: 16px;
       margin-top: 16px;
     }
 
     .el-upload__tip {
       margin-top: 16px;
-      color: #909399;
+      color: var(--muted-foreground);
       font-size: 14px;
     }
   }
 
   /* 压缩设置样式 */
   .compress-settings {
-    background: #f9f9f9;
+    background: var(--card);
     border-radius: 12px;
     padding: 24px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-md);
 
     .el-form {
       .el-form-item {
@@ -338,7 +339,7 @@ const handleDownload = () => {
 
         .el-form-item__label {
           font-size: 14px;
-          color: #606266;
+          color: var(--foreground);
           font-weight: 500;
         }
 
@@ -358,10 +359,11 @@ const handleDownload = () => {
 
 /* 压缩结果区域样式 */
 .compress-container {
-  background: #f9f9f9;
+  background: var(--card);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
   min-height: 500px;
   display: flex;
   flex-direction: column;
@@ -377,7 +379,7 @@ const handleDownload = () => {
       width: 100%;
       max-height: 300px;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-md);
       margin-bottom: 24px;
       transition: transform 0.3s ease;
 
@@ -388,7 +390,7 @@ const handleDownload = () => {
 
     .img-info {
       font-size: 14px;
-      color: #606266;
+      color: var(--muted-foreground);
       margin: 8px 0;
       text-align: center;
 
@@ -410,7 +412,7 @@ const handleDownload = () => {
 
         &:hover {
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          box-shadow: var(--shadow-lg);
         }
       }
     }
@@ -421,7 +423,7 @@ const handleDownload = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #909399;
+    color: var(--muted-foreground);
     font-size: 16px;
   }
 }
