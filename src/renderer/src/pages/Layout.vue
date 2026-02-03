@@ -99,7 +99,11 @@ const currentTheme = computed(() => {
               </template>
             </el-breadcrumb>
           </template>
-          <div class="router-view">
+          <!-- 页面 -->
+          <div
+            class="router-view"
+            :style="{ height: `calc(100% - ${showPageHeader ? '14px' : '0'})` }"
+          >
             <router-view></router-view>
           </div>
         </div>
@@ -243,7 +247,6 @@ const currentTheme = computed(() => {
   }
 
   .router-view {
-    height: 100%;
   }
 }
 </style>
