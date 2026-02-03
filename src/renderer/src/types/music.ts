@@ -15,6 +15,7 @@ export interface IPlayingSong {
   imgSrc: string // 封面 URL
   lyric: string // 歌词文件路径
   isLoadDown: boolean // 是否下载完成
+  songs: IPlayingSong[] // 歌曲列表
 }
 
 export type TMusicPlayType = 'play' | 'pause' | 'before' | 'next'
