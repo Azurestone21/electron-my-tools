@@ -75,6 +75,17 @@ const jumpTo = (e) => {
             </div>
           </el-card>
         </el-col>
+        <el-col :span="6">
+          <el-card shadow="hover" @click="jumpTo('/tool/getColor')">
+            <div class="tool-card">
+              <div class="tool-icon">
+                <el-icon><EditPen /></el-icon>
+              </div>
+              <div class="tool-name">颜色拾取</div>
+              <div class="tool-desc">拾取屏幕上的颜色</div>
+            </div>
+          </el-card>
+        </el-col>
       </el-row>
     </div>
   </div>
@@ -104,15 +115,15 @@ const jumpTo = (e) => {
 
     .el-col {
       /* 卡片容器 */
-        .el-card {
-          height: 100%;
-          border-radius: 12px;
-          overflow: hidden;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: pointer;
-          border: none;
-          box-shadow: var(--shadow-md);
-          background: var(--card);
+      .el-card {
+        height: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        border: none;
+        box-shadow: var(--shadow-md);
+        background: var(--card);
 
         /* 卡片内容 */
         .el-card__body {
