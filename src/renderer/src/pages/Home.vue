@@ -1,6 +1,6 @@
 <!-- 首页 -->
 <script setup lang="ts">
-import { isFestival, solarToLunar } from '@renderer/utils/festival.js'
+import Calendar from '@renderer/components/Calendar.vue';
 const indexStore = useIndexStore()
 const { remark } = storeToRefs(indexStore)
 </script>
@@ -19,16 +19,7 @@ const { remark } = storeToRefs(indexStore)
       ></textarea>
     </div>
     <div class="calendar">
-      <el-calendar>
-        <template #date-cell="{ data }">
-          <div>
-            <div class="solar">{{ data.day.split('-')[2] }}</div>
-            <div class="lunar" :class="{ festival: isFestival(data) }">
-              {{ solarToLunar(data) }}
-            </div>
-          </div>
-        </template>
-      </el-calendar>
+      <calendar />
     </div>
   </div>
 </template>
@@ -67,43 +58,6 @@ const { remark } = storeToRefs(indexStore)
   /* 占位符（输入文本前的文本显示） */
   .remark_input::placeholder {
     color: #a6a6a6;
-  }
-}
-
-// 日历
-.calendar {
-  width: 460px;
-  height: 400px;
-  border-radius: 12px;
-  overflow: hidden;
-  :deep(.el-calendar) {
-    width: 100%;
-    height: 100%;
-    background-color: var(--card);
-    font-size: 12px;
-    color: var(--foreground);
-    .next {
-      border: none;
-    }
-    td {
-      border: none;
-    }
-    .el-calendar-day {
-      height: 46px !important;
-      text-align: center;
-      border: none;
-    }
-    .el-calendar__header {
-      justify-content: space-between;
-    }
-    .is-selected {
-      background-color: #1d8dd8;
-      color: #fff;
-    }
-    // 本月农历节日设置颜色
-    .lunar.festival {
-      color: #adadeb;
-    }
   }
 }
 </style>
