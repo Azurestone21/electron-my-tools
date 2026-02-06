@@ -56,6 +56,11 @@ const router = createRouter({
           component: () => import('@renderer/pages/toolPages/PhotoCompression.vue')
         },
         {
+          path: '/tool/getColor',
+          name: '颜色拾取',
+          component: () => import('@renderer/pages/toolPages/GetColor.vue')
+        },
+        {
           path: '/music',
           name: '音乐',
           component: () => import('@renderer/pages/musicPages/musicPlay/MusicPlay.vue'),
