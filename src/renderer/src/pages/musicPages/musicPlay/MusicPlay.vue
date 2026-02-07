@@ -10,6 +10,7 @@ import BottomBar from './components/BottomBar.vue'
 import Lyric from './components/Lyric.vue'
 import MusicList from './components/MusicList.vue'
 import Settings from './components/Settings.vue'
+import MusicStore from './components/MusicStore.vue'
 
 // 初始化音乐列表
 const getMusicList = async () => {
@@ -41,6 +42,11 @@ const toggleSetting = () => {
 const toggleLyricDesktop = async () => {
   await window.musicApi.toggleLyricDesktop()
 }
+// 音乐库
+const isShowMusicStore = ref<boolean>(false)
+const toggleMusicStore = async () => {
+  isShowMusicStore.value = !isShowMusicStore.value
+}
 
 onMounted(() => {
   getMusicList()
@@ -70,6 +76,7 @@ onBeforeUnmount(() => {
           @onToggleMusicList="onToggleMusicList"
           @onToggleSetting="toggleSetting"
           @onToggleDesktopLyric="toggleLyricDesktop"
+          @onToggleMusicStore="toggleMusicStore"
         />
       </div>
     </div>
@@ -77,6 +84,7 @@ onBeforeUnmount(() => {
       <img :src="playingSong.imgSrc || ''" />
     </div>
     <Settings :open="openSetting" @onCancel="toggleSetting" />
+    <MusicStore :open="isShowMusicStore" @onCancel="toggleMusicStore" />
   </div>
 </template>
 
