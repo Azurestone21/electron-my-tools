@@ -397,7 +397,7 @@ onMounted(() => {
 
 .today {
   background-color: var(--primary);
-  color: var(--primary-foreground);
+  color: var(--primary-foreground) !important;
 }
 
 .other-month {
