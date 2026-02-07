@@ -1,5 +1,5 @@
 import { onMounted, onUnmounted } from 'vue'
-import { IMusic, IPlayingSong, TMusicPlayType } from '@renderer/types/music'
+import { IPlaylist, IPlayingSong, TMusicPlayType } from '@renderer/types/music'
 import { useEventListener } from '../useEventListener'
 
 // 音频实例全局维护
@@ -20,7 +20,7 @@ export function useMusicPlayer() {
    * @param currentMusic 当前播放音乐
    * @returns
    */
-  const getPlayMusic = (type: TMusicPlayType, musicList: IMusic[], currentMusic: IPlayingSong) => {
+  const getPlayMusic = (type: TMusicPlayType, musicList: IPlaylist[], currentMusic: IPlayingSong) => {
     let songIndex = currentMusic.songIndex
     let parentIndex = currentMusic.parentIndex
     let currntSortLength = musicList[parentIndex]?.songs?.length
