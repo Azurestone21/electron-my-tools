@@ -1,7 +1,7 @@
 <!-- 音乐列表 -->
 <script setup lang="ts">
 const musicStore = useMusicStore()
-const { playingSong, musicList } = storeToRefs(musicStore)
+const { playingSong, playlists, musicList } = storeToRefs(musicStore)
 const emits = defineEmits(['changePlayingSong'])
 
 // 计算当前播放的专辑索引
@@ -12,6 +12,12 @@ const activeNames = computed(() => {
 const changePlayingSong = (song) => {
   emits('changePlayingSong', song)
 }
+
+const combinedList = computed(() => {
+  const list = [...playlists.value]
+  list.push(...musicList.value)
+  return list
+})
 </script>
 
 <template>
@@ -21,17 +27,17 @@ const changePlayingSong = (song) => {
         class="collapse_item"
         :title="item.listname"
         :name="item.id + ''"
-        v-for="item in musicList"
+        v-for="item in combinedList"
         :key="item.id"
       >
         <div
           class="song_item flex-row-between-center"
-          v-for="song in item.songs"
+          v-for="(song, index) in item.songs"
           :key="song.id"
           @dblclick="changePlayingSong(song)"
         >
           <div :class="{ song_name: true, active: playingSong.songname == song.songname }">
-            {{ song.id + 1 }} {{ song.songname }} - {{ song.songer }}
+            {{ index + 1 }} {{ song.songname }} - {{ song.songer }}
           </div>
           <div class="time">{{}}</div>
         </div>
