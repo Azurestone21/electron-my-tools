@@ -29,7 +29,12 @@ defineProps({
     default: false
   }
 })
-const emits = defineEmits(['onToggleMusicList', 'onToggleSetting', 'onToggleDesktopLyric'])
+const emits = defineEmits([
+  'onToggleMusicList',
+  'onToggleSetting',
+  'onToggleDesktopLyric',
+  'onToggleMusicStore'
+])
 
 // 打开设置弹窗
 const openSetting = () => {
@@ -44,6 +49,10 @@ const onToggleMusicList = () => {
 // 切换桌面歌词显示/隐藏
 const toggleLyricDesktop = () => {
   emits('onToggleDesktopLyric')
+}
+
+const toggleMusicStore = () => {
+  emits('onToggleMusicStore')
 }
 // 音频当前播放时间
 // const timeupdate = (e) => {
@@ -143,6 +152,9 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
             <div class="cursor_pointer flex ml-[20px]" @click="onToggleMusicList">
               <el-icon size="24" color="#fff" v-if="isShowMusicList"><Expand /></el-icon>
               <el-icon size="24" color="#fff" v-else><Fold /></el-icon>
+            </div>
+            <div class="cursor_pointer flex ml-[20px]" @click="toggleMusicStore">
+              <el-icon size="20" color="#fff"><HelpFilled /></el-icon>
             </div>
             <div class="cursor_pointer flex ml-[20px]" @click="openSetting">
               <el-icon size="20" color="#fff"><Setting /></el-icon>
