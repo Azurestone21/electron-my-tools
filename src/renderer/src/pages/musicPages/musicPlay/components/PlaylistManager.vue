@@ -3,10 +3,8 @@
 import { ref, computed } from 'vue'
 import { useMusicStore } from '@renderer/store/modules/music'
 import { ElMessage, ElMessageBox } from 'element-plus'
-
 const musicStore = useMusicStore()
 const { playlists } = storeToRefs(musicStore)
-console.log('🚀 ~ playlists:', playlists.value)
 
 // 计算歌单数量
 const playlistCount = computed(() => playlists.value.length)
@@ -274,9 +272,6 @@ const onDrop = (event, index) => {
           </div>
 
           <div class="song_actions">
-            <div class="song_action_item" @click="editSong(song)">
-              <el-icon><Edit /></el-icon>
-            </div>
             <div class="song_action_item" @click="deleteSong(song)">
               <el-icon><Delete /></el-icon>
             </div>
