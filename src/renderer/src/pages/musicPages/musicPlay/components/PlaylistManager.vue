@@ -160,6 +160,51 @@ const deleteSong = (song) => {
     })
     .catch(() => {})
 }
+
+const currentPlaylist = computed(
+  () => playlists.value?.find((p) => p.id === activeId.value)?.songs || []
+)
+
+// --------------------- 歌单歌曲排序 ---------------------
+let draggedIndex = null
+const dragOverIndex = ref(null)
+
+const onDragStart = (event, index) => {
+  draggedIndex = index
+  event.dataTransfer.setData('text/plain', index)
+  event.dataTransfer.effectAllowed = 'move'
+}
+
+const onDragOver = (event, index) => {
+  event.preventDefault()
+  if (draggedIndex !== index) {
+    dragOverIndex.value = index
+  }
+}
+
+const onDragEnter = (event, index) => {
+  event.preventDefault()
+  dragOverIndex.value = index
+}
+
+const onDragLeave = (event) => {
+  // 防止子元素触发
+  if (!event.currentTarget.contains(event.relatedTarget)) {
+    dragOverIndex.value = null
+  }
+}
+
+const onDrop = (event, index) => {
+  event.preventDefault()
+  if (draggedIndex !== null && draggedIndex !== index) {
+    // 交换数组元素
+    const temp = currentPlaylist.value[draggedIndex]
+    currentPlaylist.value.splice(draggedIndex, 1)
+    currentPlaylist.value.splice(index, 0, temp)
+  }
+  dragOverIndex.value = null
+  draggedIndex = null
+}
 </script>
 
 <template>
@@ -216,6 +261,12 @@ const deleteSong = (song) => {
           v-for="(song, index) in playlists.find((p) => p.id === activeId)?.songs || []"
           :key="song.id"
           :title="song.songURL"
+          draggable="true"
+          @dragstart="onDragStart($event, index)"
+          @dragover.prevent="onDragOver($event, index)"
+          @dragenter.prevent="onDragEnter($event, index)"
+          @dragleave="onDragLeave"
+          @drop="onDrop($event, index)"
         >
           <div class="song_index">{{ index + 1 }}</div>
           <div class="song_info">
