@@ -11,6 +11,7 @@ import Lyric from './components/Lyric.vue'
 import MusicList from './components/MusicList.vue'
 import Settings from './components/Settings.vue'
 import MusicStore from './components/MusicStore.vue'
+import AudioSpectrum from './components/AudioSpectrum.vue'
 
 // 初始化音乐列表
 const getMusicList = async () => {
@@ -69,6 +70,9 @@ onBeforeUnmount(() => {
         <div class="right hide-scrollbar" v-if="isShowMusicList">
           <MusicList @changePlayingSong="changePlayingSong" />
         </div>
+      </div>
+      <div class="audio-spectrum-wrapper">
+        <AudioSpectrum />
       </div>
       <div class="footer">
         <BottomBar
@@ -137,6 +141,13 @@ div {
     flex: 1;
     width: 50%;
   }
+}
+.audio-spectrum-wrapper {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  padding-left: 100px;
 }
 .footer {
   position: fixed;
