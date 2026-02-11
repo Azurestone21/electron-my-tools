@@ -63,7 +63,7 @@ const toggleMusicStore = () => {
 // 音频进度百分比
 const percentage = computed<number>(() => {
   return currentTime.value && duration.value
-    ? Math.floor((currentTime.value / duration.value) * MUSIC_PROGRESS_BAR_WIDTH)
+    ? Math.floor((currentTime.value / duration.value) * 100)
     : 0
 })
 
@@ -84,9 +84,11 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
 <template>
   <div class="BottomBar">
     <div class="content">
-      <div class="photo">
-        <img :src="playingSong.imgSrc || ''" v-if="playingSong.imgSrc" />
-        <el-icon color="#ccc" size="40" v-else><Headset /></el-icon>
+      <div class="song_cover">
+        <div class="photo">
+          <img :src="playingSong.imgSrc || ''" v-if="playingSong.imgSrc" />
+          <el-icon color="#ccc" size="40" v-else><Headset /></el-icon>
+        </div>
       </div>
 
       <div class="bar">
@@ -94,26 +96,30 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
           <source :src="playingSong.songURL" type="audio/mpeg" />
           您的浏览器不支持 audio 元素。
         </audio> -->
-        <div class="name">{{ playingSong.songname }} - {{ playingSong.songer }}</div>
+        <!-- <div class="name">{{ playingSong.songname }} - {{ playingSong.songer }}</div> -->
         <div class="progress-bar">
+          <div class="totalTime">
+            {{ secondsTimeFormat(currentTime) }}
+          </div>
           <!-- 进度条 -->
-          <div
-            id="myProgress"
-            class="progress_bg"
-            :style="{ width: `${MUSIC_PROGRESS_BAR_WIDTH}px` }"
-          >
+          <div id="myProgress" class="progress_bg">
             <div
               class="progress"
               :style="{
-                width: percentage + 'px'
+                width: percentage + '%'
               }"
             ></div>
           </div>
           <div class="totalTime">
-            {{ secondsTimeFormat(currentTime) }} / {{ secondsTimeFormat(duration) }}
+            {{ secondsTimeFormat(duration) }}
           </div>
         </div>
-        <div class="handle">
+        <div class="play_pattern">
+          <!-- 切换播放模式 -->
+          <div class="cursor_pointer flex justify-center ml-[20px]" @click="changePlayPattern">
+            <text v-if="playPattern == 'normal'">顺</text>
+            <text v-if="playPattern == 'loop'">单</text>
+          </div>
           <!-- 上一首 / 播放/暂停 / 下一首 -->
           <div class="video_handle">
             <div class="before cursor_pointer" @click="playPrev">
@@ -127,38 +133,34 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
               <el-icon size="24"><CaretRight /></el-icon>
             </div>
           </div>
-          <div class="video_list">
-            <!-- 音量 -->
-            <div class="volume">
-              <input
-                id="volumeControl"
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                :value="volume"
-                @input="changeVolume"
-              />
-            </div>
-            <!-- 切换播放模式 -->
-            <div class="cursor_pointer flex justify-center ml-[20px]" @click="changePlayPattern">
-              <text v-if="playPattern == 'normal'">顺</text>
-              <text v-if="playPattern == 'loop'">单</text>
-            </div>
-            <div class="cursor_pointer flex justify-center ml-[20px]" @click="toggleLyricDesktop">
-              词
-            </div>
-            <!-- 展开/收起列表 -->
-            <div class="cursor_pointer flex ml-[20px]" @click="onToggleMusicList">
-              <el-icon size="24" color="#fff" v-if="isShowMusicList"><Expand /></el-icon>
-              <el-icon size="24" color="#fff" v-else><Fold /></el-icon>
-            </div>
-            <div class="cursor_pointer flex ml-[20px]" @click="toggleMusicStore">
-              <el-icon size="20" color="#fff"><HelpFilled /></el-icon>
-            </div>
-            <div class="cursor_pointer flex ml-[20px]" @click="openSetting">
-              <el-icon size="20" color="#fff"><Setting /></el-icon>
-            </div>
+          <div class="cursor_pointer flex justify-center" @click="toggleLyricDesktop">词</div>
+        </div>
+      </div>
+      <div class="handle">
+        <div class="video_list">
+          <!-- 音量 -->
+          <div class="volume">
+            <input
+              id="volumeControl"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              :value="volume"
+              @input="changeVolume"
+            />
+          </div>
+
+          <!-- 展开/收起列表 -->
+          <div class="cursor_pointer flex ml-[10px]" @click="onToggleMusicList">
+            <el-icon size="20" color="#fff" v-if="isShowMusicList"><Expand /></el-icon>
+            <el-icon size="20" color="#fff" v-else><Fold /></el-icon>
+          </div>
+          <div class="cursor_pointer flex ml-[10px]" @click="toggleMusicStore">
+            <el-icon size="20" color="#fff"><HelpFilled /></el-icon>
+          </div>
+          <div class="cursor_pointer flex ml-[10px]" @click="openSetting">
+            <el-icon size="20" color="#fff"><Operation /></el-icon>
           </div>
         </div>
       </div>
@@ -168,35 +170,48 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
 
 <style lang="less" scoped>
 .BottomBar {
-  background-color: rgb(108 180 243 / 33%);
+  background-color: rgba(0, 0, 0, 0.2);
   color: #fff;
+  width: 100%;
+  height: 80px;
 }
 .content {
   padding: 10px;
   display: flex;
-  .photo {
-    width: 80px;
-    height: 80px;
-    background-color: rgb(105, 105, 105);
-    margin-right: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    img {
-      width: 100%;
-      height: 100%;
+  justify-content: space-between;
+  .song_cover {
+    flex: 1;
+
+    .photo {
+      width: 60px;
+      height: 60px;
+      background-color: rgb(105, 105, 105);
+      margin-right: 10px;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
   .bar {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    flex: 1;
+    justify-content: space-around;
+    align-items: center;
+    width: 60%;
     .progress-bar {
       display: flex;
       align-items: center;
+      width: 100%;
     }
     .progress_bg {
+      margin: 10px;
+      width: 100%;
       height: 4px;
       border-radius: 2px;
       background-color: #fff;
@@ -212,38 +227,44 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
       }
     }
     .totalTime {
-      margin-left: 20px;
       font-size: 12px;
     }
   }
   #volumeControl {
     background-color: #fff;
   }
-  .handle {
+  .play_pattern {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    // 上一首 / 播放/暂停 / 下一首
-    .video_handle {
-      width: 120px;
+  }
+  // 上一首 / 播放/暂停 / 下一首
+  .video_handle {
+    margin: 0 20px;
+    width: 120px;
+    display: flex;
+    align-items: center;
+    .before,
+    .next {
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 50%;
       display: flex;
       align-items: center;
-      .before,
-      .next {
-        color: #fff;
-        border: 2px solid #fff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-      }
-      .launch {
-        border-radius: 50%;
-        color: #fff;
-        margin: 0 16px;
-        display: flex;
-        align-items: center;
-      }
     }
+    .launch {
+      border-radius: 50%;
+      color: #fff;
+      margin: 0 16px;
+      display: flex;
+      align-items: center;
+    }
+  }
+  .handle {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
     .video_list {
       display: flex;
       align-items: center;

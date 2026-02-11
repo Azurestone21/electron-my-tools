@@ -143,17 +143,16 @@ div {
   }
 }
 .audio-spectrum-wrapper {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100%;
   height: 100px;
-  padding-left: 100px;
+  padding-left: 80px;
 }
 .footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
-  left: 64px;
-  width: calc(100% - 64px);
-  height: 100px;
+  left: 0;
+  width: 100%;
 }
 </style>
