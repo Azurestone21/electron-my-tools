@@ -85,7 +85,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
     <div class="bg">
-      <img :src="playingSong.imgSrc || ''" />
+      <!-- <img :src="playingSong.imgSrc || ''" /> -->
     </div>
     <Settings :open="openSetting" @onCancel="toggleSetting" />
     <MusicStore :open="isShowMusicStore" @onCancel="toggleMusicStore" />
@@ -103,7 +103,9 @@ div {
   position: relative;
   z-index: 1;
   width: 100%;
-  height: calc(100% - 100px);
+  height: 100%;
+  padding-bottom: 100px;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 .bg {
   width: 100%;
@@ -112,10 +114,15 @@ div {
   left: 0;
   top: 0;
   z-index: 0;
+  filter: blur(1px);
+
   img {
-    width: 100%;
-    height: 100%;
-    filter: blur(5px);
+    width: 30%;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   &::before {
     content: '';
