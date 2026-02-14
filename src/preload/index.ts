@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import musicApi from './modules/music'
 import schedule from './modules/schedule'
+import video from './modules/video'
 
 // Custom APIs for renderer
 const api = {}
@@ -25,6 +26,8 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('musicApi', musicApi)
     // 暴露计划任务相关API
     contextBridge.exposeInMainWorld('scheduleHandle', schedule)
+    // 暴露视频相关API
+    contextBridge.exposeInMainWorld('videoHandle', video)
   } catch (error) {
     console.error(error)
   }
