@@ -1,8 +1,6 @@
 import { IPlayingSong, IPlaylist } from '@renderer/types/music'
 import { isArray, isObject } from "lodash"
 
-
-
 export const useMusicStore = defineStore('music', {
   state: () => ({
     basePath: '', // 音乐根目录
