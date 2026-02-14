@@ -67,6 +67,14 @@ const router = createRouter({
           meta: {
             keepAlive: true
           }
+        },
+        {
+          path: '/video',
+          name: '视频',
+          component: () => import('@renderer/pages/videoPages/VideoPlay.vue'),
+          meta: {
+            keepAlive: true
+          }
         }
       ]
     },

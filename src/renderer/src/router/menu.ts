@@ -10,6 +10,11 @@ const menuList = [
     icon: 'Headset'
   },
   {
+    path: '/video',
+    pathName: '视频',
+    icon: 'Film'
+  },
+  {
     path: '/tool/index',
     pathName: '工具',
     icon: 'Promotion'
