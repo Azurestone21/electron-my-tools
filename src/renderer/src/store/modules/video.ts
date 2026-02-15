@@ -20,6 +20,21 @@ export const useVideoStore = defineStore('video', {
   },
 
   actions: {
+    // 初始化数据
+    initializeStore() {
+      if (!this.videoList || this.videoList.length === 0) {
+        this.videoList = [
+          {
+            id: 1,
+            name: '默认合集',
+            list: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+          }
+        ]
+      }
+    },
+
     setStore(payload) {
       let keys = Object.keys(payload)
       keys.forEach((item) => {
