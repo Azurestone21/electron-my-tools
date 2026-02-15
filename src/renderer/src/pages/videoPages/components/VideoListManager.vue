@@ -143,8 +143,8 @@ const videoContextMenuItems = computed(() => [
   {
     name: '删除',
     handler: () => {
-      if (contextMenuItems.value && currentPlaylist.value) {
-        deleteVideo(contextMenuItems.value)
+      if (contextMenuSelected.value && currentPlaylist.value) {
+        deleteVideo(contextMenuSelected.value)
       }
     }
   }
