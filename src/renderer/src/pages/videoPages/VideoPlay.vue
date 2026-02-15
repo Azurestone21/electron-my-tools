@@ -81,7 +81,7 @@ const updateCurrentTime = (e) => {
   })
 }
 // 改变播放时间
-const changePlayProgress = (e: any) => {
+const onPlayProgress = (e: any) => {
   if (!videoRef.value) return // 视频未初始化则忽略
   const progressBar = document.getElementById('videoProgress') as HTMLElement
   if (playingVideo.value.duration) {
@@ -181,7 +181,7 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
           <!-- 播放进度 -->
           <div class="progress-bar">
             <!-- 进度条 -->
-            <div class="progress_bg" id="videoProgress" @click="changePlayProgress">
+            <div class="progress_bg" id="videoProgress" @click="onPlayProgress">
               <div
                 class="progress"
                 :style="{
