@@ -31,10 +31,8 @@ const editPlaylistName = () => {
   }
   if (dialogMode.value === 'edit') {
     musicStore.updatePlaylistName(editingPlaylistId.value, editingPlaylistName.value.trim())
-    ElMessage.success('歌单名称修改成功')
   } else {
     musicStore.createPlaylist(editingPlaylistName.value.trim())
-    ElMessage.success('歌单创建成功')
   }
   editingPlaylistId.value = 0
   editingPlaylistName.value = ''
@@ -44,14 +42,13 @@ const editPlaylistName = () => {
 
 // 删除歌单
 const deletePlaylist = (playlist) => {
-  ElMessageBox.confirm(`确定要删除歌单「${playlist.name}」吗？`, '删除歌单', {
+  ElMessageBox.confirm(`确定要删除歌单「${playlist.listname}」吗？`, '删除歌单', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   })
     .then(() => {
       musicStore.deletePlaylist(playlist.id)
-      ElMessage.success('歌单删除成功')
     })
     .catch(() => {})
 }
