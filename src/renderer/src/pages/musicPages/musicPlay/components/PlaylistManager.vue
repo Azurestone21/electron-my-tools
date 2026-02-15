@@ -101,7 +101,6 @@ const addSongToPlaylist = () => {
   // 处理文件选择
   input.onchange = (event) => {
     const files = (event.target as HTMLInputElement).files
-    console.log('🚀 ~ files:', files)
 
     if (!files || files.length === 0) {
       return
@@ -141,9 +140,6 @@ const addSongToPlaylist = () => {
   // 触发文件选择
   input.click()
 }
-
-// 编辑歌曲
-const editSong = (song) => {}
 // 删除歌曲
 const deleteSong = (song) => {
   ElMessageBox.confirm(`确定要删除歌曲「${song.songer} - ${song.songname}」吗？`, '删除歌曲', {
