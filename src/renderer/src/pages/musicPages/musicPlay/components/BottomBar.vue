@@ -62,9 +62,7 @@ const toggleMusicStore = () => {
 // }
 // 音频进度百分比
 const percentage = computed<number>(() => {
-  return currentTime.value && duration.value
-    ? Math.floor((currentTime.value / duration.value) * 100)
-    : 0
+  return currentTime.value && duration.value ? (currentTime.value / duration.value) * 100 : 0
 })
 
 // 调节音量
