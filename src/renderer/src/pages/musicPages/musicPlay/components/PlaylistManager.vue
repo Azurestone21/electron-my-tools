@@ -1,5 +1,7 @@
 <!-- 歌单管理 -->
 <script setup lang="ts">
+import ContextMenu from '@renderer/components/ContextMenu.vue'
+
 import { ref, computed } from 'vue'
 import { useMusicStore } from '@renderer/store/modules/music'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -203,6 +205,53 @@ const onDrop = (event, index) => {
   dragOverIndex.value = null
   draggedIndex = null
 }
+
+// --------------------- 上下文菜单 ---------------------
+const contextMenuVisible = ref<boolean>(false)
+const contextMenuPosition = ref<{ x: number; y: number }>({ x: 0, y: 0 })
+const contextMenuSelected = ref<any>(null)
+const contextMenuItems = ref<any>(null)
+const showContextMenu = (e: MouseEvent, item: any, menuItems: any) => {
+  e.preventDefault()
+  e.stopPropagation()
+  contextMenuSelected.value = item
+  contextMenuItems.value = menuItems
+  contextMenuPosition.value = {
+    x: e.clientX,
+    y: e.clientY
+  }
+  contextMenuVisible.value = true
+}
+
+// --------------------- 歌单上下文菜单 ---------------------
+const playlistContextMenuItems = computed(() => [
+  {
+    name: '编辑',
+    handler: () => {
+      editPlaylist(contextMenuSelected.value)
+    }
+  },
+  {
+    name: '删除',
+    handler: () => {
+      if (contextMenuSelected.value && playlists.value) {
+        deletePlaylist(contextMenuSelected.value)
+      }
+    }
+  }
+])
+
+// --------------------- 歌曲上下文菜单 ---------------------
+const songContextMenuItems = computed(() => [
+  {
+    name: '删除',
+    handler: () => {
+      if (contextMenuSelected.value && currentPlaylist.value) {
+        deleteSong(contextMenuSelected.value)
+      }
+    }
+  }
+])
 </script>
 
 <template>
@@ -228,19 +277,11 @@ const onDrop = (event, index) => {
           @dragend="handleDragEnd"
           @dragover="handleDragOver"
           @drop="handleDrop($event, index)"
+          @contextmenu="(e) => showContextMenu(e, playlist, playlistContextMenuItems)"
         >
           <div class="playing_info" @click="activeId = playlist.id">
             <div class="playing_name">
               {{ playlist.listname }} （{{ playlist.songs.length || 0 }}首）
-            </div>
-          </div>
-
-          <div class="playing_actions">
-            <div class="playing_action_item" @click="editPlaylist(playlist)">
-              <el-icon><Edit /></el-icon>
-            </div>
-            <div class="playing_action_item" @click="deletePlaylist(playlist)">
-              <el-icon><Delete /></el-icon>
             </div>
           </div>
         </div>
@@ -265,16 +306,11 @@ const onDrop = (event, index) => {
           @dragenter.prevent="onDragEnter($event, index)"
           @dragleave="onDragLeave"
           @drop="onDrop($event, index)"
+          @contextmenu="(e) => showContextMenu(e, song, songContextMenuItems)"
         >
           <div class="song_index">{{ index + 1 }}</div>
           <div class="song_info">
             <div class="song_name">{{ song.songer }} - {{ song.songname }}</div>
-          </div>
-
-          <div class="song_actions">
-            <div class="song_action_item" @click="deleteSong(song)">
-              <el-icon><Delete /></el-icon>
-            </div>
           </div>
         </div>
       </div>
@@ -306,6 +342,13 @@ const onDrop = (event, index) => {
         </span>
       </template>
     </el-dialog>
+
+    <!-- 上下文菜单 -->
+    <ContextMenu
+      v-model:visible="contextMenuVisible"
+      :position="contextMenuPosition"
+      :menuItems="contextMenuItems"
+    />
   </div>
 </template>
 
@@ -369,18 +412,6 @@ const onDrop = (event, index) => {
           .playing_meta {
             color: var(--muted-foreground);
             font-size: 12px;
-          }
-        }
-
-        .playing_actions {
-          display: flex;
-          gap: 8px;
-
-          .playing_action_item {
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
           }
         }
 
@@ -449,17 +480,6 @@ const onDrop = (event, index) => {
           .song_meta {
             color: var(--muted-foreground);
             font-size: 12px;
-          }
-        }
-        .song_actions {
-          display: flex;
-          gap: 8px;
-
-          .song_action_item {
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
           }
         }
 
