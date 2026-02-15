@@ -73,9 +73,7 @@ export const useVideoStore = defineStore('video', {
 
     // 添加视频到视频合集
     addVideoToPlaylist(playlistId: number, video: IVideo) {
-      console.log("🚀 ~ this.videoList:", video)
       const playlist = this.videoList.find((p) => p.id === playlistId)
-      console.log("🚀 ~ playlist:", playlist)
       if (playlist) {
         // 检查视频是否已存在
         const videoExists = playlist.list?.some((s) => s.filePath === video.filePath)
@@ -88,13 +86,9 @@ export const useVideoStore = defineStore('video', {
 
     // 从歌单删除视频
     removeVideoFromPlaylist(playlistId: number, videoId: number) {
-      console.log('🚀 ~ videoId:', videoId)
       const playlistIndex = this.videoList.findIndex((p) => p.id === playlistId)
-      console.log('🚀 ~ playlistIndex:', playlistIndex)
-      console.log('🚀 ~ this.videoList[playlistIndex]:', this.videoList[playlistIndex])
       if (playlistIndex !== -1) {
         const index = this.videoList[playlistIndex].list.findIndex((s) => s.id === Number(videoId))
-        console.log('🚀 ~ index:', index)
         if (index > -1) {
           this.videoList[playlistIndex].list.splice(index, 1)
           this.videoList[playlistIndex].updatedAt = Date.now()
