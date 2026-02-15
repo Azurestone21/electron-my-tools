@@ -1,5 +1,6 @@
 <!-- 歌单管理 -->
 <script setup lang="ts">
+import DropList from '@renderer/components/DropList.vue'
 import ContextMenu from '@renderer/components/ContextMenu.vue'
 
 import { ref, computed } from 'vue'
@@ -12,6 +13,7 @@ const { playlists } = storeToRefs(musicStore)
 const playlistCount = computed(() => playlists.value.length)
 const activeId = ref(playlists.value[0]?.id || 0)
 
+// --------------------- 歌单管理 ---------------------
 const editingPlaylistId = ref(0)
 const editingPlaylistName = ref('')
 const showEditPlaylistDialog = ref(false)
@@ -51,37 +53,6 @@ const deletePlaylist = (playlist) => {
       musicStore.deletePlaylist(playlist.id)
     })
     .catch(() => {})
-}
-
-// 歌单排序
-const isDragging = ref(false)
-const dragStartIndex = ref(0)
-
-const handleDragStart = (event, index) => {
-  isDragging.value = true
-  dragStartIndex.value = index
-  event.target.style.opacity = '0.5'
-}
-
-const handleDragEnd = (event) => {
-  isDragging.value = false
-  event.target.style.opacity = '1'
-}
-
-const handleDragOver = (event) => {
-  event.preventDefault()
-}
-
-const handleDrop = (event, targetIndex) => {
-  event.preventDefault()
-
-  if (dragStartIndex.value !== targetIndex) {
-    const newPlaylists = [...playlists.value]
-    const [draggedPlaylist] = newPlaylists.splice(dragStartIndex.value, 1)
-    newPlaylists.splice(targetIndex, 0, draggedPlaylist)
-    musicStore.sortPlaylists(newPlaylists)
-    ElMessage.success('歌单排序成功')
-  }
 }
 
 // --------------------- 歌曲管理 ---------------------
@@ -158,45 +129,22 @@ const currentPlaylist = computed(
   () => playlists.value?.find((p) => p.id === activeId.value)?.songs || []
 )
 
-// --------------------- 歌单歌曲排序 ---------------------
-let draggedIndex = null
-const dragOverIndex = ref(null)
-
-const onDragStart = (event, index) => {
-  draggedIndex = index
-  event.dataTransfer.setData('text/plain', index)
-  event.dataTransfer.effectAllowed = 'move'
-}
-
-const onDragOver = (event, index) => {
-  event.preventDefault()
-  if (draggedIndex !== index) {
-    dragOverIndex.value = index
+// --------------------- 歌单排序 ---------------------
+const handleListDrop = (index, targetIndex) => {
+  if (index !== targetIndex) {
+    const newPlaylists = [...playlists.value]
+    const [draggedPlaylist] = newPlaylists.splice(index, 1)
+    newPlaylists.splice(targetIndex, 0, draggedPlaylist)
+    musicStore.sortPlaylists(newPlaylists)
   }
 }
-
-const onDragEnter = (event, index) => {
-  event.preventDefault()
-  dragOverIndex.value = index
-}
-
-const onDragLeave = (event) => {
-  // 防止子元素触发
-  if (!event.currentTarget.contains(event.relatedTarget)) {
-    dragOverIndex.value = null
-  }
-}
-
-const onDrop = (event, index) => {
-  event.preventDefault()
+// --------------------- 歌曲排序 ---------------------
+const handleSongDrop = (index, draggedIndex) => {
   if (draggedIndex !== null && draggedIndex !== index) {
-    // 交换数组元素
     const temp = currentPlaylist.value[draggedIndex]
     currentPlaylist.value.splice(draggedIndex, 1)
     currentPlaylist.value.splice(index, 0, temp)
   }
-  dragOverIndex.value = null
-  draggedIndex = null
 }
 
 // --------------------- 上下文菜单 ---------------------
@@ -261,23 +209,17 @@ const songContextMenuItems = computed(() => [
       <!-- 歌单列表 -->
       <div class="playing_list">
         <div v-if="playlistCount === 0" class="empty_playlist">暂无歌单</div>
-        <div
-          v-for="(playlist, index) in playlists"
-          :key="playlist.id"
-          :class="{ playing_item: true, active: playlist.id === activeId }"
-          draggable
-          @dragstart="handleDragStart($event, index)"
-          @dragend="handleDragEnd"
-          @dragover="handleDragOver"
-          @drop="handleDrop($event, index)"
-          @contextmenu="(e) => showContextMenu(e, playlist, playlistContextMenuItems)"
+        <DropList
+          v-model:activeId="activeId"
+          :lists="playlists"
+          @onClick="(item) => (activeId = item.id)"
+          @onDrop="handleListDrop"
+          @showContextMenu="(e, item) => showContextMenu(e, item, playlistContextMenuItems)"
         >
-          <div class="playing_info" @click="activeId = playlist.id">
-            <div class="playing_name">
-              {{ playlist.listname }} （{{ playlist.songs.length || 0 }}首）
-            </div>
-          </div>
-        </div>
+          <template #item="{ item }">
+            <div>{{ item.listname }} （{{ item.songs.length || 0 }}首）</div>
+          </template>
+        </DropList>
       </div>
     </div>
 
@@ -288,24 +230,15 @@ const songContextMenuItems = computed(() => [
         </div>
       </div>
       <div class="songs_list">
-        <div
-          class="song_item"
-          v-for="(song, index) in playlists.find((p) => p.id === activeId)?.songs || []"
-          :key="song.id"
-          :title="song.songURL"
-          draggable="true"
-          @dragstart="onDragStart($event, index)"
-          @dragover.prevent="onDragOver($event, index)"
-          @dragenter.prevent="onDragEnter($event, index)"
-          @dragleave="onDragLeave"
-          @drop="onDrop($event, index)"
-          @contextmenu="(e) => showContextMenu(e, song, songContextMenuItems)"
+        <DropList
+          :lists="playlists.find((p) => p.id === activeId)?.songs || []"
+          @onDrop="handleSongDrop"
+          @showContextMenu="(e, item) => showContextMenu(e, item, songContextMenuItems)"
         >
-          <div class="song_index">{{ index + 1 }}</div>
-          <div class="song_info">
-            <div class="song_name">{{ song.songer }} - {{ song.songname }}</div>
-          </div>
-        </div>
+          <template #item="{ item, index }">
+            <div>{{ index + 1 }}. {{ item.songer }} - {{ item.songname }}</div>
+          </template>
+        </DropList>
       </div>
     </div>
 
@@ -385,43 +318,6 @@ const songContextMenuItems = computed(() => [
         color: var(--muted-foreground);
         font-size: 14px;
       }
-
-      .playing_item {
-        padding: 4px 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: rgba(255, 255, 255, 0.1);
-        cursor: pointer;
-
-        .playing_info {
-          flex: 1;
-
-          .playing_name {
-            color: var(--foreground);
-            font-size: 14px;
-          }
-
-          .playing_meta {
-            color: var(--muted-foreground);
-            font-size: 12px;
-          }
-        }
-
-        &.active {
-          .playing_info {
-            flex: 1;
-
-            .playing_name {
-              color: var(--primary) !important;
-              font-weight: 500;
-            }
-          }
-        }
-        &:hover {
-          background-color: aliceblue;
-        }
-      }
     }
   }
 
@@ -444,46 +340,6 @@ const songContextMenuItems = computed(() => [
 
       &::-webkit-scrollbar {
         display: none;
-      }
-
-      .song_item {
-        padding: 4px 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: var(--background);
-        cursor: pointer;
-
-        .song_index {
-          margin-right: 8px;
-          width: 20px;
-          text-align: right;
-          color: var(--foreground);
-          font-size: 14px;
-        }
-
-        .song_info {
-          flex: 1;
-
-          .song_name {
-            color: var(--foreground);
-            font-size: 14px;
-          }
-
-          .song_meta {
-            color: var(--muted-foreground);
-            font-size: 12px;
-          }
-        }
-
-        &::nth-child(even) {
-          background-color: var(--alternate);
-        }
-
-        &:hover {
-          background-color: var(--accent);
-          color: var(--accent-foreground);
-        }
       }
     }
   }

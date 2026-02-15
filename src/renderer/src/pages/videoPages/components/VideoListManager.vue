@@ -1,18 +1,15 @@
 <!-- 播放列表管理 -->
 <script setup lang="ts">
+import DropList from '@renderer/components/DropList.vue'
 import ContextMenu from '@renderer/components/ContextMenu.vue'
+
 import { ref, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useVideoStore } from '@renderer/store/modules/video'
 const videoStore = useVideoStore()
 const { videoList } = storeToRefs(videoStore)
 
-// 计算播放列表数量
 const activeId = ref(videoList.value[0]?.id || 0)
-// 切换播放列表
-const changeActiveId = (id) => {
-  activeId.value = id
-}
 
 const editingPlaylistId = ref(0)
 const editingPlaylistName = ref('')
@@ -33,10 +30,8 @@ const editPlaylistName = () => {
   }
   if (dialogMode.value === 'edit') {
     videoStore.updatePlaylistName(editingPlaylistId.value, editingPlaylistName.value.trim())
-    ElMessage.success('播放列表名称修改成功')
   } else {
     videoStore.createPlaylist(editingPlaylistName.value.trim())
-    ElMessage.success('播放列表创建成功')
   }
   editingPlaylistId.value = 0
   editingPlaylistName.value = ''
@@ -54,31 +49,6 @@ const deletePlaylist = (playlist) => {
       videoStore.deletePlaylist(playlist.id)
     })
     .catch(() => {})
-}
-
-// ---------------------- 播放列表排序 ----------------------
-const isDragging = ref(false)
-const dragStartIndex = ref(0)
-const handleDragStart = (event, index) => {
-  isDragging.value = true
-  dragStartIndex.value = index
-  event.target.style.opacity = '0.5'
-}
-const handleDragEnd = (event) => {
-  isDragging.value = false
-  event.target.style.opacity = '1'
-}
-const handleDragOver = (event) => {
-  event.preventDefault()
-}
-const handleDrop = (event, targetIndex) => {
-  event.preventDefault()
-  if (dragStartIndex.value !== targetIndex) {
-    const newPlaylists = [...videoList.value]
-    const [draggedPlaylist] = newPlaylists.splice(dragStartIndex.value, 1)
-    newPlaylists.splice(targetIndex, 0, draggedPlaylist)
-    videoStore.sortPlaylists(newPlaylists)
-  }
 }
 
 // --------------------- 视频管理 ---------------------
@@ -115,45 +85,22 @@ const currentPlaylist = computed(
   () => videoList.value?.find((p) => p.id === activeId.value)?.list || []
 )
 
+// ---------------------- 播放列表排序 ----------------------
+const handleListDrop = (index, targetIndex) => {
+  if (targetIndex !== null && targetIndex !== index) {
+    const newPlaylists = [...videoList.value]
+    const [draggedPlaylist] = newPlaylists.splice(index, 1)
+    newPlaylists.splice(targetIndex, 0, draggedPlaylist)
+    videoStore.sortPlaylists(newPlaylists)
+  }
+}
 // --------------------- 视频排序 ---------------------
-let draggedIndex = null
-const dragOverIndex = ref(null)
-
-const onDragStart = (event, index) => {
-  draggedIndex = index
-  event.dataTransfer.setData('text/plain', index)
-  event.dataTransfer.effectAllowed = 'move'
-}
-
-const onDragOver = (event, index) => {
-  event.preventDefault()
-  if (draggedIndex !== index) {
-    dragOverIndex.value = index
-  }
-}
-
-const onDragEnter = (event, index) => {
-  event.preventDefault()
-  dragOverIndex.value = index
-}
-
-const onDragLeave = (event) => {
-  // 防止子元素触发
-  if (!event.currentTarget.contains(event.relatedTarget)) {
-    dragOverIndex.value = null
-  }
-}
-
-const onDrop = (event, index) => {
-  event.preventDefault()
-  if (draggedIndex !== null && draggedIndex !== index) {
-    // 交换数组元素
-    const temp = currentPlaylist.value[draggedIndex]
-    currentPlaylist.value.splice(draggedIndex, 1)
+const handleVideoDrop = (index, targetIndex) => {
+  if (targetIndex !== null && targetIndex !== index) {
+    const temp = currentPlaylist.value[targetIndex]
+    currentPlaylist.value.splice(targetIndex, 1)
     currentPlaylist.value.splice(index, 0, temp)
   }
-  dragOverIndex.value = null
-  draggedIndex = null
 }
 
 // --------------------- 上下文菜单 ---------------------
@@ -218,23 +165,17 @@ const videoContextMenuItems = computed(() => [
       <!-- 视频集合列表 -->
       <div class="video_list">
         <div v-if="videoList.length === 0" class="empty_playlist">暂无视频集合</div>
-        <div
-          v-for="(item, index) in videoList"
-          :key="item.id"
-          :class="{ video_item: true, active: item.id === activeId }"
-          draggable="true"
-          @dragstart="handleDragStart($event, index)"
-          @dragover.prevent="handleDragOver"
-          @dragend.prevent="handleDragEnd"
-          @drop="handleDrop($event, index)"
-          @contextmenu="showContextMenu($event, item, videoListContextMenuItems)"
+        <DropList
+          :activeId="activeId"
+          :lists="videoList"
+          @onClick="(item) => (activeId = item.id)"
+          @onDrop="handleListDrop"
+          @showContextMenu="(e, item) => showContextMenu(e, item, videoListContextMenuItems)"
         >
-          <div class="video_info" @click="changeActiveId(item.id)">
-            <div class="video_name">
-              {{ item.name }}
-            </div>
-          </div>
-        </div>
+          <template #item="{ item }">
+            <div>{{ item.name }}</div>
+          </template>
+        </DropList>
       </div>
     </div>
 
@@ -245,24 +186,15 @@ const videoContextMenuItems = computed(() => [
         </div>
       </div>
       <div class="videos_list">
-        <div
-          class="video_item"
-          v-for="(video, index) in currentPlaylist"
-          :key="video.id"
-          :title="video.fileName"
-          draggable="true"
-          @dragstart="onDragStart($event, index)"
-          @dragover.prevent="onDragOver($event, index)"
-          @dragenter.prevent="onDragEnter($event, index)"
-          @dragleave="onDragLeave"
-          @drop="onDrop($event, index)"
-          @contextmenu="showContextMenu($event, video, videoContextMenuItems)"
+        <DropList
+          :lists="currentPlaylist"
+          @onDrop="handleVideoDrop"
+          @showContextMenu="(e, item) => showContextMenu(e, item, videoContextMenuItems)"
         >
-          <div class="video_index">{{ index + 1 }}</div>
-          <div class="video_info">
-            <div class="video_name">{{ video.fileName }}</div>
-          </div>
-        </div>
+          <template #item="{ item }">
+            <div>{{ item.fileName }}</div>
+          </template>
+        </DropList>
       </div>
     </div>
 
