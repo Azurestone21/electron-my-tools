@@ -203,7 +203,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  document.removeEventListener('click', hideContextMenu)
+  videoRef.value.pause()
+  videoStore.setStore({
+    isPlay: false
+  })
 })
 
 useEventListener('wheel', handleVolumeWheel, 'volumeControl')
