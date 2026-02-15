@@ -87,7 +87,7 @@ onBeforeUnmount(() => {
     <div class="bg">
       <!-- <img :src="playingSong.imgSrc || ''" /> -->
     </div>
-    <Settings :open="openSetting" @onCancel="toggleSetting" />
+    <!-- <Settings :open="openSetting" @onCancel="toggleSetting" /> -->
     <MusicStore :open="isShowMusicStore" @onCancel="toggleMusicStore" />
   </div>
 </template>

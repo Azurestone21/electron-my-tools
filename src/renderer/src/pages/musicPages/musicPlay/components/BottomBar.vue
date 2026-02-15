@@ -36,9 +36,9 @@ const emits = defineEmits([
 ])
 
 // 打开设置弹窗
-const openSetting = () => {
-  emits('onToggleSetting')
-}
+// const openSetting = () => {
+//   emits('onToggleSetting')
+// }
 
 // 展开音乐列表
 const onToggleMusicList = () => {
@@ -156,9 +156,9 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
           <div class="cursor_pointer flex ml-[10px]" @click="toggleMusicStore">
             <el-icon class="handle_icon"><HelpFilled /></el-icon>
           </div>
-          <div class="cursor_pointer flex ml-[10px]" @click="openSetting">
+          <!-- <div class="cursor_pointer flex ml-[10px]" @click="openSetting">
             <el-icon class="handle_icon"><Operation /></el-icon>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
