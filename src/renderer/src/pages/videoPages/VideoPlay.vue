@@ -232,7 +232,7 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
               ></div>
             </div>
             <div class="totalTime">
-              {{ formatDuration(currentTime) }} / {{ formatDuration(playingVideo.duration) }}
+              {{ formatDuration(currentTime) }} / {{ formatDuration(playingVideo?.duration || 0) }}
             </div>
           </div>
         </div>
