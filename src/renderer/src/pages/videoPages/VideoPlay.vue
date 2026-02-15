@@ -199,7 +199,7 @@ const toggleVideoStore = () => {
 }
 
 onMounted(() => {
-  document.addEventListener('click', hideContextMenu)
+  videoStore.initializeStore()
 })
 
 onBeforeUnmount(() => {
