@@ -7,81 +7,40 @@ import { useEventListener } from '@renderer/hooks/useEventListener'
 import { formatDuration } from '@renderer/utils'
 import { storeToRefs } from 'pinia'
 const videoStore = useVideoStore()
-const { currentTime, volume, isPlay, videoList, playingVideo, playbackRate } =
+const { currentTime, volume, isPlay, playingVideo, playbackRate, currentTab } =
   storeToRefs(videoStore)
 
 const videoRef = ref<HTMLVideoElement>()
 const isShowList = ref<boolean>(false)
-const videoTabs = ref<{ key: string; name: string }[]>([])
-const activeTab = ref<string>('')
-
-const contextMenuVisible = ref<boolean>(false)
-const contextMenuPosition = ref<{ x: number; y: number }>({ x: 0, y: 0 })
-const selectedVideo = ref<any>(null)
-
-onMounted(() => {
-  videoTabs.value = getVideoTabs()
-  activeTab.value = videoTabs.value[0].key
-})
-
-// 视频集合列表标签
-const getVideoTabs = () => {
-  return videoList.value.map((item) => {
-    return {
-      key: item.id + '',
-      name: item.name
-    }
-  })
-}
+const isShowVideoStore = ref<boolean>(false)
 
 // 切换视频列表
 const handleChangeTab = (tabKey: string) => {
-  activeTab.value = tabKey
-}
-
-// 当前播放视频列表
-const currentVideoList = computed(() => {
-  if (activeTab.value) {
-    return videoList.value.find((item) => item.id + '' === activeTab.value)
-  } else {
-    return videoList.value[0]
-  }
-})
-
-// 添加视频
-const addVideoToList = async () => {
-  const videos = await window.videoHandle.selectVideoFile()
-  if (videos && videos.length > 0) {
-    if (videoList.value.length === 0) {
-      videoStore.createPlaylist('默认列表')
-    }
-    const defaultPlaylist = videoList.value[0]
-    videos.forEach((video) => {
-      videoStore.addVideoToPlaylist(defaultPlaylist.id, video)
-    })
-  }
+  videoStore.setStore({
+    currentTab: tabKey
+  })
 }
 
 // 播放上一个视频
 const playPrev = () => {
-  const currentIndex = currentVideoList.value.list.findIndex(
+  const currentIndex = videoStore.getCurrentList.list.findIndex(
     (item) => item.id === playingVideo.value.id
   )
   if (currentIndex > 0) {
-    playVideo(currentVideoList.value.list[currentIndex - 1])
+    playVideo(videoStore.getCurrentList.list[currentIndex - 1])
   } else {
-    playVideo(currentVideoList.value.list[currentVideoList.value.list.length - 1])
+    playVideo(videoStore.getCurrentList.list[videoStore.getCurrentList.list.length - 1])
   }
 }
 // 播放下一个视频
 const playNext = () => {
-  const currentIndex = currentVideoList.value.list.findIndex(
+  const currentIndex = videoStore.getCurrentList.list.findIndex(
     (item) => item.id === playingVideo.value.id
   )
-  if (currentIndex < currentVideoList.value.list.length - 1) {
-    playVideo(currentVideoList.value.list[currentIndex + 1])
+  if (currentIndex < videoStore.getCurrentList.list.length - 1) {
+    playVideo(videoStore.getCurrentList.list[currentIndex + 1])
   } else {
-    playVideo(currentVideoList.value.list[0])
+    playVideo(videoStore.getCurrentList.list[0])
   }
 }
 // 播放/暂停视频
@@ -190,7 +149,6 @@ const handleSpeedChange = (e) => {
 // 展开/收起列表
 const toggleShowList = () => {
   isShowList.value = !isShowList.value
-  videoTabs.value = getVideoTabs()
 }
 
 // 打开视频库
@@ -297,13 +255,17 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
         <div class="video_list_title">播放列表</div>
       </div>
       <div class="video_list_tabs">
-        <MyTabs :tabs="videoTabs" :activeTab="activeTab" @onChangeTab="handleChangeTab" />
+        <MyTabs
+          :tabs="videoStore.getVideoTabs"
+          :activeTab="currentTab"
+          @onChangeTab="handleChangeTab"
+        />
       </div>
       <div class="video_list_content">
         <div
           class="video_list_item"
           :class="{ active: item.id === playingVideo.id }"
-          v-for="(item, index) in currentVideoList?.list"
+          v-for="(item, index) in videoStore.getCurrentList.list"
           :key="item.id"
           @dblclick="playVideo(item)"
         >
@@ -508,6 +470,9 @@ div {
       cursor: pointer;
       font-size: 14px;
       color: var(--foreground);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       &:hover {
         background-color: var(--border);
       }
