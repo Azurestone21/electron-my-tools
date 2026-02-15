@@ -16,8 +16,15 @@ export const useVideoStore = defineStore('video', {
       return state.currentTab || state.playingVideo?.parentId || 1
     },
     getCurrentList: (state) => {
-      const activeListId = state.currentTab || state.playingVideo?.parentId || 1
-      return state.videoList.find((p) => p.id + '' === activeListId + '') || state.videoList[0]
+      const activeListId = state.currentTab || state.playingVideo?.parentId || state.videoList[0]?.id || null
+      if (!activeListId) {
+        return []
+      }
+      return (
+        state.videoList.find((p) => p.id + '' === activeListId + '')?.list ||
+        state.videoList[0]?.list ||
+        []
+      )
     },
     getVideoTabs: (state) => {
       return state.videoList.map((item) => {

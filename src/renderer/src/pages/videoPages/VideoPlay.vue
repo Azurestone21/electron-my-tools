@@ -23,24 +23,24 @@ const handleChangeTab = (tabKey: string) => {
 
 // 播放上一个视频
 const playPrev = () => {
-  const currentIndex = videoStore.getCurrentList.list.findIndex(
+  const currentIndex = videoStore.getCurrentList.findIndex(
     (item) => item.id === playingVideo.value.id
   )
   if (currentIndex > 0) {
-    playVideo(videoStore.getCurrentList.list[currentIndex - 1])
+    playVideo(videoStore.getCurrentList[currentIndex - 1])
   } else {
-    playVideo(videoStore.getCurrentList.list[videoStore.getCurrentList.list.length - 1])
+    playVideo(videoStore.getCurrentList[videoStore.getCurrentList.length - 1])
   }
 }
 // 播放下一个视频
 const playNext = () => {
-  const currentIndex = videoStore.getCurrentList.list.findIndex(
+  const currentIndex = videoStore.getCurrentList.findIndex(
     (item) => item.id === playingVideo.value.id
   )
-  if (currentIndex < videoStore.getCurrentList.list.length - 1) {
-    playVideo(videoStore.getCurrentList.list[currentIndex + 1])
+  if (currentIndex < videoStore.getCurrentList.length - 1) {
+    playVideo(videoStore.getCurrentList[currentIndex + 1])
   } else {
-    playVideo(videoStore.getCurrentList.list[0])
+    playVideo(videoStore.getCurrentList[0])
   }
 }
 // 播放/暂停视频
@@ -263,10 +263,10 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
       </div>
       <div class="video_list_content">
         <div
+          v-for="(item, index) in videoStore.getCurrentList"
           class="video_list_item"
-          :class="{ active: item.id === playingVideo.id }"
-          v-for="(item, index) in videoStore.getCurrentList.list"
-          :key="item.id"
+          :class="{ active: item?.id === playingVideo?.id }"
+          :key="item?.id"
           @dblclick="playVideo(item)"
         >
           <div>{{ index + 1 }}. {{ item.fileName }}</div>
