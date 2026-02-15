@@ -5,7 +5,6 @@ import { useMusicStore } from '@renderer/store/modules/music'
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
 import { secondsTimeFormat } from '@renderer/hooks/music/common'
 import { adjustVolume, handleVolumeWheel } from '../../../../hooks/music/volume'
-import { MUSIC_PROGRESS_BAR_WIDTH } from '@renderer/config/music'
 import { useEventListener } from '@renderer/hooks/useEventListener'
 import {
   Headset,
