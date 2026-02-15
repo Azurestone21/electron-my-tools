@@ -1,5 +1,6 @@
 export interface IVideo {
   id: number
+  parentId: number
   fileName: string
   filePath: string
   fileSize: number
