@@ -1,6 +1,8 @@
 <!-- 视频播放页 -->
 <script setup lang="ts">
 import MyTabs from '@renderer/components/MyTabs.vue'
+import VideoStore from '@renderer/pages/videoPages/components/VideoStore.vue'
+
 import { useEventListener } from '@renderer/hooks/useEventListener'
 import { formatDuration } from '@renderer/utils'
 import { storeToRefs } from 'pinia'
@@ -279,6 +281,10 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
               <el-icon class="handle_icon" v-if="isShowList"><Expand /></el-icon>
               <el-icon class="handle_icon" v-else><Fold /></el-icon>
             </div>
+
+            <div class="cursor_pointer flex ml-[10px]" @click="toggleVideoStore">
+              <el-icon class="handle_icon"><HelpFilled /></el-icon>
+            </div>
           </div>
         </div>
       </div>
@@ -303,6 +309,8 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
         </div>
       </div>
     </div>
+
+    <VideoStore :open="isShowVideoStore" @onCancel="toggleVideoStore" />
   </div>
 </template>
 
