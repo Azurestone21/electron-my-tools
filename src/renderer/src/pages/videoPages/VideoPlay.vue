@@ -307,6 +307,9 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
 </template>
 
 <style lang="less" scoped>
+div {
+  user-select: none;
+}
 .page {
   padding: 0;
   height: 100%;
