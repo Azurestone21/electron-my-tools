@@ -4,6 +4,7 @@ import { isArray, isObject } from 'lodash'
 export const useVideoStore = defineStore('video', {
   state: () => ({
     videoList: [] as IVideoList[], // 视频列表
+    currentTab: '1', // 当前选中的视频列表
     playingVideo: {} as IVideo, // 当前播放视频
     currentTime: 0, // 当前播放事件
     isPlay: false, // 是否正在播放
@@ -11,11 +12,20 @@ export const useVideoStore = defineStore('video', {
     volume: 0.05 // 音量
   }),
   getters: {
-    // 获取所有视频
-    getAllVideos: (state) => state.videoList,
-    // 根据ID获取视频
-    getVideoById: (state) => (id: number) => {
-      return state.videoList.find((video) => video.id === id)
+    getActiveListId: (state) => {
+      return state.currentTab || state.playingVideo?.parentId || 1
+    },
+    getCurrentList: (state) => {
+      const activeListId = state.currentTab || state.playingVideo?.parentId || 1
+      return state.videoList.find((p) => p.id + '' === activeListId + '') || state.videoList[0]
+    },
+    getVideoTabs: (state) => {
+      return state.videoList.map((item) => {
+        return {
+          key: item.id + '',
+          name: item.name
+        }
+      })
     }
   },
 
