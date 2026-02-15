@@ -92,6 +92,14 @@ const onPlayProgress = (e: any) => {
     })
   }
 }
+// 改变播放进度（前10秒/后10秒）
+const changePlayProgress = (type: 'forward' | 'backward') => {
+  const newTime = videoRef.value.currentTime + (type === 'forward' ? 5 : -5)
+  videoRef.value.currentTime = newTime
+  videoStore.setStore({
+    currentTime: newTime
+  })
+}
 // 视频进度百分比
 const percentage = computed<number>(() => {
   return currentTime.value && playingVideo.value.duration
@@ -156,6 +164,25 @@ const toggleVideoStore = () => {
   isShowVideoStore.value = !isShowVideoStore.value
 }
 
+// 键盘事件处理（空格/左箭头/右箭头）
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (!videoRef.value) return // 音频未初始化则忽略键盘事件
+  switch (e.code) {
+    case 'Space':
+      //播放/暂停
+      play()
+      break
+    case 'ArrowLeft':
+      // 后退
+      changePlayProgress('backward')
+      break
+    case 'ArrowRight':
+      // 前进
+      changePlayProgress('forward')
+      break
+  }
+}
+
 onMounted(() => {
   videoStore.initializeStore()
 })
@@ -168,6 +195,7 @@ onBeforeUnmount(() => {
 })
 
 useEventListener('wheel', handleVolumeWheel, 'volumeControl')
+useEventListener('keydown', handleKeyDown, document)
 </script>
 
 <template>
