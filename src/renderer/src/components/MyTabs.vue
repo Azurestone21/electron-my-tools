@@ -63,15 +63,15 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="my-tabs" ref="tabsContainer">
-  <div
-    class="my-tabs-item"
-    v-for="item in tabs"
-    :key="item.key"
-    :class="{ active: item.key === activeTab }"
-    @click="$emit('onChangeTab', item.key)"
-  >
-    {{ item.name }}
-  </div>
+    <div
+      class="my-tabs-item"
+      v-for="item in tabs"
+      :key="item.key"
+      :class="{ active: item.key === activeTab }"
+      @click="$emit('onChangeTab', item.key)"
+    >
+      {{ item.name }}
+    </div>
   </div>
 </template>
 
@@ -97,6 +97,7 @@ onBeforeUnmount(() => {
   font-size: 16px;
   font-weight: 500;
   color: var(--foreground);
+  white-space: nowrap;
 }
 .my-tabs-item.active {
   &::after {
