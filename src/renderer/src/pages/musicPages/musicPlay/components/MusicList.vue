@@ -60,7 +60,7 @@ const combinedList = computed(() => {
   :deep(.el-collapse-item__header) {
     background-color: transparent !important;
     border: none !important;
-    color: #ccc;
+    color: var(--foreground);
     height: 30px;
     // padding: 0 10px;
   }
@@ -76,7 +76,7 @@ const combinedList = computed(() => {
     line-height: 30px;
     padding: 0 10px;
     background-color: transparent !important;
-    color: #ccc;
+    color: var(--foreground);
     padding: 0 10px;
     &:nth-child(odd) {
       background-color: rgba(255, 255, 255, 0.1) !important;

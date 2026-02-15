@@ -105,7 +105,7 @@ div {
   width: 100%;
   height: 100%;
   padding-bottom: 100px;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: var(--background);
 }
 .bg {
   width: 100%;

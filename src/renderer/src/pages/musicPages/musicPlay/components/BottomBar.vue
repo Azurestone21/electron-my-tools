@@ -153,14 +153,14 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
 
           <!-- 展开/收起列表 -->
           <div class="cursor_pointer flex ml-[10px]" @click="onToggleMusicList">
-            <el-icon size="20" color="#fff" v-if="isShowMusicList"><Expand /></el-icon>
-            <el-icon size="20" color="#fff" v-else><Fold /></el-icon>
+            <el-icon class="handle_icon" v-if="isShowMusicList"><Expand /></el-icon>
+            <el-icon class="handle_icon" v-else><Fold /></el-icon>
           </div>
           <div class="cursor_pointer flex ml-[10px]" @click="toggleMusicStore">
-            <el-icon size="20" color="#fff"><HelpFilled /></el-icon>
+            <el-icon class="handle_icon"><HelpFilled /></el-icon>
           </div>
           <div class="cursor_pointer flex ml-[10px]" @click="openSetting">
-            <el-icon size="20" color="#fff"><Operation /></el-icon>
+            <el-icon class="handle_icon"><Operation /></el-icon>
           </div>
         </div>
       </div>
@@ -171,7 +171,7 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
 <style lang="less" scoped>
 .BottomBar {
   background-color: rgba(0, 0, 0, 0.2);
-  color: #fff;
+  color: var(--foreground);
   width: 100%;
   height: 80px;
 }
@@ -230,9 +230,6 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
       font-size: 12px;
     }
   }
-  #volumeControl {
-    background-color: #fff;
-  }
   .play_pattern {
     display: flex;
     align-items: center;
@@ -245,15 +242,15 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
     align-items: center;
     .before,
     .next {
-      color: #fff;
-      border: 2px solid #fff;
+      color: var(--foreground);
+      border: 2px solid var(--foreground);
       border-radius: 50%;
       display: flex;
       align-items: center;
     }
     .launch {
       border-radius: 50%;
-      color: #fff;
+      color: var(--foreground);
       margin: 0 16px;
       display: flex;
       align-items: center;
@@ -276,6 +273,7 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
         margin-top: -5px;
       }
       input[type='range'] {
+        background-color: var(--border);
         -webkit-appearance: none; // 去掉默认的样式
         appearance: none;
         width: 68px;
@@ -299,6 +297,11 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
         /* 使用border-image属性给圆形添加渐变边框 */
         border-image: linear-gradient(var(--primary), var(--primary)) 0 fill / 3 10 3 0 / 0px 0px 0
           60px;
+      }
+
+      .handle_icon {
+        font-size: 20px;
+        color: var(--foreground);
       }
     }
   }

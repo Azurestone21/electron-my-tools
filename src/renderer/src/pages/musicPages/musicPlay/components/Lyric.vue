@@ -97,7 +97,7 @@ watchEffect(() => {
   }
   .lyric {
     font-size: 12px;
-    color: #999;
+    color: var(--foreground);
   }
   .active {
     font-size: 16px;
