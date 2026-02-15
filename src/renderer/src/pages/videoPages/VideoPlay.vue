@@ -10,9 +10,9 @@ const videoStore = useVideoStore()
 const { currentTime, volume, isPlay, playingVideo, playbackRate, currentTab } =
   storeToRefs(videoStore)
 
-const videoRef = ref<HTMLVideoElement>()
-const isShowList = ref<boolean>(false)
-const isShowVideoStore = ref<boolean>(false)
+const videoRef = ref<HTMLVideoElement>() // 视频元素引用
+const isShowList = ref<boolean>(false) // 视频列表
+const isShowVideoStore = ref<boolean>(false) // 视频库
 
 // 切换视频列表
 const handleChangeTab = (tabKey: string) => {
