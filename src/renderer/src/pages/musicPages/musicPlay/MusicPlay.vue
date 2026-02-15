@@ -1,25 +1,25 @@
 <!-- 音乐播放页 -->
 <script setup lang="ts">
-const { proxy } = getCurrentInstance()
+// const { proxy } = getCurrentInstance()
 const musicStore = useMusicStore()
-const { playingSong, basePath } = storeToRefs(musicStore)
+// const { playingSong, basePath } = storeToRefs(musicStore)
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
 const { play } = useMusicPlayer()
 
 import BottomBar from './components/BottomBar.vue'
 import Lyric from './components/Lyric.vue'
 import MusicList from './components/MusicList.vue'
-import Settings from './components/Settings.vue'
+// import Settings from './components/Settings.vue'
 import MusicStore from './components/MusicStore.vue'
 import AudioSpectrum from './components/AudioSpectrum.vue'
 
 // 初始化音乐列表
-const getMusicList = async () => {
-  const data = await window.musicApi.getMusicData(basePath.value)
-  musicStore.setStore({
-    musicList: data
-  })
-}
+// const getMusicList = async () => {
+//   const data = await window.musicApi.getMusicData(basePath.value)
+//   musicStore.setStore({
+//     musicList: data
+//   })
+// }
 // 切换播放歌曲
 const changePlayingSong = (song) => {
   musicStore.setStore({
@@ -50,16 +50,16 @@ const toggleMusicStore = async () => {
 }
 
 onMounted(() => {
-  getMusicList()
+  // getMusicList()
 })
 
 // 监听刷新音乐列表事件
-proxy.$eventBus.on('refreshMusic', () => {
-  getMusicList()
-})
-onBeforeUnmount(() => {
-  proxy.$eventBus.off('refreshMusic')
-})
+// proxy.$eventBus.on('refreshMusic', () => {
+//   getMusicList()
+// })
+// onBeforeUnmount(() => {
+//   proxy.$eventBus.off('refreshMusic')
+// })
 </script>
 
 <template>

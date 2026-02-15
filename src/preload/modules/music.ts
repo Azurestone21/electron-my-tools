@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron'
 
 export default {
-  getMusicData: (basePath: string) => ipcRenderer.invoke('getMusicList', basePath),
+  // getMusicData: (basePath: string) => ipcRenderer.invoke('getMusicList', basePath),
   getLyric: (filePath: string) => ipcRenderer.invoke('getLyric', filePath),
 
   // 桌面歌词相关
