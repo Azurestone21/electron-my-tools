@@ -109,6 +109,16 @@ export const useVideoStore = defineStore('video', {
         playlist.list = videos
         playlist.updatedAt = Date.now()
       }
+    },
+
+    // 清空数据
+    clearAllData() {
+      this.videoList = []
+      this.playingVideo = {} as IVideo
+      this.currentTime = 0
+      this.isPlay = false
+      this.playbackRate = 1
+      this.volume = 0.05
     }
   },
   persist: true // 持久化
