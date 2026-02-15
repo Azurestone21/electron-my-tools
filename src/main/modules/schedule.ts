@@ -1,4 +1,4 @@
-import { Notification } from 'electron'
+import { ipcMain, Notification } from 'electron'
 import { IScheduleItem } from '../../preload/types/schedule'
 
 // 存储所有定时任务的定时器
@@ -39,7 +39,7 @@ const isTimeMatch = (schedule: IScheduleItem): boolean => {
   }
 
   // 检查时间是否匹配
-  return schedule.timeData.some(timeItem => {
+  return schedule.timeData.some((timeItem) => {
     if (timeItem.time) {
       const scheduleTime = new Date(timeItem.time).toTimeString().substring(0, 8)
       return currentTime === scheduleTime
@@ -93,39 +93,42 @@ export const initSchedules = (schedules: IScheduleItem[]) => {
   clearAllSchedules()
 
   // 添加所有新的日程
-  schedules.forEach(schedule => {
+  schedules.forEach((schedule) => {
     addOrUpdateSchedule(schedule)
   })
 }
 
 // 清除所有日程
 const clearAllSchedules = () => {
-  scheduleTimers.forEach(timer => {
+  scheduleTimers.forEach((timer) => {
     clearInterval(timer)
   })
   scheduleTimers.clear()
 }
 
-// 添加单个日程
-export const addSchedule = (schedule: IScheduleItem) => {
-  addOrUpdateSchedule(schedule)
-}
+// 日程管理相关的IPC事件
+export const scheduleManager = () => {
+  // 初始化所有日程
+  ipcMain.handle('initSchedules', async (_event, schedules) => {
+    initSchedules(schedules)
+    return true
+  })
 
-// 更新单个日程
-export const updateSchedule = (schedule: IScheduleItem) => {
-  addOrUpdateSchedule(schedule)
-}
+  // 添加日程
+  ipcMain.handle('addSchedule', async (_event, schedule) => {
+    addOrUpdateSchedule(schedule)
+    return true
+  })
 
-// 删除单个日程
-export const deleteSchedule = (scheduleId: string) => {
-  removeSchedule(scheduleId)
-}
+  // 更新日程
+  ipcMain.handle('updateSchedule', async (_event, schedule) => {
+    addOrUpdateSchedule(schedule)
+    return true
+  })
 
-// 导出所有函数（用于IPC通信）
-export const scheduleManager = {
-  initSchedules,
-  addSchedule,
-  updateSchedule,
-  deleteSchedule,
-  clearAllSchedules
+  // 删除日程
+  ipcMain.handle('deleteSchedule', async (_event, scheduleId) => {
+    removeSchedule(scheduleId)
+    return true
+  })
 }

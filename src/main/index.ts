@@ -2,11 +2,10 @@ import { app, shell, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } from '
 import path from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import getLocalMusic from './modules/localMusic'
-import { handleMusicLyric } from './modules/musicLyric'
 import { scheduleManager } from './modules/schedule'
 import { initLyricDesktopIPC } from './modules/lyricDesktop'
 import { videoManager } from './modules/video'
+import { musicManager } from './modules/music'
 
 const login_width = 900
 const login_height = 650
@@ -74,43 +73,18 @@ function createWindow(): void {
         break
     }
   })
-  // 获取本地音乐
-  // ipcMain.handle('getMusicList', async (_event, basePath) => {
-  //   const data = getLocalMusic(basePath)
-  //   return data
-  // })
-  // 获取本地音乐歌词
-  ipcMain.handle('getLyric', async (_event, filePath) => {
-    const data = handleMusicLyric(filePath)
-    return data
-  })
 
-  // 日程管理相关的IPC事件
-  ipcMain.handle('initSchedules', async (_event, schedules) => {
-    scheduleManager.initSchedules(schedules)
-    return true
-  })
-
-  ipcMain.handle('addSchedule', async (_event, schedule) => {
-    scheduleManager.addSchedule(schedule)
-    return true
-  })
-
-  ipcMain.handle('updateSchedule', async (_event, schedule) => {
-    scheduleManager.updateSchedule(schedule)
-    return true
-  })
-
-  ipcMain.handle('deleteSchedule', async (_event, scheduleId) => {
-    scheduleManager.deleteSchedule(scheduleId)
-    return true
-  })
+  // 音乐相关的IPC事件
+  musicManager(mainWindow)
 
   // 初始化桌面歌词相关的IPC事件
   initLyricDesktopIPC()
 
   // 视频相关的IPC事件
   videoManager(mainWindow)
+
+  // 日程管理相关的IPC事件
+  scheduleManager()
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
