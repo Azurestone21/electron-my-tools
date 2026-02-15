@@ -191,33 +191,11 @@ const toggleShowList = () => {
   videoTabs.value = getVideoTabs()
 }
 
-// 右键菜单
-const showContextMenu = (e: MouseEvent, video: any) => {
-  e.preventDefault()
-  e.stopPropagation()
-  selectedVideo.value = video
-  contextMenuPosition.value = {
-    x: e.clientX,
-    y: e.clientY
-  }
-  contextMenuVisible.value = true
+// 打开视频库
+const toggleVideoStore = () => {
+  isShowVideoStore.value = !isShowVideoStore.value
 }
 
-// 关闭右键菜单
-const hideContextMenu = () => {
-  contextMenuVisible.value = false
-  selectedVideo.value = null
-}
-
-// 删除视频
-const deleteVideo = () => {
-  if (selectedVideo.value && currentVideoList.value) {
-    videoStore.removeVideoFromPlaylist(currentVideoList.value.id, selectedVideo.value.id)
-    hideContextMenu()
-  }
-}
-
-// 点击其他地方关闭菜单
 onMounted(() => {
   document.addEventListener('click', hideContextMenu)
 })
@@ -308,12 +286,6 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
     <div class="video_list" v-show="isShowList">
       <div class="video_list_header">
         <div class="video_list_title">播放列表</div>
-        <div>
-          <div class="add_video" @click="addVideoToList">
-            <el-icon><Plus /></el-icon>
-          </div>
-          <div></div>
-        </div>
       </div>
       <div class="video_list_tabs">
         <MyTabs :tabs="videoTabs" :activeTab="activeTab" @onChangeTab="handleChangeTab" />
@@ -324,24 +296,10 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
           :class="{ active: item.id === playingVideo.id }"
           v-for="(item, index) in currentVideoList?.list"
           :key="item.id"
-          @click="playVideo(item)"
-          @contextmenu="showContextMenu($event, item)"
+          @dblclick="playVideo(item)"
         >
-          {{ index + 1 }}. {{ item.fileName }}
-        </div>
-      </div>
-
-      <!-- 右键菜单 -->
-      <div
-        v-if="contextMenuVisible"
-        class="context-menu"
-        :style="{
-          left: contextMenuPosition.x + 'px',
-          top: contextMenuPosition.y + 'px'
-        }"
-      >
-        <div class="context-menu-item" @click="deleteVideo">
-          <span>删除</span>
+          <div>{{ index + 1 }}. {{ item.fileName }}</div>
+          <div>{{ formatDuration(item.duration) }}</div>
         </div>
       </div>
     </div>
@@ -541,34 +499,6 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
       }
       &.active {
         color: var(--primary);
-      }
-    }
-  }
-
-  .context-menu {
-    position: fixed;
-    background-color: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    min-width: 80px;
-
-    .context-menu-item {
-      padding: 8px 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      color: var(--foreground);
-
-      &:hover {
-        background-color: var(--border);
-      }
-
-      .el-icon {
-        font-size: 16px;
       }
     }
   }
