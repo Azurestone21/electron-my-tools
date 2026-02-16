@@ -103,13 +103,9 @@ export const useMusicStore = defineStore('music', {
 
     // 从歌单删除歌曲
     removeSongFromPlaylist(playlistId: number, songId: number) {
-      console.log("🚀 ~ songId:", songId)
       const playlistIndex = this.playlists.findIndex(p => p.id === playlistId)
-      console.log("🚀 ~ playlistIndex:", playlistIndex)
-      console.log("🚀 ~ this.playlists[playlistIndex]:", this.playlists[playlistIndex])
       if (playlistIndex !== -1) {
         const index = this.playlists[playlistIndex].songs.findIndex(s => s.id === Number(songId))
-        console.log("🚀 ~ index:", index)
         if (index > -1) {
           this.playlists[playlistIndex].songs.splice(index, 1)
           this.playlists[playlistIndex].updatedAt = Date.now()
