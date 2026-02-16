@@ -113,7 +113,7 @@ const addSongToPlaylist = () => {
 }
 // 删除歌曲
 const deleteSong = (song) => {
-  ElMessageBox.confirm(`确定要删除歌曲「${song.songer} - ${song.songname}」吗？`, '删除歌曲', {
+  ElMessageBox.confirm(`确定要删除歌曲「${song.songer} - ${song.songName}」吗？`, '删除歌曲', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
