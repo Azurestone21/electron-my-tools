@@ -72,6 +72,7 @@ function handleChangeTab(tab) {
 
   .music-store-tabs-content {
     flex: 1;
+    height: 0;
     padding-top: 10px;
   }
 }
