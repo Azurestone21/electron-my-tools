@@ -6,7 +6,7 @@
 // 歌单类型定义
 export interface IPlaylist {
   id: number
-  listname: string  // 歌单名称
+  listname: string // 歌单名称
   songs: IPlayingSong[] // 歌曲列表
   createdAt: number
   updatedAt: number
