@@ -25,14 +25,16 @@ export function useMusicPlayer() {
     playlists: IPlaylist[],
     currentMusic: IPlayingSong
   ) => {
-    // 当前播放音乐的索引（歌曲索引）
-    const songIndex = currentMusic.songIndex
     // 当前播放音乐所在的歌单id
     const parentId = currentMusic.parentIndex
     // 当前播放音乐所在的歌单索引
     const playlistIndex = playlists.findIndex((p) => p.id + '' === parentId + '')
     // 当前播放音乐所在的歌单的歌曲数量
     const currntSortLength = playlists[playlistIndex]?.songs?.length
+    // 当前播放音乐的索引（歌曲索引）
+    const songIndex = playlists[playlistIndex]?.songs?.findIndex(
+      (s) => s.id + '' === currentMusic.id + ''
+    )
     // 总歌单数量
     const parentLength = playlists.length
     let newIndex = songIndex
