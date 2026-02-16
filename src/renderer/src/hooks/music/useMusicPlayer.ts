@@ -20,17 +20,21 @@ export function useMusicPlayer() {
    * @param currentMusic 当前播放音乐
    * @returns
    */
-  const getPlayMusic = (type: TMusicPlayType, musicList: IPlaylist[], currentMusic: IPlayingSong) => {
+  const getPlayMusic = (
+    type: TMusicPlayType,
+    playlists: IPlaylist[],
+    currentMusic: IPlayingSong
+  ) => {
     // 当前播放音乐的索引（歌曲索引）
     const songIndex = currentMusic.songIndex
     // 当前播放音乐所在的歌单id
-    const parentIndex = currentMusic.parentIndex
+    const parentId = currentMusic.parentIndex
+    // 当前播放音乐所在的歌单索引
+    const playlistIndex = playlists.findIndex((p) => p.id + '' === parentId + '')
     // 当前播放音乐所在的歌单的歌曲数量
-    const currntSortLength = musicList[parentIndex]?.songs?.length
+    const currntSortLength = playlists[playlistIndex]?.songs?.length
     // 总歌单数量
-    const parentLength = musicList.length
-    // 找到当前播放音乐所在的歌单索引
-    const playlistIndex = musicList.findIndex((p) => p.id + '' === parentIndex + '')
+    const parentLength = playlists.length
     let newIndex = songIndex
     if (type === 'before') {
       // 上一首
@@ -45,7 +49,7 @@ export function useMusicPlayer() {
         newIndex = 0
       }
     }
-    return musicList[playlistIndex]?.songs[newIndex]
+    return playlists[playlistIndex]?.songs[newIndex]
   }
 
   // 初始化音频元素
@@ -80,8 +84,8 @@ export function useMusicPlayer() {
 
   // 上一首/下一首切歌
   const changeMusic = (type: TMusicPlayType) => {
-    const { musicList, playlists, playingSong } = musicStore
-    const song = getPlayMusic(type, [...playlists, ...musicList], playingSong)
+    const { playlists, playingSong } = musicStore
+    const song = getPlayMusic(type, playlists, playingSong)
     if (!song) return // 无可用歌曲则返回
     musicStore.setStore({ playingSong: song })
     play(true) // 切歌后刷新并播放
