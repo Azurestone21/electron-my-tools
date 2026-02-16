@@ -85,7 +85,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="bg">
-      <!-- <img :src="playingSong.imgSrc || ''" /> -->
+      <!-- <img :src="playingSong.coverPath || ''" /> -->
     </div>
     <!-- <Settings :open="openSetting" @onCancel="toggleSetting" /> -->
     <MusicStore :open="isShowMusicStore" @onCancel="toggleMusicStore" />

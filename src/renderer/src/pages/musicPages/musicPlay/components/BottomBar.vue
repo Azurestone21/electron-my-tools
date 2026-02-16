@@ -83,7 +83,7 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
     <div class="content">
       <div class="song_cover">
         <div class="photo">
-          <img :src="playingSong.imgSrc || ''" v-if="playingSong.imgSrc" />
+          <img :src="playingSong.coverPath || ''" v-if="playingSong.coverPath" />
           <el-icon color="#ccc" size="40" v-else><Headset /></el-icon>
         </div>
       </div>

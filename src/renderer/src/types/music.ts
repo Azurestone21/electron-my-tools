@@ -15,16 +15,14 @@ export interface IPlaylist {
 export interface IPlayingSong {
   parentIndex: number
   id: number
-  listname: string // 目录名称
-  filename: string // 文件名
-  songName: string // 歌曲名称
-  songURL: string // 歌曲文件路径
-  songIndex: number // 歌曲索引
-  songer: string // 歌手
-  imgSrc: string // 封面 URL
-  lyric: string // 歌词文件路径
-  isLoadDown: boolean // 是否下载完成
-  songs: IPlayingSong[] // 歌曲列表
+  fileName: string
+  filePath: string
+  songName: string
+  songer: string
+  lyricPath: string
+  coverPath: string
+  size: number
+  containerFormat: string
 }
 
 export type TMusicPlayType = 'play' | 'pause' | 'before' | 'next'

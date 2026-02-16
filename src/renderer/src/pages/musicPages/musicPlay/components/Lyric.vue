@@ -20,8 +20,8 @@ const activityLyric = computed(() => {
 })
 // 获取歌词
 const getLyric = async () => {
-  if (playingSong.value.lyric) {
-    lyricArr.value = (await window.musicApi.getLyric(playingSong.value.lyric)) || []
+  if (playingSong.value.lyricPath) {
+    lyricArr.value = (await window.musicApi.getLyric(playingSong.value.lyricPath)) || []
   }
   if (lyricArr.value.length == 0) {
     lyricArr.value.push({
@@ -59,7 +59,7 @@ onMounted(() => {
   getLyric()
 })
 watchEffect(() => {
-  if (playingSong.value.lyric) {
+  if (playingSong.value.lyricPath) {
     getLyric()
   }
   if (currentTime.value) {

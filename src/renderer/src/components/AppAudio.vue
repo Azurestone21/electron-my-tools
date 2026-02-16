@@ -21,9 +21,9 @@ const timeupdate = (e) => {
 
 // 获取歌词并发送到桌面歌词
 const getLyric = async () => {
-  if (playingSong.value.lyric) {
+  if (playingSong.value.lyricPath) {
     try {
-      const lyricArr = (await window.musicApi.getLyric(playingSong.value.lyric)) || []
+      const lyricArr = (await window.musicApi.getLyric(playingSong.value.lyricPath)) || []
 
       // 发送歌词数据到桌面歌词
       await window.musicApi.sendLyricData(
@@ -39,7 +39,7 @@ const getLyric = async () => {
 
 // 监听播放状态变化，持续发送数据到桌面歌词
 watchEffect(() => {
-  if (playingSong.value.lyric) {
+  if (playingSong.value.lyricPath) {
     getLyric()
   }
   if (currentTime.value !== undefined) {
