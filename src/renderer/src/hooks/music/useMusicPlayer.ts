@@ -125,8 +125,9 @@ export function useMusicPlayer() {
   // 改变播放时间
   const changePlayProgress = (layerX: number) => {
     if (!myAudio) return // 音频未初始化则忽略
+    const progressBar = document.getElementById('audioProgress') as HTMLElement
     if (myAudio.duration) {
-      let t = Math.floor((layerX / 600) * myAudio.duration)
+      let t = Math.floor((layerX / progressBar.clientWidth) * myAudio.duration)
       myAudio.currentTime = t
       musicStore.setStore({
         currentTime: t
