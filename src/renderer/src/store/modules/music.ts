@@ -124,6 +124,12 @@ export const useMusicStore = defineStore('music', {
         playlist.songs = songs
         playlist.updatedAt = Date.now()
       }
+    },
+
+    clearAudioContext() {
+      this.globalAudioContext = null
+      this.globalAudioAnalyser = null
+      this.globalAudioSource = null
     }
   },
   persist: true // 持久化
