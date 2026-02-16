@@ -93,7 +93,7 @@ export const useMusicStore = defineStore('music', {
       const playlist = this.playlists.find(p => p.id === playlistId)
       if (playlist) {
         // 检查歌曲是否已存在
-        const songExists = playlist.songs.some(s => s.id === song.id)
+        const songExists = playlist.songs.some(s => s.filePath === song.filePath)
         if (!songExists) {
           playlist.songs.push(song)
           playlist.updatedAt = Date.now()
