@@ -11,7 +11,11 @@ export const useMusicStore = defineStore('music', {
     currentTime: 0, // 当前播放事件
     isPlay: false, // 是否正在播放
     playPattern: 'normal', // normal:顺序播放 loop:单曲循环
-    volume: 0.05 // 音量
+    volume: 0.05, // 音量
+
+    globalAudioContext: null, // 全局音频上下文
+    globalAudioAnalyser: null, // 全局音频分析器
+    globalAudioSource: null, // 全局音频源节点
   }),
   getters: {
     // 获取所有歌单

@@ -1,10 +1,11 @@
 <!-- 音频频谱组件 -->
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useMusicStore } from '@renderer/store/modules/music'
 
 const musicStore = useMusicStore()
-const { isPlay } = storeToRefs(musicStore)
+const { isPlay, globalAudioContext, globalAudioAnalyser, globalAudioSource } =
+  storeToRefs(musicStore)
 
 const spectrumCanvas = ref(null)
 let canvasCtx = null // Canvas 2D 上下文
@@ -28,8 +29,8 @@ onMounted(() => {
   // 初始化 Canvas
   if (spectrumCanvas.value) {
     // 设置画布尺寸
-    canvasWidth = spectrumCanvas.value.offsetWidth || 600
-    canvasHeight = spectrumCanvas.value.offsetHeight || 100
+    canvasWidth = spectrumCanvas.value.offsetWidth
+    canvasHeight = spectrumCanvas.value.offsetHeight
     spectrumCanvas.value.width = canvasWidth
     spectrumCanvas.value.height = canvasHeight
 
@@ -39,21 +40,33 @@ onMounted(() => {
   // 初始化音频元素
   audioElement = getAudioElement()
 
-  // 初始化 Web Audio Context
+  // 初始化 Web Audio Context（使用单例）
   try {
-    cleanUpAudio()
+    // 如果全局 audioContext 已存在，直接使用
+    if (globalAudioContext?.value) {
+      audioContext = globalAudioContext.value
+      audioAnalyser = globalAudioAnalyser.value
+      audioSource = globalAudioSource.value
+    } else {
+      // 首次初始化
+      audioContext = new AudioContext()
 
-    // 初始化音频上下文
-    audioContext = new AudioContext()
+      // 创建分析器节点
+      audioAnalyser = audioContext.createAnalyser()
+      audioAnalyser.fftSize = 256 // FFT大小
 
-    // 创建分析器节点
-    audioAnalyser = audioContext.createAnalyser()
-    audioAnalyser.fftSize = 256 // FFT大小
+      // 创建音频源并连接分析器
+      audioSource = audioContext.createMediaElementSource(audioElement)
+      audioSource.connect(audioAnalyser) // 源 -> 分析器
+      audioAnalyser.connect(audioContext.destination) // 分析器 -> 扬声器
 
-    // 创建音频源并连接分析器
-    audioSource = audioContext.createMediaElementSource(audioElement)
-    audioSource.connect(audioAnalyser) // 源 -> 分析器
-    audioAnalyser.connect(audioContext.destination) // 分析器 -> 扬声器
+      // 保存到全局变量
+      musicStore.setStore({
+        globalAudioContext: audioContext,
+        globalAudioAnalyser: audioAnalyser,
+        globalAudioSource: audioSource
+      })
+    }
   } catch (error) {
     console.error('音频频谱初始化失败:', error)
   }
@@ -119,23 +132,12 @@ const drawSpectrum = () => {
   animationId = requestAnimationFrame(drawSpectrum)
 }
 
-// 清理音频节点关联（核心修复函数）
+// 清理当前组件的资源（不清理全局 audioContext）
 const cleanUpAudio = () => {
-  // 1. 断开音频节点连接（关键：解决重复绑定问题）
-  if (audioSource) {
-    // 断开源节点与分析器/扬声器的所有连接
-    audioSource.disconnect()
-    audioSource = null
-  }
-
-  // 2. 清空分析器（可选，增强清理效果）
-  if (audioAnalyser) {
-    audioAnalyser.disconnect()
-    audioAnalyser = null
-  }
-
-  // 3. 停止动画和播放状态
+  // 停止动画
   cancelAnimationFrame(animationId)
+  animationId = null
+
   // 清空画布
   if (canvasCtx) {
     canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight)
@@ -145,11 +147,6 @@ const cleanUpAudio = () => {
 // 销毁时清理资源，避免内存泄漏
 onBeforeUnmount(() => {
   cleanUpAudio()
-
-  if (audioContext) {
-    audioContext.close()
-  }
-  cancelAnimationFrame(animationId)
 })
 </script>
 
