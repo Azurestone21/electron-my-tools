@@ -19,6 +19,14 @@ interface VideoMetadata {
   containerFormat: string
 }
 
+// ID 生成器 - 使用递增计数器确保唯一性
+let idCounter = 0
+const generateId = (): number => {
+  const timestamp = Date.now()
+  const counter = (idCounter++ % 10000)
+  return timestamp + counter
+}
+
 const getVideoMetadata = async (filePath: string): Promise<VideoMetadata | null> => {
   return new Promise((resolve) => {
     const stats = fs.statSync(filePath)
@@ -58,7 +66,7 @@ const getVideoMetadata = async (filePath: string): Promise<VideoMetadata | null>
         const audioStream = streams.find((s: any) => s.codec_type === 'audio')
 
         const result: VideoMetadata = {
-          id: Date.now() + Math.random(),
+          id: generateId(),
           fileName,
           filePath,
           fileSize,
