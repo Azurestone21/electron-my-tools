@@ -91,7 +91,7 @@ onUnmounted(() => {
 <template>
   <div>
     <audio id="myAudio" @timeupdate="timeupdate">
-      <source :src="playingSong.songURL" type="audio/mpeg" />
+      <source :src="playingSong.filePath" type="audio/mpeg" />
       您的浏览器不支持 audio 元素。
     </audio>
   </div>

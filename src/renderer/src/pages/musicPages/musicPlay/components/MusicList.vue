@@ -36,8 +36,8 @@ const combinedList = computed(() => {
           :key="song.id"
           @dblclick="changePlayingSong(song)"
         >
-          <div :class="{ song_name: true, active: playingSong.songname == song.songname }">
-            {{ index + 1 }} {{ song.songname }} - {{ song.songer }}
+          <div :class="{ song_name: true, active: playingSong.songName == song.songName }">
+            {{ index + 1 }} {{ song.songName }} - {{ song.songer }}
           </div>
           <div class="time">{{}}</div>
         </div>

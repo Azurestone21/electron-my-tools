@@ -90,10 +90,10 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
 
       <div class="bar">
         <!-- <audio id="myAudio" @timeupdate="timeupdate">
-          <source :src="playingSong.songURL" type="audio/mpeg" />
+          <source :src="playingSong.filePath" type="audio/mpeg" />
           您的浏览器不支持 audio 元素。
         </audio> -->
-        <!-- <div class="name">{{ playingSong.songname }} - {{ playingSong.songer }}</div> -->
+        <!-- <div class="name">{{ playingSong.songName }} - {{ playingSong.songer }}</div> -->
         <div class="progress-bar">
           <div class="totalTime">
             {{ secondsTimeFormat(currentTime) }}

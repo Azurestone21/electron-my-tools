@@ -17,7 +17,7 @@ export interface IPlayingSong {
   id: number
   listname: string // 目录名称
   filename: string // 文件名
-  songname: string // 歌曲名称
+  songName: string // 歌曲名称
   songURL: string // 歌曲文件路径
   songIndex: number // 歌曲索引
   songer: string // 歌手
