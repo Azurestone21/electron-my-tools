@@ -1,4 +1,4 @@
-import { IAppSettings, IPageStack } from '@renderer/types/global'
+import { IAppSettings, IPageStack } from '@share/types/global'
 import { isObject } from 'lodash'
 
 export const useIndexStore = defineStore('index', {

@@ -1,4 +1,4 @@
-import { IScheduleItem } from '@renderer/types/schedule'
+import { IScheduleItem } from '@share/types/schedule'
 import { cloneDeep } from 'lodash'
 import { useToolStore } from '@renderer/store/modules/tool'
 import { storeToRefs } from 'pinia'

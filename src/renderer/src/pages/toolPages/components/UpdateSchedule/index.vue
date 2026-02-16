@@ -5,7 +5,7 @@ const emit = defineEmits(['submitCb'])
 import { ref, reactive } from 'vue'
 const toolStore = useToolStore()
 import type { FormInstance, FormRules } from 'element-plus'
-import { IScheduleItem } from '@renderer/types/schedule'
+import { IScheduleItem } from '@share/types/schedule'
 import { options } from './config'
 import { addMainProcessSchedules, updateMainProcessSchedules } from '@renderer/hooks/schedules/schedules'
 import { cloneDeep } from 'lodash'

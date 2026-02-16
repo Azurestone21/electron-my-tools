@@ -1,4 +1,4 @@
-import { IPlayingSong, IPlaylist } from '@renderer/types/music'
+import { IPlayingSong, IPlaylist } from '@share/types/music'
 import { isArray, isObject } from "lodash"
 
 export const useMusicStore = defineStore('music', {

@@ -1,5 +1,5 @@
 import { ipcMain, Notification } from 'electron'
-import { IScheduleItem } from '../../preload/types/schedule'
+import { IScheduleItem } from '../../share/types/schedule'
 
 // 存储所有定时任务的定时器
 const scheduleTimers: Map<string, NodeJS.Timeout> = new Map()

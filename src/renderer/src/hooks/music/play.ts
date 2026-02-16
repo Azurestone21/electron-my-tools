@@ -1,4 +1,4 @@
-import { TMusicPlayType } from '@renderer/types/music'
+import { TMusicPlayType } from '@share/types/music'
 let myAudio: HTMLAudioElement | null = null
 
 /**

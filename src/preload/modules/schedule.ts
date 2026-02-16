@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron'
-import { IScheduleItem } from '../types/schedule'
+import { IScheduleItem } from '../../share/types/schedule'
 
 export default {
   initSchedules: (schedules: IScheduleItem[]) => ipcRenderer.invoke('initSchedules', schedules),

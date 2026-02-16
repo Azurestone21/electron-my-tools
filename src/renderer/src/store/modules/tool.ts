@@ -1,4 +1,4 @@
-import { IScheduleItem } from '@renderer/types/schedule'
+import { IScheduleItem } from '@share/types/schedule'
 import { isObject } from "lodash"
 
 export const useToolStore = defineStore('tool', {

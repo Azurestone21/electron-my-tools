@@ -1,6 +1,6 @@
 <!-- 设置 -->
 <script setup lang="ts">
-import { IAppSettings } from '@renderer/types/global'
+import { IAppSettings } from '@share/types/global'
 const indexStore = useIndexStore()
 const { appSettingsVisible, appSettings } = storeToRefs(indexStore)
 

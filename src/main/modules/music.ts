@@ -1,19 +1,8 @@
 import { BrowserWindow, dialog, ipcMain } from 'electron'
-import { handleMusicLyric } from './musicLyric'
+import { handleMusicLyric } from '../../share/utils/musicLyric'
+import { IAudioMetadata } from '../../share/types/music'
 import fs from 'fs'
 import path from 'path'
-
-interface IAudioMetadata {
-  id: number
-  fileName: string
-  filePath: string
-  songName: string
-  songer: string
-  lyricPath: string
-  coverPath: string
-  size: number
-  containerFormat: string
-}
 
 const audioExtensions = ['mp3']
 

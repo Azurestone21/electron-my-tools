@@ -1,4 +1,4 @@
-import { IVideo, IVideoList } from '@renderer/types/video'
+import { IVideo, IVideoList } from '@share/types/video'
 import { isArray, isObject } from 'lodash'
 
 export const useVideoStore = defineStore('video', {
