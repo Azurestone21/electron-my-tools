@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import musicApi from './modules/music'
+import music from './modules/music'
 import schedule from './modules/schedule'
 import video from './modules/video'
 
@@ -23,7 +23,7 @@ if (process.contextIsolated) {
       }
     })
     // 暴露音乐相关API
-    contextBridge.exposeInMainWorld('musicApi', musicApi)
+    contextBridge.exposeInMainWorld('musicApi', music)
     // 暴露计划任务相关API
     contextBridge.exposeInMainWorld('scheduleHandle', schedule)
     // 暴露视频相关API
