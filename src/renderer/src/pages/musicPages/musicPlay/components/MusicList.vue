@@ -1,33 +1,27 @@
 <!-- 音乐列表 -->
 <script setup lang="ts">
 const musicStore = useMusicStore()
-const { playingSong, playlists, musicList } = storeToRefs(musicStore)
+const { playingSong, playlists } = storeToRefs(musicStore)
 const emits = defineEmits(['changePlayingSong'])
 
 // 计算当前播放的专辑索引
-const activeNames = computed(() => {
+const activeId = computed(() => {
   return playingSong.value.parentIndex + ''
 })
 // 切换播放歌曲
 const changePlayingSong = (song) => {
   emits('changePlayingSong', song)
 }
-
-const combinedList = computed(() => {
-  const list = [...playlists.value]
-  list.push(...musicList.value)
-  return list
-})
 </script>
 
 <template>
   <div class="music_list no-copy cursor_pointer">
-    <el-collapse accordion v-model="activeNames">
+    <el-collapse accordion v-model="activeId">
       <el-collapse-item
         class="collapse_item"
         :title="item.listname"
         :name="item.id + ''"
-        v-for="item in combinedList"
+        v-for="item in playlists"
         :key="item.id"
       >
         <div
