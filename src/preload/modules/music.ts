@@ -4,6 +4,8 @@ export default {
   // getMusicData: (basePath: string) => ipcRenderer.invoke('getMusicList', basePath),
   getLyric: (filePath: string) => ipcRenderer.invoke('getLyric', filePath),
 
+  selectAudioFile: () => ipcRenderer.invoke('selectAudioFile'),
+
   // 桌面歌词相关
   // 创建桌面歌词窗口
   createLyricDesktop: () => ipcRenderer.invoke('createLyricDesktop'),
