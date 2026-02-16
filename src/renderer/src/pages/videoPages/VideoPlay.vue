@@ -154,6 +154,18 @@ const handleSpeedChange = (e) => {
   })
 }
 
+// 画中画
+const pictureInPicture = () => {
+  if (!videoRef.value) return // 视频未初始化则忽略
+  videoRef.value.requestPictureInPicture()
+}
+
+// 切换全屏
+const fullScreen = () => {
+  if (!videoRef.value) return // 视频未初始化则忽略
+  videoRef.value.requestFullscreen()
+}
+
 // 展开/收起列表
 const toggleShowList = () => {
   isShowList.value = !isShowList.value
@@ -263,6 +275,16 @@ useEventListener('keydown', handleKeyDown, document)
                 <option value="1.5">1.5x</option>
                 <option value="2">2x</option>
               </select>
+            </div>
+
+            <!-- 画中画 -->
+            <div class="cursor_pointer flex ml-[10px]" @click="pictureInPicture">
+              <el-icon class="handle_icon"><Connection /></el-icon>
+            </div>
+
+            <!-- 全屏 -->
+            <div class="cursor_pointer flex ml-[10px]" @click="fullScreen">
+              <el-icon class="handle_icon"><FullScreen /></el-icon>
             </div>
 
             <!-- 展开/收起列表 -->
