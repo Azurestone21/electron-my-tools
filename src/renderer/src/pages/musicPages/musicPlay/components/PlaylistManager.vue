@@ -57,59 +57,18 @@ const deletePlaylist = (playlist) => {
 
 // --------------------- 歌曲管理 ---------------------
 // 新增歌曲到歌单
-const addSongToPlaylist = () => {
+const addSongToPlaylist = async () => {
   if (!activeId.value) {
     ElMessage.warning('请先选择一个歌单')
     return
   }
-
-  // 创建文件选择输入
-  const input = document.createElement('input')
-  input.type = 'file'
-  input.accept = 'audio/*'
-  input.multiple = true
-
-  // 处理文件选择
-  input.onchange = (event) => {
-    const files = (event.target as HTMLInputElement).files
-
-    if (!files || files.length === 0) {
-      return
-    }
-
-    // 处理选择的文件
-    const addedSongs = []
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-      if (!file.path) {
-        continue
-      }
-      // 创建歌曲对象
-      const fileName = file.name.replace(/\.[^/.]+$/, '') // 移除文件扩展名
-      const songname = fileName?.split(' - ')?.[1]?.trim() || fileName?.trim() || '未知歌曲'
-      const songer = fileName?.split(' - ')?.[0]?.trim() || '未知'
-      const song = {
-        id: Date.now() + i,
-        songname,
-        songer,
-        songURL: file.path, // 使用文件路径或文件名
-        parentIndex: activeId.value,
-        imgSrc: '' // 可以后续添加封面图片逻辑
-      }
-
-      // 添加歌曲到歌单
-      musicStore.addSongToPlaylist(activeId.value, song)
-      addedSongs.push(song)
-    }
-
-    // 显示成功提示
-    if (addedSongs.length > 0) {
-      ElMessage.success(`成功添加 ${addedSongs.length} 首歌曲到歌单`)
-    }
-  }
-
-  // 触发文件选择
-  input.click()
+  const audioFiles = await window.musicApi.selectAudioFile()
+  audioFiles.forEach((audioFile) => {
+    musicStore.addSongToPlaylist(activeId.value, {
+      ...audioFile,
+      parentIndex: activeId.value
+    })
+  })
 }
 // 删除歌曲
 const deleteSong = (song) => {
@@ -236,7 +195,7 @@ const songContextMenuItems = computed(() => [
           @showContextMenu="(e, item) => showContextMenu(e, item, songContextMenuItems)"
         >
           <template #item="{ item, index }">
-            <div>{{ index + 1 }}. {{ item.songer }} - {{ item.songname }}</div>
+            <div>{{ index + 1 }}. {{ item.songer }} - {{ item.songName }}</div>
           </template>
         </DropList>
       </div>
