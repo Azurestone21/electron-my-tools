@@ -74,7 +74,7 @@ const changeVolume = (e) => {
 
 onMounted(() => {})
 
-useEventListener('click', (event) => changePlayProgress((event as MouseEvent).layerX), 'myProgress')
+useEventListener('click', (event) => changePlayProgress((event as MouseEvent).layerX), 'audioProgress')
 useEventListener('wheel', handleVolumeWheel, 'volumeControl')
 </script>
 
@@ -99,7 +99,7 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
             {{ secondsTimeFormat(currentTime) }}
           </div>
           <!-- 进度条 -->
-          <div id="myProgress" class="progress_bg">
+          <div id="audioProgress" class="progress_bg">
             <div
               class="progress"
               :style="{
