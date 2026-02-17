@@ -1,14 +1,12 @@
 <!-- 日程通知 -->
 <script setup lang="ts">
-const emit = defineEmits(['submitCb'])
-
-import { ref, reactive } from 'vue'
-const toolStore = useToolStore()
 import type { FormInstance, FormRules } from 'element-plus'
 import { IScheduleItem } from '@share/types/schedule'
 import { options } from './config'
-import { addMainProcessSchedules, updateMainProcessSchedules } from '@renderer/hooks/schedules/schedules'
 import { cloneDeep } from 'lodash'
+const { addSchedule, updateSchedule } = useSchedule()
+
+const emit = defineEmits(['submitCb'])
 
 const defaultFormData = {
   id: '',
@@ -83,11 +81,9 @@ const onSubmit = async () => {
       const data = cloneDeep(formData)
       if (!data.id) {
         data.id = new Date().getTime().toString()
-        toolStore.addSchedule(data)
-        addMainProcessSchedules(data)
+        addSchedule(data)
       } else {
-        toolStore.editSchedule(data)
-        updateMainProcessSchedules(data)
+        updateSchedule(data)
       }
       onClose()
     }

@@ -2,13 +2,12 @@
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 const locale = zhCn
 import AppAudio from './components/AppAudio.vue'
-import { initMainProcessSchedules } from './hooks/schedules/schedules'
-import { useMusicStore } from './store/modules/music'
 const musicStore = useMusicStore()
+const { initSchedules } = useSchedule()
 
 onMounted(async () => {
-  // 监听主进程发送的通知
-  initMainProcessSchedules()
+  // 初始化主进程的日程列表
+  initSchedules()
 })
 
 onBeforeUnmount(() => {

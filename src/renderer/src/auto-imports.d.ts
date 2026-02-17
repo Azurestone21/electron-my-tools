@@ -76,6 +76,7 @@ declare global {
   const useMusicStore: typeof import('./store/modules/music')['useMusicStore']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
+  const useSchedule: typeof import('./hooks/schedules/useSchedule')['useSchedule']
   const useSlots: typeof import('vue')['useSlots']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
   const useToolStore: typeof import('./store/modules/tool')['useToolStore']
