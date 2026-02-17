@@ -1,121 +1,55 @@
-import { onMounted } from 'vue'
-import { IPlaylist, IPlayingSong, TMusicPlayType } from '@share/types/music'
-import { handleMusicPlayApi, onHandleMusicPlayApi } from '@renderer/api/music'
+import { ref, onMounted } from 'vue'
+import { useMusicStore } from '@renderer/store/modules/music'
+import { onHandleMusicPlayApi } from '@renderer/api/music'
+import { getPlayMusic, changePlayProgress } from '@renderer/utils/music/player'
+import { handleMusicKeydown } from '@renderer/utils/music/keyboard'
 
-// 音频实例全局维护
-let myAudio: HTMLAudioElement | null = null
-
-/**
- * 音乐播放核心 Hooks
- * @param audioElement 音频 DOM 元素
- * @returns 对外暴露的状态和方法
- */
 export function useMusicPlayer() {
   const musicStore = useMusicStore()
-
-  /**
-   * 获取下一首要播放的音乐
-   * @param type 操作类型：before上一首、next下一首
-   * @param musicList 播放列表
-   * @param currentMusic 当前播放音乐
-   * @returns
-   */
-  const getPlayMusic = (
-    type: TMusicPlayType,
-    playlists: IPlaylist[],
-    currentMusic: IPlayingSong
-  ) => {
-    // 当前播放音乐所在的歌单id
-    const parentId = currentMusic.parentIndex
-    // 当前播放音乐所在的歌单索引
-    const playlistIndex = playlists.findIndex((p) => p.id + '' === parentId + '')
-    // 当前播放音乐所在的歌单的歌曲数量
-    const currntSortLength = playlists[playlistIndex]?.songs?.length
-    // 当前播放音乐的索引（歌曲索引）
-    const songIndex = playlists[playlistIndex]?.songs?.findIndex(
-      (s) => s.id + '' === currentMusic.id + ''
-    )
-    // 总歌单数量
-    const parentLength = playlists.length
-    let newIndex = songIndex
-    if (type === 'before') {
-      // 上一首
-      if (songIndex != 0) {
-        newIndex = songIndex - 1
-      }
-    } else {
-      // 下一首
-      if (songIndex < currntSortLength - 1) {
-        newIndex = songIndex + 1
-      } else if (playlistIndex < parentLength - 1) {
-        newIndex = 0
-      }
-    }
-    return playlists[playlistIndex]?.songs[newIndex]
-  }
+  const myAudio = ref<HTMLAudioElement | null>(null)
 
   // 初始化音频元素
   const initAudio = () => {
-    myAudio = document.getElementById('myAudio') as HTMLAudioElement
-    if (!myAudio) console.warn('音频元素未初始化，请传入有效的 audio DOM 元素')
+    myAudio.value = document.getElementById('myAudio') as HTMLAudioElement
+    if (!myAudio.value) console.warn('音频元素未初始化，请传入有效的 audio DOM 元素')
   }
 
-  // 播放/暂停核心方法
+  // 播放/暂停音乐
   const play = (refresh: boolean = false) => {
-    if (!myAudio) return
+    if (!myAudio.value) return
 
     if (refresh) {
-      myAudio.load()
-      myAudio.currentTime = 0
+      myAudio.value.load()
+      myAudio.value.currentTime = 0
       musicStore.setStore({
         currentTime: 0
       })
     }
 
-    if (myAudio.paused) {
-      myAudio.currentTime = musicStore.currentTime
-      myAudio.play()
+    if (myAudio.value.paused) {
+      myAudio.value.currentTime = musicStore.currentTime
+      myAudio.value.play()
     } else {
-      myAudio.pause()
+      myAudio.value.pause()
     }
 
     musicStore.setStore({
-      isPlay: !myAudio.paused
+      isPlay: !myAudio.value.paused
     })
   }
 
-  // 上一首/下一首切歌
-  const changeMusic = (type: TMusicPlayType) => {
+  // 切换音乐
+  const changeMusic = (type: 'before' | 'next') => {
     const { playlists, playingSong } = musicStore
     const song = getPlayMusic(type, playlists, playingSong)
-    if (!song) return // 无可用歌曲则返回
+    if (!song) return
     musicStore.setStore({ playingSong: song })
-    play(true) // 切歌后刷新并播放
+    play(true)
   }
 
-  // 键盘事件处理（空格/左箭头/右箭头）
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (!myAudio) return // 音频未初始化则忽略键盘事件
-    switch (e.code) {
-      case 'Space':
-        //播放/暂停
-        handleMusicPlayApi('play')
-        break
-      case 'ArrowLeft':
-        // 上一首
-        handleMusicPlayApi('before')
-        break
-      case 'ArrowRight':
-        // 下一首
-        handleMusicPlayApi('next')
-        break
-    }
-  }
-
-  // 监听主进程 IPC 音乐播放事件
+  // 监听 IPC 音乐播放事件
   const listenIPCMusicPlay = async () => {
-    // 监听音乐播放控制事件（播放/暂停/上一首/下一首）
-    await onHandleMusicPlayApi((action: TMusicPlayType) => {
+    await onHandleMusicPlayApi((action: 'play' | 'pause' | 'before' | 'next') => {
       if (action === 'play' || action === 'pause') {
         play(false)
       } else {
@@ -124,31 +58,25 @@ export function useMusicPlayer() {
     })
   }
 
-  // 改变播放时间
-  const changePlayProgress = (layerX: number) => {
-    if (!myAudio) return // 音频未初始化则忽略
-    const progressBar = document.getElementById('audioProgress') as HTMLElement
-    if (myAudio.duration) {
-      let t = Math.floor((layerX / progressBar.clientWidth) * myAudio.duration)
-      myAudio.currentTime = t
-      musicStore.setStore({
-        currentTime: t
-      })
-    }
+  // 改变播放进度
+  const handleChangePlayProgress = (layerX: number) => {
+    if (!myAudio.value) return
+    const t = changePlayProgress(layerX, myAudio.value)
+    musicStore.setStore({
+      currentTime: t
+    })
   }
 
-  // 生命周期：挂载时初始化
   onMounted(() => {
-    initAudio() // 初始化音频实例
-    listenIPCMusicPlay() // 注册 IPC 监听
+    initAudio()
+    listenIPCMusicPlay()
   })
 
-  // 对外暴露的 API
   return {
-    play, // 播放/暂停（传入 true 则刷新并重新播放）
-    playPrev: () => changeMusic('before'), // 快捷上一首
-    playNext: () => changeMusic('next'), // 快捷下一首
-    changePlayProgress, // 改变播放时间
-    handleKeyDown // 键盘事件处理
+    play,
+    playPrev: () => changeMusic('before'),
+    playNext: () => changeMusic('next'),
+    changePlayProgress: handleChangePlayProgress,
+    handleKeyDown: handleMusicKeydown
   }
 }
