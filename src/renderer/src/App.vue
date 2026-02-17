@@ -3,6 +3,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 const locale = zhCn
 import AppAudio from './components/AppAudio.vue'
 const musicStore = useMusicStore()
+import useSchedule from '@renderer/hooks/schedules/useSchedule'
 const { initSchedules } = useSchedule()
 
 onMounted(async () => {
