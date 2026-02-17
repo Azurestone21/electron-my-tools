@@ -2,6 +2,7 @@
 <script setup lang="ts">
 const toolStore = useToolStore()
 const { scheduleList } = storeToRefs(toolStore)
+import useSchedule from '@renderer/hooks/schedules/useSchedule'
 const { deleteSchedule } = useSchedule()
 
 import moment from 'moment'

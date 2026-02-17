@@ -4,6 +4,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { IScheduleItem } from '@share/types/schedule'
 import { options } from './config'
 import { cloneDeep } from 'lodash'
+import useSchedule from '@renderer/hooks/schedules/useSchedule'
 const { addSchedule, updateSchedule } = useSchedule()
 
 const emit = defineEmits(['submitCb'])
