@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useMusicStore } from '@renderer/store/modules/music'
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
 import { secondsTimeFormat } from '@share/utils/common'
-import { adjustVolume, handleVolumeWheel } from '../../../../hooks/music/volume'
+import { adjustVolume, handleVolumeWheel } from '@renderer/utils/volume'
 import { useEventListener } from '@renderer/hooks/useEventListener'
 import {
   Headset,

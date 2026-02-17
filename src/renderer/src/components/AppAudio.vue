@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia'
 import { useMusicStore } from '../store/modules/music'
 const musicStore = useMusicStore()
 const { playingSong, currentTime, playPattern } = storeToRefs(musicStore)
-import { getVolume } from '@renderer/hooks/music/volume'
+import { getVolume } from '@renderer/utils/volume'
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
 import { useEventListener } from '@renderer/hooks/useEventListener'
 import {

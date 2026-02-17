@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { parseTime } from '@share/utils/common'
-import { handleVolumeWheel } from '../../../hooks/music/volume'
+import { handleVolumeWheel } from '@renderer/utils/volume'
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
 import { useEventListener } from '@renderer/hooks/useEventListener'
 import {
