@@ -74,7 +74,6 @@ useEventListener(
       duration: myAudio.value?.duration || 0
     })
     myAudio.value.volume = getVolume()
-    myAudio.value.loop = playPattern.value === 'loop'
   },
   'myAudio'
 )
@@ -90,7 +89,7 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <audio id="myAudio" @timeupdate="timeupdate">
+    <audio id="myAudio" :loop="playPattern === 'loop'" @timeupdate="timeupdate">
       <source :src="playingSong.filePath" type="audio/mpeg" />
       您的浏览器不支持 audio 元素。
     </audio>
