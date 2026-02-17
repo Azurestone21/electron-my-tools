@@ -3,6 +3,7 @@
 const musicStore = useMusicStore()
 const { playingSong, currentTime } = storeToRefs(musicStore)
 import { parseTime } from '@share/utils/common'
+import { getLyricApi } from '@renderer/api/music'
 
 // 当前歌词
 const lyricArr = ref([])
@@ -21,7 +22,7 @@ const activityLyric = computed(() => {
 // 获取歌词
 const getLyric = async () => {
   if (playingSong.value.lyricPath) {
-    lyricArr.value = (await window.musicApi.getLyric(playingSong.value.lyricPath)) || []
+    lyricArr.value = (await getLyricApi(playingSong.value.lyricPath)) || []
   }
   if (lyricArr.value.length == 0) {
     lyricArr.value.push({

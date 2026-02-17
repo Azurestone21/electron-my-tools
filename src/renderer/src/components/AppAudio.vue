@@ -8,6 +8,12 @@ const { playingSong, currentTime, playPattern } = storeToRefs(musicStore)
 import { getVolume } from '@renderer/hooks/music/volume'
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
 import { useEventListener } from '@renderer/hooks/useEventListener'
+import {
+  getLyricApi,
+  sendLyricDataApi,
+  sendPlayStatusApi,
+  onUpdateVolumeApi
+} from '@renderer/api/music'
 const { playNext } = useMusicPlayer()
 
 let myAudio = ref<HTMLAudioElement | null>(null)
@@ -23,10 +29,10 @@ const timeupdate = (e) => {
 const getLyric = async () => {
   if (playingSong.value.lyricPath) {
     try {
-      const lyricArr = (await window.musicApi.getLyric(playingSong.value.lyricPath)) || []
+      const lyricArr = (await getLyricApi(playingSong.value.lyricPath)) || []
 
       // 发送歌词数据到桌面歌词
-      await window.musicApi.sendLyricData(
+      await sendLyricDataApi(
         JSON.parse(JSON.stringify(lyricArr)),
         Number(musicStore.currentTime),
         Boolean(musicStore.isPlay)
@@ -44,7 +50,7 @@ watchEffect(() => {
   }
   if (currentTime.value !== undefined) {
     // 发送播放状态到桌面歌词
-    window.musicApi.sendPlayStatus(currentTime.value, musicStore.isPlay)
+    sendPlayStatusApi(currentTime.value, musicStore.isPlay)
   }
 })
 
@@ -59,7 +65,7 @@ onMounted(async () => {
   // 获取音频元素
   myAudio.value = document.getElementById('myAudio') as HTMLAudioElement
   // 监听音量变化（跨窗口同步）
-  window.musicApi.onUpdateVolume((volume) => {
+  onUpdateVolumeApi((volume) => {
     musicStore.setStore({
       volume: volume
     })

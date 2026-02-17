@@ -1,5 +1,6 @@
 import { onMounted } from 'vue'
 import { IPlaylist, IPlayingSong, TMusicPlayType } from '@share/types/music'
+import { handleMusicPlayApi, onHandleMusicPlayApi } from '@renderer/api/music'
 
 // 音频实例全局维护
 let myAudio: HTMLAudioElement | null = null
@@ -98,15 +99,15 @@ export function useMusicPlayer() {
     switch (e.code) {
       case 'Space':
         //播放/暂停
-        window.musicApi.handleMusicPlay('play')
+        handleMusicPlayApi('play')
         break
       case 'ArrowLeft':
         // 上一首
-        window.musicApi.handleMusicPlay('before')
+        handleMusicPlayApi('before')
         break
       case 'ArrowRight':
         // 下一首
-        window.musicApi.handleMusicPlay('next')
+        handleMusicPlayApi('next')
         break
     }
   }
@@ -114,7 +115,7 @@ export function useMusicPlayer() {
   // 监听主进程 IPC 音乐播放事件
   const listenIPCMusicPlay = async () => {
     // 监听音乐播放控制事件（播放/暂停/上一首/下一首）
-    await window.musicApi.onHandleMusicPlay((action: TMusicPlayType) => {
+    await onHandleMusicPlayApi((action: TMusicPlayType) => {
       if (action === 'play' || action === 'pause') {
         play(false)
       } else {

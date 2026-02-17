@@ -5,6 +5,14 @@ import { parseTime } from '@share/utils/common'
 import { handleVolumeWheel } from '../../../hooks/music/volume'
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
 import { useEventListener } from '@renderer/hooks/useEventListener'
+import {
+  moveLyricDesktopWindowApi,
+  toggleLyricDesktopApi,
+  onUpdateLyricDataApi,
+  onUpdatePlayStatusApi,
+  offUpdateLyricDataApi,
+  offUpdatePlayStatusApi
+} from '@renderer/api/music'
 useMusicPlayer()
 
 // 状态管理
@@ -58,7 +66,7 @@ const handleMouseMove = async (event) => {
       y: event.clientY - startPos.value.y
     }
     lyricConfig.value.position = newPosition
-    await window.musicApi.moveLyricDesktopWindow(newPosition)
+    await moveLyricDesktopWindowApi(newPosition)
   }
 }
 
@@ -81,28 +89,28 @@ const handleResize = (event) => {
 
 // 关闭桌面歌词
 const closeLyricDesktop = async () => {
-  await window.musicApi.toggleLyricDesktop()
+  await toggleLyricDesktopApi()
 }
 
 // 监听IPC事件
 onMounted(async () => {
   // 监听歌词数据更新
-  await window.musicApi.onUpdateLyricData((data) => {
+  await onUpdateLyricDataApi((data) => {
     lyricArr.value = data.lyricData || []
     currentTime.value = data.currentTime || 0
     isPlaying.value = data.isPlaying || false
   })
 
   // 监听播放状态更新
-  window.musicApi.onUpdatePlayStatus((data) => {
+  onUpdatePlayStatusApi((data) => {
     currentTime.value = data.currentTime || 0
     isPlaying.value = data.isPlaying || false
   })
 })
 onBeforeUnmount(() => {
   // 移除IPC事件监听
-  window.musicApi.offUpdateLyricData()
-  window.musicApi.offUpdatePlayStatus()
+  offUpdateLyricDataApi()
+  offUpdatePlayStatusApi()
 })
 
 useEventListener('wheel', handleVolumeWheel, 'lyric-desktop')

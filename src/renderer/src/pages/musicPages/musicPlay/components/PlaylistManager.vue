@@ -6,6 +6,7 @@ import ContextMenu from '@renderer/components/ContextMenu.vue'
 import { ref, computed } from 'vue'
 import { useMusicStore } from '@renderer/store/modules/music'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { selectAudioFileApi } from '@renderer/api/music'
 const musicStore = useMusicStore()
 const { playlists } = storeToRefs(musicStore)
 
@@ -62,7 +63,7 @@ const addSongToPlaylist = async () => {
     ElMessage.warning('请先选择一个歌单')
     return
   }
-  const audioFiles = await window.musicApi.selectAudioFile()
+  const audioFiles = await selectAudioFileApi()
   audioFiles.forEach((audioFile) => {
     musicStore.addSongToPlaylist(activeId.value, {
       ...audioFile,

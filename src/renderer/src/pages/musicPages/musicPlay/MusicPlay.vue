@@ -5,6 +5,7 @@ const musicStore = useMusicStore()
 // const { playingSong, basePath } = storeToRefs(musicStore)
 import { useEventListener } from '@renderer/hooks/useEventListener'
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
+import { toggleLyricDesktopApi } from '@renderer/api/music'
 const { play, handleKeyDown } = useMusicPlayer()
 
 import BottomBar from './components/BottomBar.vue'
@@ -42,7 +43,7 @@ const toggleSetting = () => {
 }
 // 桌面歌词
 const toggleLyricDesktop = async () => {
-  await window.musicApi.toggleLyricDesktop()
+  await toggleLyricDesktopApi()
 }
 // 音乐库
 const isShowMusicStore = ref<boolean>(false)

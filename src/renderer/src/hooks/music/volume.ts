@@ -1,3 +1,5 @@
+import { changeVolumeApi } from '@renderer/api/music'
+
 // 获取当前音量（确保返回有效数字）
 export const getVolume = () => {
   const musicStore = useMusicStore()
@@ -19,7 +21,7 @@ export const adjustVolume = (delta: number) => {
   }
 
   // 通过IPC通知主进程更新音量
-  window.musicApi.changeVolume(newVolume)
+  changeVolumeApi(newVolume)
 }
 
 // 处理音量区域的鼠标滚轮事件
