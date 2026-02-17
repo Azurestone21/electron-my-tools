@@ -3,10 +3,10 @@ import { IScheduleItem } from '@share/types/schedule'
 import { useToolStore } from '@renderer/store/modules/tool'
 import { storeToRefs } from 'pinia'
 import {
-  initMainProcessSchedules,
-  addMainProcessSchedules,
-  updateMainProcessSchedules,
-  deleteMainProcessSchedules
+  initSchedulesApi,
+  addScheduleApi,
+  updateScheduleApi,
+  deleteScheduleApi
 } from '@renderer/api/schedule'
 import { cloneDeep } from 'lodash'
 
@@ -20,7 +20,7 @@ export default function useSchedule() {
     loading.value = true
     error.value = null
     try {
-      await initMainProcessSchedules(cloneDeep(scheduleList.value))
+      await initSchedulesApi(cloneDeep(scheduleList.value))
     } catch (err) {
       error.value = err instanceof Error ? err.message : '初始化日程失败'
       throw err
@@ -34,7 +34,7 @@ export default function useSchedule() {
     error.value = null
     try {
       toolStore.addSchedule(schedule)
-      await addMainProcessSchedules(schedule)
+      await addScheduleApi(schedule)
     } catch (err) {
       error.value = err instanceof Error ? err.message : '添加日程失败'
       throw err
@@ -48,7 +48,7 @@ export default function useSchedule() {
     error.value = null
     try {
       toolStore.editSchedule(schedule)
-      await updateMainProcessSchedules(schedule)
+      await updateScheduleApi(schedule)
     } catch (err) {
       error.value = err instanceof Error ? err.message : '更新日程失败'
       throw err
@@ -62,7 +62,7 @@ export default function useSchedule() {
     error.value = null
     try {
       toolStore.deleteSchedule(id)
-      await deleteMainProcessSchedules(id)
+      await deleteScheduleApi(id)
     } catch (err) {
       error.value = err instanceof Error ? err.message : '删除日程失败'
       throw err
