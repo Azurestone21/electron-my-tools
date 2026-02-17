@@ -136,26 +136,11 @@ export function useMusicPlayer() {
     }
   }
 
-  // 切换播放模式
-  const changePlayPattern = () => {
-    const { playPattern } = musicStore
-    musicStore.changePlayPattern()
-    if (myAudio && playPattern) {
-      myAudio.loop = playPattern === 'loop'
-    }
-  }
-
   // 生命周期：挂载时初始化
   onMounted(() => {
     initAudio() // 初始化音频实例
     listenIPCMusicPlay() // 注册 IPC 监听
   })
-
-  // 键盘事件监听
-  useEventListener('keydown', handleKeyDown, window)
-
-  // 卸载时清理副作用
-  onUnmounted(() => {})
 
   // 对外暴露的 API
   return {
