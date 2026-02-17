@@ -15,8 +15,8 @@ export const useToolStore = defineStore('tool', {
         ...obj
       }
     },
-    deleteSchedule(i) {
-      this.scheduleList.splice(i, 1)
+    deleteSchedule(id: string) {
+      this.scheduleList = this.scheduleList.filter((x) => x.id !== id)
     },
     setStore(payload) {
       let keys = Object.keys(payload)
