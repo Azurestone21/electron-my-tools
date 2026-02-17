@@ -2,7 +2,7 @@
 <script setup lang="ts">
 const musicStore = useMusicStore()
 const { playingSong, currentTime } = storeToRefs(musicStore)
-import { parseTime } from '@renderer/hooks/music/common'
+import { parseTime } from '@share/utils/common'
 
 // 当前歌词
 const lyricArr = ref([])

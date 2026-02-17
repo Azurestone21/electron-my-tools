@@ -1,6 +1,5 @@
-import { onMounted, onUnmounted } from 'vue'
-import { IPlaylist, IPlayingSong, TMusicPlayType } from '@renderer/types/music'
-import { useEventListener } from '../useEventListener'
+import { onMounted } from 'vue'
+import { IPlaylist, IPlayingSong, TMusicPlayType } from '@share/types/music'
 
 // 音频实例全局维护
 let myAudio: HTMLAudioElement | null = null

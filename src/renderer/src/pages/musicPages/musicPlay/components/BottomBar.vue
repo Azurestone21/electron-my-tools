@@ -3,7 +3,7 @@
 import { storeToRefs } from 'pinia'
 import { useMusicStore } from '@renderer/store/modules/music'
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
-import { secondsTimeFormat } from '@renderer/hooks/music/common'
+import { secondsTimeFormat } from '@share/utils/common'
 import { adjustVolume, handleVolumeWheel } from '../../../../hooks/music/volume'
 import { useEventListener } from '@renderer/hooks/useEventListener'
 import {
@@ -20,7 +20,7 @@ import {
 const musicStore = useMusicStore()
 const { playingSong, isPlay, duration, currentTime, playPattern, volume } = storeToRefs(musicStore)
 
-const { play, playNext, playPrev, changePlayProgress, changePlayPattern } = useMusicPlayer()
+const { play, playNext, playPrev, changePlayProgress } = useMusicPlayer()
 
 defineProps({
   isShowMusicList: {
@@ -113,7 +113,7 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
         </div>
         <div class="play_pattern">
           <!-- 切换播放模式 -->
-          <div class="cursor_pointer flex justify-center ml-[20px]" @click="changePlayPattern">
+          <div class="cursor_pointer flex justify-center ml-[20px]" @click="musicStore.changePlayPattern">
             <text v-if="playPattern == 'normal'">顺</text>
             <text v-if="playPattern == 'loop'">单</text>
           </div>
