@@ -148,6 +148,6 @@ export function useMusicPlayer() {
     playPrev: () => changeMusic('before'), // 快捷上一首
     playNext: () => changeMusic('next'), // 快捷下一首
     changePlayProgress, // 改变播放时间
-    changePlayPattern // 切换播放模式
+    handleKeyDown // 键盘事件处理
   }
 }
