@@ -3,8 +3,9 @@
 // const { proxy } = getCurrentInstance()
 const musicStore = useMusicStore()
 // const { playingSong, basePath } = storeToRefs(musicStore)
+import { useEventListener } from '@renderer/hooks/useEventListener'
 import { useMusicPlayer } from '@renderer/hooks/music/useMusicPlayer'
-const { play } = useMusicPlayer()
+const { play, handleKeyDown } = useMusicPlayer()
 
 import BottomBar from './components/BottomBar.vue'
 import Lyric from './components/Lyric.vue'
@@ -52,6 +53,9 @@ const toggleMusicStore = async () => {
 onMounted(() => {
   // getMusicList()
 })
+
+// 键盘事件监听
+useEventListener('keydown', handleKeyDown, window)
 
 // 监听刷新音乐列表事件
 // proxy.$eventBus.on('refreshMusic', () => {
