@@ -24,11 +24,13 @@ const getLyric = async () => {
   if (playingSong.value.lyricPath) {
     lyricArr.value = (await getLyricApi(playingSong.value.lyricPath)) || []
   }
-  if (lyricArr.value.length == 0) {
-    lyricArr.value.push({
+  if (lyricArr.value.length == 0 || !playingSong.value.lyricPath) {
+    lyricArr.value = [
+      {
       time: '00:00.00',
       lyric: '~~~~~'
-    })
+      }
+    ]
   }
 }
 
@@ -60,7 +62,7 @@ onMounted(() => {
   getLyric()
 })
 watchEffect(() => {
-  if (playingSong.value.lyricPath) {
+  if (playingSong.value.filePath) {
     getLyric()
   }
   if (currentTime.value) {
