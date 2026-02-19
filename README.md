@@ -33,36 +33,40 @@ npm run build:mac
 npm run build:linux
 ```
 
-## Effect Picture
-
-![home](./src/renderer/src/assets/effectPicture/home.png)
-
-![music](./src/renderer/src/assets/effectPicture/music.png)
-
-![tools](./src/renderer/src/assets/effectPicture/tools.png)
-
 ## Feature
 
-**全局**
+**全局设置**
 
 - [x] 主题切换（浅色模式/深色模式）
 
-**音乐相关**
+![home](./src/renderer/src/assets/effectPicture/home.png)
+![home](./src/renderer/src/assets/effectPicture/home2.png)
 
-- [x] 本地音乐播放
-- [x] 桌面歌词
-- [x] 歌单管理
+**音乐**
 
-**视频相关**
+- [x] 本地音乐播放（播放、暂停、上一曲、下一曲、调整音量、调整播放进度）
+- [x] 歌单管理（创建、删除、重命名歌单，添加、删除音乐到歌单）
+- [x] 桌面歌词（显示当前播放音乐的歌词）
 
-- [x] 视频播放列表
-- [x] 本地视频播放
+![home](./src/renderer/src/assets/effectPicture/music.png)
 
-**工具相关**
+**视频**
+
+- [x] 视频集合（添加、删除、重命名视频，添加、删除视频到集合）
+- [x] 本地视频播放（播放、暂停、上一集、下一集、调整播放进度、倍速、全屏、画中画）
+
+![home](./src/renderer/src/assets/effectPicture/video.png)
+
+**工具**
 
 - [x] 日程通知
 - [ ] 待办事项列表
 - [x] JSON数据格式化
 - [x] 图片压缩
+- [x] 颜色拾取
+
+![home](./src/renderer/src/assets/effectPicture/tools.png)
 
 **其他**
+
+待补充
