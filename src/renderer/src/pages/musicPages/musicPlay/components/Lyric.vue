@@ -27,8 +27,8 @@ const getLyric = async () => {
   if (lyricArr.value.length == 0 || !playingSong.value.lyricPath) {
     lyricArr.value = [
       {
-      time: '00:00.00',
-      lyric: '~~~~~'
+        time: '00:00.00',
+        lyric: '~~~~~'
       }
     ]
   }
@@ -46,8 +46,7 @@ const setLyricOffset = () => {
     maxOffset = ulEl.value.clientHeight - lyricEl.value.clientHeight
   }
   let index: number = activityLyric.value
-  let offset =
-    liHeight * index + liHeight / 2 - clientHeighHalf
+  let offset = liHeight * index + liHeight / 2 - clientHeighHalf
   if (offset < 0) offset = 0
   if (offset > maxOffset) offset = maxOffset
   if (ulEl.value) {
