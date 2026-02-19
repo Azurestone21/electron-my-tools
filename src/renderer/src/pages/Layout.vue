@@ -162,7 +162,6 @@ const currentTheme = computed(() => {
         align-items: center;
 
         font-size: 20px;
-        color: var(--foreground);
       }
     }
 
