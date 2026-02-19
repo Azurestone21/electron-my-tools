@@ -57,7 +57,9 @@ const currentTheme = computed(() => {
       <!-- 侧边栏 -->
       <aside class="aside">
         <div class="aside-header">
-          <div class="avatar"></div>
+          <div class="avatar">
+            <el-icon class="icon"><User /></el-icon>
+          </div>
         </div>
         <div class="menu-bar">
           <div
@@ -158,6 +160,9 @@ const currentTheme = computed(() => {
         display: flex;
         justify-content: center;
         align-items: center;
+
+        font-size: 20px;
+        color: var(--foreground);
       }
     }
 
