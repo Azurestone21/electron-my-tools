@@ -11,7 +11,7 @@ const videoExtensions = ['mp4', 'avi', 'mov', 'mkv', 'flv']
 let idCounter = 0
 const generateId = (): number => {
   const timestamp = Date.now()
-  const counter = (idCounter++ % 10000)
+  const counter = idCounter++ % 10000
   return timestamp + counter
 }
 
@@ -25,8 +25,10 @@ export const getVideoMetadata = async (filePath: string): Promise<VideoMetadata 
 
     const ffprobePath = ffprobe.path
     const ffprobeArgs = [
-      '-v', 'quiet',
-      '-print_format', 'json',
+      '-v',
+      'quiet',
+      '-print_format',
+      'json',
       '-show_format',
       '-show_streams',
       filePath
@@ -88,9 +90,7 @@ export const selectVideoFile = async (win: BrowserWindow) => {
   })
 
   if (!result.canceled && result.filePaths.length > 0) {
-    const videos = await Promise.all(
-      result.filePaths.map((filePath) => getVideoMetadata(filePath))
-    )
+    const videos = await Promise.all(result.filePaths.map((filePath) => getVideoMetadata(filePath)))
     return videos.filter((v): v is VideoMetadata => v !== null)
   }
 
