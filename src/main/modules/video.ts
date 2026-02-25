@@ -3,21 +3,9 @@ import fs from 'fs'
 import path from 'path'
 import ffprobe from '@ffprobe-installer/ffprobe'
 import { spawn } from 'child_process'
+import { VideoMetadata } from '@share/types/video'
 
 const videoExtensions = ['mp4', 'avi', 'mov', 'mkv', 'flv']
-
-interface VideoMetadata {
-  id: number
-  fileName: string
-  filePath: string
-  fileSize: number
-  duration: number
-  width: number
-  height: number
-  videoCodec: string
-  audioCodec: string
-  containerFormat: string
-}
 
 // ID 生成器 - 使用递增计数器确保唯一性
 let idCounter = 0
