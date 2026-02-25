@@ -15,7 +15,8 @@ const generateId = (): number => {
   return timestamp + counter
 }
 
-const getVideoMetadata = async (filePath: string): Promise<VideoMetadata | null> => {
+// 获取视频元数据
+export const getVideoMetadata = async (filePath: string): Promise<VideoMetadata | null> => {
   return new Promise((resolve) => {
     const stats = fs.statSync(filePath)
     const fileName = path.basename(filePath)
