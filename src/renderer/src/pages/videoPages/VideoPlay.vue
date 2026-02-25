@@ -2,17 +2,21 @@
 <script setup lang="ts">
 import MyTabs from '@renderer/components/MyTabs.vue'
 import VideoStore from '@renderer/pages/videoPages/components/VideoStore.vue'
+import VideoPlayer from '@renderer/components/VideoPlayer.vue'
 
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useEventListener } from '@renderer/hooks/useEventListener'
 import { formatDuration } from '@renderer/utils'
 import { storeToRefs } from 'pinia'
+import { useVideoStore } from '@renderer/store/modules/video'
+
 const videoStore = useVideoStore()
 const { currentTime, volume, isPlay, playingVideo, playbackRate, currentTab } =
   storeToRefs(videoStore)
 
-const videoRef = ref<HTMLVideoElement>() // 视频元素引用
-const isShowList = ref<boolean>(false) // 视频列表
-const isShowVideoStore = ref<boolean>(false) // 视频库
+const videoPlayerRef = ref<InstanceType<typeof VideoPlayer>>()
+const isShowList = ref<boolean>(false)
+const isShowVideoStore = ref<boolean>(false)
 
 // 切换视频列表
 const handleChangeTab = (tabKey: string) => {
@@ -45,29 +49,25 @@ const playNext = () => {
 }
 // 播放/暂停视频
 const play = (refresh: boolean = false) => {
-  if (!videoRef.value) return
+  if (!videoPlayerRef.value) return
+  const videoEl = videoPlayerRef.value.videoElement
 
   if (refresh) {
-    videoRef.value.load()
-    videoRef.value.currentTime = 0
     videoStore.setStore({
       currentTime: 0
     })
+    return
   }
 
-  if (videoRef.value.paused) {
-    videoRef.value.currentTime = videoStore.currentTime
-    videoRef.value.play()
-  } else {
-    videoRef.value.pause()
-  }
+  if (!videoEl) return
 
   videoStore.setStore({
-    isPlay: !videoRef.value.paused
+    isPlay: videoEl.paused
   })
 }
+
 // 切换视频
-const playVideo = (video) => {
+const playVideo = async (video) => {
   videoStore.setStore({
     playingVideo: video
   })
@@ -75,27 +75,27 @@ const playVideo = (video) => {
 }
 
 // 更新当前播放时间
-const updateCurrentTime = (e) => {
+const updateCurrentTime = (time: number) => {
   videoStore.setStore({
-    currentTime: e.target.currentTime || 0
+    currentTime: time
   })
 }
+
 // 改变播放时间
 const onPlayProgress = (e: any) => {
-  if (!videoRef.value) return // 视频未初始化则忽略
+  if (!videoPlayerRef.value) return
   const progressBar = document.getElementById('videoProgress') as HTMLElement
   if (playingVideo.value.duration) {
     let t = Math.floor((e.layerX / progressBar.clientWidth) * playingVideo.value.duration)
-    videoRef.value.currentTime = t
     videoStore.setStore({
       currentTime: t
     })
   }
 }
+
 // 改变播放进度（前10秒/后10秒）
 const changePlayProgress = (type: 'forward' | 'backward') => {
-  const newTime = videoRef.value.currentTime + (type === 'forward' ? 5 : -5)
-  videoRef.value.currentTime = newTime
+  const newTime = currentTime.value + (type === 'forward' ? 5 : -5)
   videoStore.setStore({
     currentTime: newTime
   })
@@ -124,7 +124,6 @@ const adjustVolume = (delta: number) => {
     newVolume = 0
   }
 
-  videoRef.value.volume = newVolume
   videoStore.setStore({
     volume: newVolume
   })
@@ -139,7 +138,6 @@ const handleVolumeWheel = (e: WheelEvent) => {
 // 调节音量
 const changeVolume = (e) => {
   const newVolume = Number(e.target.value)
-  videoRef.value.volume = newVolume
   videoStore.setStore({
     volume: newVolume
   })
@@ -148,7 +146,6 @@ const changeVolume = (e) => {
 // 处理倍速选择改变
 const handleSpeedChange = (e) => {
   const newRate = Number(e.target.value)
-  videoRef.value.playbackRate = newRate
   videoStore.setStore({
     playbackRate: newRate
   })
@@ -156,14 +153,14 @@ const handleSpeedChange = (e) => {
 
 // 画中画
 const pictureInPicture = () => {
-  if (!videoRef.value) return // 视频未初始化则忽略
-  videoRef.value.requestPictureInPicture()
+  if (!videoPlayerRef.value) return
+  videoPlayerRef.value.requestPictureInPicture()
 }
 
 // 切换全屏
 const fullScreen = () => {
-  if (!videoRef.value) return // 视频未初始化则忽略
-  videoRef.value.requestFullscreen()
+  if (!videoPlayerRef.value) return
+  videoPlayerRef.value.requestFullscreen()
 }
 
 // 展开/收起列表
@@ -178,7 +175,7 @@ const toggleVideoStore = () => {
 
 // 键盘事件处理（空格/左箭头/右箭头）
 const handleKeyDown = (e: KeyboardEvent) => {
-  if (!videoRef.value) return // 音频未初始化则忽略键盘事件
+  if (!videoPlayerRef.value) return
   switch (e.code) {
     case 'Space':
       //播放/暂停
@@ -195,12 +192,14 @@ const handleKeyDown = (e: KeyboardEvent) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   videoStore.initializeStore()
 })
 
 onBeforeUnmount(() => {
-  videoRef.value.pause()
+  if (videoPlayerRef.value) {
+    videoPlayerRef.value.pause()
+  }
   videoStore.setStore({
     isPlay: false
   })
@@ -213,9 +212,25 @@ useEventListener('keydown', handleKeyDown, document)
 <template>
   <div class="page">
     <div class="video_container">
-      <video ref="videoRef" class="video_player" @timeupdate="updateCurrentTime">
-        <source :src="playingVideo.filePath" type="video/mp4" />
-      </video>
+      <div class="video_player">
+        <div class="video-player-container">
+          <!-- 视频播放器 -->
+          <VideoPlayer
+            ref="videoPlayerRef"
+            :src="playingVideo.filePath"
+            v-model:currentTime="currentTime"
+            v-model:volume="volume"
+            v-model:playbackRate="playbackRate"
+            v-model:isPlay="isPlay"
+            @timeupdate="updateCurrentTime"
+            @loadedmetadata="
+              (duration) =>
+                playingVideo && videoStore.setStore({ playingVideo: { ...playingVideo, duration } })
+            "
+            @ended="playNext"
+          />
+        </div>
+      </div>
       <div class="video_play_handle">
         <div class="bar">
           <!-- 播放进度 -->
@@ -352,6 +367,12 @@ div {
     width: 100%;
     height: 0;
     flex: 1;
+  }
+
+  .video-player-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
   }
 
   .video_play_handle {
