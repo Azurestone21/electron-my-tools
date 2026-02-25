@@ -31,6 +31,7 @@ body {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px;
+  color: var(--foreground)
 }
 
 .cursor_pointer {
