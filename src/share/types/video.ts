@@ -1,6 +1,5 @@
-export interface IVideo {
+export interface VideoMetadata {
   id: number
-  parentId: number
   fileName: string
   filePath: string
   fileSize: number
@@ -10,6 +9,10 @@ export interface IVideo {
   videoCodec: string
   audioCodec: string
   containerFormat: string
+}
+
+export interface IVideo extends VideoMetadata {
+  parentId: number
 }
 
 export interface IVideoList {
