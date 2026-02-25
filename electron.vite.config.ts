@@ -7,16 +7,27 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   main: {
+    resolve: {
+      alias: {
+        '@share': resolve('src/share')
+      }
+    },
     plugins: [externalizeDepsPlugin()]
   },
   preload: {
+    resolve: {
+      alias: {
+        '@share': resolve('src/share')
+      }
+    },
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src'),
-        '@share': resolve('src/share')
+        '@share': resolve('src/share'),
+        '@components': resolve('src/renderer/src/components')
       }
     },
     plugins: [
