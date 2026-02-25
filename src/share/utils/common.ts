@@ -20,3 +20,22 @@ export function secondsTimeFormat(seconds) {
   }
   return '00:00'
 }
+
+/**
+ * 格式化文件大小
+ * @param {*} size 字节数
+ * @returns '123.45 MB'
+ */
+export const formatFileSize = (size) => {
+  if (!size) {
+    return '0 B'
+  } else if (size > 1024 * 1024 * 1024) {
+    return `${(size / 1024 / 1024 / 1024).toFixed(2)} GB`
+  } else if (size > 1024 * 1024) {
+    return `${(size / 1024 / 1024).toFixed(2)} MB`
+  } else if (size > 1024) {
+    return `${(size / 1024).toFixed(2)} KB`
+  } else {
+    return `${size.toFixed(2)} B`
+  }
+}
