@@ -61,6 +61,11 @@ const router = createRouter({
           component: () => import('@renderer/pages/toolPages/GetColor.vue')
         },
         {
+          path: '/tool/format',
+          name: '格式转换',
+          component: () => import('@renderer/pages/toolPages/FormatChange.vue')
+        },
+        {
           path: '/music',
           name: '音乐',
           component: () => import('@renderer/pages/musicPages/musicPlay/MusicPlay.vue'),

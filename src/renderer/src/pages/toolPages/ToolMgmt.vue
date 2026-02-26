@@ -54,6 +54,17 @@ const jumpTo = (e) => {
           </el-card>
         </el-col> -->
         <el-col :span="6">
+          <el-card shadow="hover" @click="jumpTo('/tool/format')">
+            <div class="tool-card">
+              <div class="tool-icon">
+                <el-icon><Refresh /></el-icon>
+              </div>
+              <div class="tool-name">格式转换</div>
+              <div class="tool-desc">文件格式转换</div>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="6">
           <el-card shadow="hover" @click="jumpTo('/tool/data')">
             <div class="tool-card">
               <div class="tool-icon">
