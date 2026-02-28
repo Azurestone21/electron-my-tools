@@ -9,6 +9,7 @@ import { useEventListener } from '@renderer/hooks/useEventListener'
 import { formatDuration } from '@renderer/utils'
 import { storeToRefs } from 'pinia'
 import { useVideoStore } from '@renderer/store/modules/video'
+import { ElMessage } from 'element-plus'
 
 const videoStore = useVideoStore()
 const { currentTime, volume, isPlay, playingVideo, playbackRate, currentTab } =
@@ -163,6 +164,24 @@ const fullScreen = () => {
   videoPlayerRef.value.requestFullscreen()
 }
 
+// 处理视频加载错误
+const handleError = (error: { message: string; fileNotFound?: boolean }) => {
+  if (error.fileNotFound) {
+    // 删除当前视频在列表中的记录
+    videoStore.removeVideoFromPlaylist(
+      playingVideo.value.parentId,
+      playingVideo.value.id
+    )
+    // 删除当前视频
+    videoStore.setStore({
+      playingVideo: {}
+    })
+    ElMessage.error(error.message)
+  } else {
+    ElMessage.error('视频加载失败')
+  }
+}
+
 // 展开/收起列表
 const toggleShowList = () => {
   isShowList.value = !isShowList.value
@@ -228,6 +247,7 @@ useEventListener('keydown', handleKeyDown, document)
                 playingVideo && videoStore.setStore({ playingVideo: { ...playingVideo, duration } })
             "
             @ended="playNext"
+            @error="handleError"
           />
         </div>
       </div>

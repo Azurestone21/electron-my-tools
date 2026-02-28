@@ -24,6 +24,7 @@ const emit = defineEmits<{
   timeupdate: [value: number]
   ended: []
   loadedmetadata: [duration: number]
+  error: [error: { message: string; fileNotFound?: boolean }]
 }>()
 
 const videoElement = ref<HTMLVideoElement>()
@@ -72,6 +73,25 @@ const handleVolumeChange = () => {
 const handleRateChange = () => {
   if (videoElement.value) {
     emit('update:playbackRate', videoElement.value.playbackRate)
+  }
+}
+
+// 视频加载错误
+const handleError = async (event: Event) => {
+  // 检查本地视频是否存在
+  if (props.src) {
+    try {
+      const exists = await window.formatHandle.checkFileExists(props.src)
+      if (!exists) {
+        emit('error', { message: '视频文件不存在', fileNotFound: true })
+      } else {
+        emit('error', { message: '视频加载失败', fileNotFound: false })
+      }
+    } catch (error) {
+      emit('error', { message: '检查视频文件失败', fileNotFound: false })
+    }
+  } else {
+    emit('error', { message: '视频路径为空', fileNotFound: false })
   }
 }
 
@@ -179,6 +199,7 @@ defineExpose({
       @ended="handleEnded"
       @volumechange="handleVolumeChange"
       @ratechange="handleRateChange"
+      @error="handleError"
     ></video>
   </div>
 </template>
