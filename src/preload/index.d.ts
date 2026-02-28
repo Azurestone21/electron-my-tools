@@ -8,5 +8,6 @@ declare global {
     musicApi: any,
     scheduleHandle: any,
     videoHandle: any,
+    formatHandle: any,
   }
 }

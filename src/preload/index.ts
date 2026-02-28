@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 import music from './modules/music'
 import schedule from './modules/schedule'
 import video from './modules/video'
+import format from './modules/format'
 
 // Custom APIs for renderer
 const api = {}
@@ -28,6 +29,8 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('scheduleHandle', schedule)
     // 暴露视频相关API
     contextBridge.exposeInMainWorld('videoHandle', video)
+    // 暴露文件格式化相关API
+    contextBridge.exposeInMainWorld('formatHandle', format)
   } catch (error) {
     console.error(error)
   }

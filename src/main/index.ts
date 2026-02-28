@@ -6,6 +6,7 @@ import { scheduleManager } from './modules/schedule'
 import { initLyricDesktopIPC } from './modules/lyricDesktop'
 import { videoManager } from './modules/video'
 import { musicManager } from './modules/music'
+import { formatFileManager } from './modules/formatFile'
 
 const login_width = 900
 const login_height = 650
@@ -85,6 +86,9 @@ function createWindow(): void {
 
   // 日程管理相关的IPC事件
   scheduleManager()
+
+  // 格式转换相关的IPC事件
+  formatFileManager(mainWindow)
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
