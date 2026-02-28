@@ -120,11 +120,6 @@ export const transcodeVideo = async (inputPath: string): Promise<string | null> 
   })
 }
 
-const isAudioCodecSupported = (codec: string): boolean => {
-  const supportedCodecs = ['aac', 'mp3', 'opus', 'vorbis', 'flac', 'alac']
-  return supportedCodecs.includes(codec.toLowerCase())
-}
-
 const transcodeTasks = new Map<string, ITranscodeTask>()
 
 // 加载保存的转码任务
@@ -200,30 +195,6 @@ const saveTaskProgress = (task: ITranscodeTask) => {
     fs.writeFileSync(progressPath, JSON.stringify(progressData, null, 2))
   } catch (error) {
     console.error('保存任务进度失败:', error)
-  }
-}
-
-const loadTaskProgress = (taskId: string): ITranscodeTask | null => {
-  try {
-    const progressPath = getTaskProgressFilePath(taskId)
-    if (fs.existsSync(progressPath)) {
-      const data = fs.readFileSync(progressPath, 'utf-8')
-      return JSON.parse(data) as ITranscodeTask
-    }
-  } catch (error) {
-    console.error('加载任务进度失败:', error)
-  }
-  return null
-}
-
-const deleteTaskProgress = (taskId: string) => {
-  try {
-    const progressPath = getTaskProgressFilePath(taskId)
-    if (fs.existsSync(progressPath)) {
-      fs.unlinkSync(progressPath)
-    }
-  } catch (error) {
-    console.error('删除任务进度失败:', error)
   }
 }
 
