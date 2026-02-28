@@ -483,35 +483,35 @@ export const deleteTranscodeTask = (taskId: string): boolean => {
 // 格式化文件管理器
 export const formatFileManager = (win: BrowserWindow) => {
   // 选择文件
-  ipcMain.handle('selectFile', async (event, fileType) => {
+  ipcMain.handle('selectFile', async (_, fileType) => {
     return selectFile(win, fileType)
   })
 
   // 转化
-  ipcMain.handle('transform', async (event, filePath) => {
+  ipcMain.handle('transform', async (_, filePath) => {
     return transcodeVideo(filePath)
   })
 
-  ipcMain.handle('startTranscodeTask', async (event, inputPath: string, config?: any) => {
+  ipcMain.handle('startTranscodeTask', async (_, inputPath: string, config?: any) => {
     const taskId = await startTranscodeTask(inputPath, config, (progress) => {
       win.webContents.send('transcode-progress', progress)
     })
     return taskId
   })
 
-  ipcMain.handle('getTranscodeTask', async (_event, taskId: string) => {
+  ipcMain.handle('getTranscodeTask', async (_, taskId: string) => {
     return getTranscodeTask(taskId)
   })
 
-  ipcMain.handle('cancelTranscodeTask', async (_event, taskId: string) => {
+  ipcMain.handle('cancelTranscodeTask', async (_, taskId: string) => {
     return cancelTranscodeTask(taskId)
   })
 
-  ipcMain.handle('deleteTranscodeTask', async (_event, taskId: string) => {
+  ipcMain.handle('deleteTranscodeTask', async (_, taskId: string) => {
     return deleteTranscodeTask(taskId)
   })
 
-  ipcMain.handle('checkFileExists', async (_event, filePath: string) => {
+  ipcMain.handle('checkFileExists', async (_, filePath: string) => {
     try {
       return fs.existsSync(filePath)
     } catch (error) {

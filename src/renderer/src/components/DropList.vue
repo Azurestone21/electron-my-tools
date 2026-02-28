@@ -7,7 +7,7 @@ export interface Props {
   lists: any[]
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emit = defineEmits(['onDrop', 'showContextMenu', 'onClick', 'onDblClick'])
 
 let draggedIndex = null

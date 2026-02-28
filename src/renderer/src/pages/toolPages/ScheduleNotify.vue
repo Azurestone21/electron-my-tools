@@ -23,12 +23,12 @@ const onOpenDrawer = () => {
   updateScheduleRef?.value?.open()
 }
 // 编辑
-const onEdit = (row, index) => {
+const onEdit = (row, _index) => {
   updateScheduleRef?.value?.setFormData(row)
   updateScheduleRef?.value?.open()
 }
 // 删除
-const onDelete = (row, index) => {
+const onDelete = (row, _index) => {
   deleteSchedule(row.id)
 }
 </script>

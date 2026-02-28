@@ -13,7 +13,7 @@ interface Props {
   menuItems: MenuItem[] // 菜单列表
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void
   (e: 'select', item: MenuItem): void

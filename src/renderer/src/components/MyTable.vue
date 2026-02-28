@@ -3,7 +3,7 @@
 import { PropType } from 'vue'
 import { ActionButton, Column } from './MyTable'
 
-const props = defineProps({
+defineProps({
   columns: {
     type: Array as PropType<Column[]>,
     default: () => []
@@ -29,7 +29,7 @@ const handleAction = async (action: ActionButton, row: any) => {
     <table>
       <tr class="table-header">
         <th
-          v-for="(column, columnIndex) in columns"
+          v-for="(column) in columns"
           :key="column.key"
           :align="column.align || 'center'"
           style="width: 200px"
@@ -39,7 +39,7 @@ const handleAction = async (action: ActionButton, row: any) => {
       </tr>
       <tr class="table-row" v-for="(item, itemIndex) in fileData" :key="item.id || itemIndex">
         <td
-          v-for="(column, columnIndex) in columns"
+          v-for="(column) in columns"
           :key="column.key"
           :align="column.align || 'center'"
           style="width: 200px"

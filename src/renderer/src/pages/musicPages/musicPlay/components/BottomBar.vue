@@ -13,8 +13,7 @@ import {
   VideoPause,
   CaretRight,
   Expand,
-  Fold,
-  Setting
+  Fold
 } from '@element-plus/icons-vue'
 
 const musicStore = useMusicStore()
@@ -74,7 +73,11 @@ const changeVolume = (e) => {
 
 onMounted(() => {})
 
-useEventListener('click', (event) => changePlayProgress((event as MouseEvent).layerX), 'audioProgress')
+useEventListener(
+  'click',
+  (event) => changePlayProgress((event as MouseEvent).layerX),
+  'audioProgress'
+)
 useEventListener('wheel', handleVolumeWheel, 'volumeControl')
 </script>
 
@@ -113,7 +116,10 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
         </div>
         <div class="play_pattern">
           <!-- 切换播放模式 -->
-          <div class="cursor_pointer flex justify-center ml-[20px]" @click="musicStore.changePlayPattern">
+          <div
+            class="cursor_pointer flex justify-center ml-[20px]"
+            @click="musicStore.changePlayPattern"
+          >
             <text v-if="playPattern == 'normal'">顺</text>
             <text v-if="playPattern == 'loop'">单</text>
           </div>
@@ -278,8 +284,8 @@ useEventListener('wheel', handleVolumeWheel, 'volumeControl')
         border-radius: 2px;
       }
       /* 定义range控件容器的样式 */
-      [type='range' i]::-webkit-slider-container {
-      }
+      // [type='range' i]::-webkit-slider-container {
+      // }
       /* 滑块样式  圆形*/
       [type='range']::-webkit-slider-thumb {
         -webkit-appearance: none;

@@ -11,7 +11,7 @@ import {
 } from '@share/config/transcodeConfig'
 import { computed } from 'vue'
 
-const props = defineProps({
+defineProps({
   open: {
     type: Boolean,
     default: false

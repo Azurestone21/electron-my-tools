@@ -77,7 +77,7 @@ const handleRateChange = () => {
 }
 
 // 视频加载错误
-const handleError = async (event: Event) => {
+const handleError = async (_: Event) => {
   // 检查本地视频是否存在
   if (props.src) {
     try {

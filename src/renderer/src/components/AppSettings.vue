@@ -1,6 +1,5 @@
 <!-- 设置 -->
 <script setup lang="ts">
-import { IAppSettings } from '@share/types/global'
 const indexStore = useIndexStore()
 const { appSettingsVisible, appSettings } = storeToRefs(indexStore)
 
@@ -10,18 +9,18 @@ defineProps({})
 const emits = defineEmits(['onCancel'])
 
 // 关闭设置弹窗
-const onClose = () => {
-  indexStore.setStore({
-    appSettingsVisible: false
-  })
-}
+// const onClose = () => {
+//   indexStore.setStore({
+//     appSettingsVisible: false
+//   })
+// }
 
 // 确保 appSettings 存在
 const form = reactive(appSettings.value)
-const onSubmit = () => {
-  indexStore.setAppSettings(form as IAppSettings)
-  onClose()
-}
+// const onSubmit = () => {
+//   indexStore.setAppSettings(form as IAppSettings)
+//   onClose()
+// }
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <!-- 音乐设置 -->
 <script setup lang="ts">
-const props = defineProps({
+defineProps({
   open: {
     type: Boolean,
     default: false

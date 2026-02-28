@@ -22,7 +22,7 @@ const formRef = ref<FormInstance>()
 let formData = reactive<IScheduleItem>({ ...defaultFormData })
 const formLabelWidth = '100px'
 
-const validateTimeData = (rule: any, value: any, callback: any) => {
+const validateTimeData = (_rule: any, value: any, callback: any) => {
   value.map((t) => {
     if (!t.time) {
       callback(new Error('请设置时间'))

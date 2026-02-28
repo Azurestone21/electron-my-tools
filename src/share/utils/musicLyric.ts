@@ -45,6 +45,7 @@ const handleMusicLyric = function (path) {
     return arr
   } catch (error) {
     console.log('handleMusicLyric ~ error:', error)
+    return []
   }
 }
 

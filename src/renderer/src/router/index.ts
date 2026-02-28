@@ -94,7 +94,7 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   // console.log("router.beforeEach", to.path)
   const indexStore = useIndexStore() // 不能写在外面，会报错
   // 记录进入的路由
@@ -110,7 +110,7 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-router.afterEach((to, from) => {
+router.afterEach((_to, _from) => {
   // const indexStore = useIndexStore() // 不能写在外面，会报错
   // console.log("router.beforeEach 页面栈", indexStore.pageStack)
 })
