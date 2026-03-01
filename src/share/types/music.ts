@@ -12,7 +12,7 @@ export interface IAudioMetadata {
 
 // 歌曲类型定义
 export interface IPlayingSong extends IAudioMetadata {
-  parentIndex: number
+  parentId: string
 }
 
 // 歌单类型定义

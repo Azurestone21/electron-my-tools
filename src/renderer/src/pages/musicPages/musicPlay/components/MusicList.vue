@@ -6,7 +6,7 @@ const emits = defineEmits(['changePlayingSong'])
 
 // 计算当前播放的专辑索引
 const activeId = computed(() => {
-  return playingSong.value.parentIndex + ''
+  return playingSong.value.parentId + ''
 })
 // 切换播放歌曲
 const changePlayingSong = (song) => {

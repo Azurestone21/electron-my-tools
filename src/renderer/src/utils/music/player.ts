@@ -6,7 +6,7 @@ export const getPlayMusic = (
   playlists: IPlaylist[],
   currentMusic: IPlayingSong
 ) => {
-  const parentId = currentMusic.parentIndex
+  const parentId = currentMusic.parentId
   const playlistIndex = playlists.findIndex((p) => p.id + '' === parentId + '')
   const currntSortLength = playlists[playlistIndex]?.songs?.length
   const songIndex = playlists[playlistIndex]?.songs?.findIndex(
