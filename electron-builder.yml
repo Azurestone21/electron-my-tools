@@ -15,6 +15,7 @@ asarUnpack:
   - resources/**
 win:
   executableName: mytoolbox
+  signAndEditExecutable: false
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
