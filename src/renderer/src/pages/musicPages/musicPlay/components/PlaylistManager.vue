@@ -51,7 +51,12 @@ const deletePlaylist = (playlist) => {
     type: 'warning'
   })
     .then(() => {
-      musicStore.deletePlaylist(playlist.id)
+      musicStore.deletePlaylist(playlist.id, () => {
+        const myAudio = document.getElementById('myAudio') as HTMLAudioElement
+        myAudio.load()
+        myAudio.currentTime = 0
+        myAudio.pause()
+      })
     })
     .catch(() => {})
 }
@@ -67,7 +72,7 @@ const addSongToPlaylist = async () => {
   audioFiles.forEach((audioFile) => {
     musicStore.addSongToPlaylist(activeId.value, {
       ...audioFile,
-      parentIndex: activeId.value
+      parentId: activeId.value
     })
   })
 }

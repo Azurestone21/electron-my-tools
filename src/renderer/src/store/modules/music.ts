@@ -77,10 +77,16 @@ export const useMusicStore = defineStore('music', {
     },
 
     // 删除歌单
-    deletePlaylist(id: string) {
+    deletePlaylist(id: string, callback: () => void) {
       const index = this.playlists.findIndex(p => p.id === id)
       if (index > -1) {
         this.playlists.splice(index, 1)
+        if (this.playingSong.parentId === id) {
+          this.playingSong = {} as IPlayingSong
+          this.currentTime = 0
+          this.isPlay = false
+          callback()
+        }
       }
     },
 

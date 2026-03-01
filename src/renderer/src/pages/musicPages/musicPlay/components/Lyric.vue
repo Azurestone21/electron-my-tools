@@ -61,7 +61,7 @@ onMounted(() => {
   getLyric()
 })
 watchEffect(() => {
-  if (playingSong.value.filePath) {
+  if (playingSong.value) {
     getLyric()
   }
   if (currentTime.value) {
