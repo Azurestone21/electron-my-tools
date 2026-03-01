@@ -74,15 +74,15 @@ const addVideoToList = async () => {
       })
       return
     }
-  const videos = await window.videoHandle.selectVideoFile()
-  if (videos && videos.length > 0) {
+    const videos = await window.videoHandle.selectVideoFile()
+    if (videos && videos.length > 0) {
       const listId = activeId.value
-    videos.forEach((video) => {
-      videoStore.addVideoToPlaylist(listId, {
-        ...video,
-        parentId: listId
+      videos.forEach((video) => {
+        videoStore.addVideoToPlaylist(listId, {
+          ...video,
+          parentId: listId
+        })
       })
-    })
     }
   } catch (error) {
     ElMessage.error('添加视频失败' + error)
