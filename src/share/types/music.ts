@@ -1,5 +1,5 @@
 export interface IAudioMetadata {
-  id: number
+  id: string
   fileName: string
   filePath: string
   songName: string
@@ -17,7 +17,7 @@ export interface IPlayingSong extends IAudioMetadata {
 
 // 歌单类型定义
 export interface IPlaylist {
-  id: number
+  id: string
   listname: string // 歌单名称
   songs: IPlayingSong[] // 歌曲列表
   createdAt: number

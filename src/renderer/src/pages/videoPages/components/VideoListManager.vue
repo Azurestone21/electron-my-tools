@@ -9,7 +9,7 @@ import { useVideoStore } from '@renderer/store/modules/video'
 const videoStore = useVideoStore()
 const { videoList } = storeToRefs(videoStore)
 
-const activeId = ref(0)
+const activeId = ref('')
 
 // 监听 videoList 变化，自动选中第一个播放列表
 watch(
@@ -22,7 +22,7 @@ watch(
   { immediate: true }
 )
 
-const editingPlaylistId = ref(0)
+const editingPlaylistId = ref('')
 const editingPlaylistName = ref('')
 const showEditPlaylistDialog = ref(false)
 const dialogMode = ref<'new' | 'edit'>('new')
@@ -44,7 +44,7 @@ const editPlaylistName = () => {
   } else {
     videoStore.createPlaylist(editingPlaylistName.value.trim())
   }
-  editingPlaylistId.value = 0
+  editingPlaylistId.value = ''
   editingPlaylistName.value = ''
   showEditPlaylistDialog.value = false
   dialogMode.value = 'new'

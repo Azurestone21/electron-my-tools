@@ -22,7 +22,7 @@ export const useMusicStore = defineStore('music', {
     // 获取所有歌单
     getAllPlaylists: (state) => state.playlists,
     // 根据ID获取歌单
-    getPlaylistById: (state) => (id: number) => {
+    getPlaylistById: (state) => (id: string) => {
       return state.playlists.find(playlist => playlist.id === id)
     }
   },
@@ -68,7 +68,7 @@ export const useMusicStore = defineStore('music', {
     },
 
     // 编辑歌单名称
-    updatePlaylistName(id: number, name: string) {
+    updatePlaylistName(id: string, name: string) {
       const playlist = this.playlists.find(p => p.id === id)
       if (playlist) {
         playlist.listname = name
@@ -77,7 +77,7 @@ export const useMusicStore = defineStore('music', {
     },
 
     // 删除歌单
-    deletePlaylist(id: number) {
+    deletePlaylist(id: string) {
       const index = this.playlists.findIndex(p => p.id === id)
       if (index > -1) {
         this.playlists.splice(index, 1)
@@ -90,7 +90,7 @@ export const useMusicStore = defineStore('music', {
     },
 
     // 添加歌曲到歌单
-    addSongToPlaylist(playlistId: number, song: any) {
+    addSongToPlaylist(playlistId: string, song: any) {
       const playlist = this.playlists.find(p => p.id === playlistId)
       if (playlist) {
         // 检查歌曲是否已存在
@@ -103,10 +103,10 @@ export const useMusicStore = defineStore('music', {
     },
 
     // 从歌单删除歌曲
-    removeSongFromPlaylist(playlistId: number, songId: number) {
+    removeSongFromPlaylist(playlistId: string, songId: string) {
       const playlistIndex = this.playlists.findIndex(p => p.id === playlistId)
       if (playlistIndex !== -1) {
-        const index = this.playlists[playlistIndex].songs.findIndex(s => s.id === Number(songId))
+        const index = this.playlists[playlistIndex].songs.findIndex(s => s.id === songId)
         if (index > -1) {
           this.playlists[playlistIndex].songs.splice(index, 1)
           this.playlists[playlistIndex].updatedAt = Date.now()
@@ -115,7 +115,7 @@ export const useMusicStore = defineStore('music', {
     },
 
     // 歌单内歌曲排序
-    sortPlaylistSongs(playlistId: number, songs: IPlayingSong[]) {
+    sortPlaylistSongs(playlistId: string, songs: IPlayingSong[]) {
       const playlist = this.playlists.find(p => p.id === playlistId)
       if (playlist) {
         playlist.songs = songs

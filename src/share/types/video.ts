@@ -1,5 +1,5 @@
 export interface VideoMetadata {
-  id: number
+  id: string
   fileName: string
   filePath: string
   fileSize: number
@@ -12,11 +12,11 @@ export interface VideoMetadata {
 }
 
 export interface IVideo extends VideoMetadata {
-  parentId: number
+  parentId: string
 }
 
 export interface IVideoList {
-  id: number
+  id: string
   name: string
   list: IVideo[]
   createdAt: number

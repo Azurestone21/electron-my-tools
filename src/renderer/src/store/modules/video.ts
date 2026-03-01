@@ -1,4 +1,5 @@
 import { IVideo, IVideoList } from '@share/types/video'
+import { generateSimpleId } from '@share/utils/common'
 import { isArray, isObject } from 'lodash'
 
 export const useVideoStore = defineStore('video', {
@@ -43,7 +44,7 @@ export const useVideoStore = defineStore('video', {
       if (!this.videoList || this.videoList.length === 0) {
         this.videoList = [
           {
-            id: 1,
+            id: '1',
             name: '默认合集',
             list: [],
             createdAt: Date.now(),
@@ -72,7 +73,7 @@ export const useVideoStore = defineStore('video', {
     // 新建歌单
     createPlaylist(name: string) {
       const newPlaylist: IVideoList = {
-        id: Date.now(),
+        id: generateSimpleId(),
         name: name,
         list: [],
         createdAt: Date.now(),
@@ -83,7 +84,7 @@ export const useVideoStore = defineStore('video', {
     },
 
     // 编辑歌单名称
-    updatePlaylistName(id: number, name: string) {
+    updatePlaylistName(id: string, name: string) {
       const playlist = this.videoList.find((p) => p.id == id)
       if (playlist) {
         playlist.name = name
@@ -92,7 +93,7 @@ export const useVideoStore = defineStore('video', {
     },
 
     // 删除视频
-    deletePlaylist(id: number) {
+    deletePlaylist(id: string) {
       const index = this.videoList.findIndex((p) => p.id == id)
       if (index > -1) {
         this.videoList.splice(index, 1)
@@ -105,7 +106,7 @@ export const useVideoStore = defineStore('video', {
     },
 
     // 添加视频到视频合集
-    addVideoToPlaylist(playlistId: number, video: IVideo) {
+    addVideoToPlaylist(playlistId: string, video: IVideo) {
       const playlist = this.videoList.find((p) => p.id == playlistId)
       if (playlist) {
         // 检查视频是否已存在
@@ -118,7 +119,7 @@ export const useVideoStore = defineStore('video', {
     },
 
     // 从歌单删除视频
-    removeVideoFromPlaylist(playlistId: number, videoId: number) {
+    removeVideoFromPlaylist(playlistId: string, videoId: string) {
       const playlistIndex = this.videoList.findIndex((p) => p.id == playlistId)
       if (playlistIndex !== -1) {
         const index = this.videoList[playlistIndex].list.findIndex((s) => s.id == videoId)
@@ -130,7 +131,7 @@ export const useVideoStore = defineStore('video', {
     },
 
     // 视频内视频排序
-    sortPlaylistVideos(playlistId: number, videos: IVideo[]) {
+    sortPlaylistVideos(playlistId: string, videos: IVideo[]) {
       const playlist = this.videoList.find((p) => p.id == playlistId)
       if (playlist) {
         playlist.list = videos

@@ -12,10 +12,10 @@ const { playlists } = storeToRefs(musicStore)
 
 // 计算歌单数量
 const playlistCount = computed(() => playlists.value.length)
-const activeId = ref(playlists.value[0]?.id || 0)
+const activeId = ref(playlists.value[0]?.id || '')
 
 // --------------------- 歌单管理 ---------------------
-const editingPlaylistId = ref(0)
+const editingPlaylistId = ref('')
 const editingPlaylistName = ref('')
 const showEditPlaylistDialog = ref(false)
 const dialogMode = ref<'new' | 'edit'>('new')
@@ -37,7 +37,7 @@ const editPlaylistName = () => {
   } else {
     musicStore.createPlaylist(editingPlaylistName.value.trim())
   }
-  editingPlaylistId.value = 0
+  editingPlaylistId.value = ''
   editingPlaylistName.value = ''
   showEditPlaylistDialog.value = false
   dialogMode.value = 'new'
