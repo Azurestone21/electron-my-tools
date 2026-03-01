@@ -16,7 +16,8 @@ export const useVideoStore = defineStore('video', {
       return state.currentTab || state.playingVideo?.parentId || 1
     },
     getCurrentList: (state) => {
-      const activeListId = state.currentTab || state.playingVideo?.parentId || state.videoList[0]?.id || null
+      const activeListId =
+        state.currentTab || state.playingVideo?.parentId || state.videoList[0]?.id || null
       if (!activeListId) {
         return []
       }
