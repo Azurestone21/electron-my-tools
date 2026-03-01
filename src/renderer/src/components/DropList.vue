@@ -61,7 +61,7 @@ const onDblClick = (item) => {
     <div
       v-for="(item, index) in lists"
       :key="item.id"
-      :class="{ item: true, active: item.id === activeId }"
+      :class="{ item: true, active: item.id == activeId }"
       draggable="true"
       @dragstart="onDragStart($event, index)"
       @dragover.prevent="onDragOver($event, index)"

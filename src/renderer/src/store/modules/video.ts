@@ -83,7 +83,7 @@ export const useVideoStore = defineStore('video', {
 
     // 编辑歌单名称
     updatePlaylistName(id: number, name: string) {
-      const playlist = this.videoList.find((p) => p.id === id)
+      const playlist = this.videoList.find((p) => p.id == id)
       if (playlist) {
         playlist.name = name
         playlist.updatedAt = Date.now()
@@ -92,7 +92,7 @@ export const useVideoStore = defineStore('video', {
 
     // 删除视频
     deletePlaylist(id: number) {
-      const index = this.videoList.findIndex((p) => p.id === id)
+      const index = this.videoList.findIndex((p) => p.id == id)
       if (index > -1) {
         this.videoList.splice(index, 1)
       }
@@ -105,7 +105,7 @@ export const useVideoStore = defineStore('video', {
 
     // 添加视频到视频合集
     addVideoToPlaylist(playlistId: number, video: IVideo) {
-      const playlist = this.videoList.find((p) => p.id === playlistId)
+      const playlist = this.videoList.find((p) => p.id == playlistId)
       if (playlist) {
         // 检查视频是否已存在
         const videoExists = playlist.list?.some((s) => s.filePath === video.filePath)
@@ -118,9 +118,9 @@ export const useVideoStore = defineStore('video', {
 
     // 从歌单删除视频
     removeVideoFromPlaylist(playlistId: number, videoId: number) {
-      const playlistIndex = this.videoList.findIndex((p) => p.id === playlistId)
+      const playlistIndex = this.videoList.findIndex((p) => p.id == playlistId)
       if (playlistIndex !== -1) {
-        const index = this.videoList[playlistIndex].list.findIndex((s) => s.id === Number(videoId))
+        const index = this.videoList[playlistIndex].list.findIndex((s) => s.id == videoId)
         if (index > -1) {
           this.videoList[playlistIndex].list.splice(index, 1)
           this.videoList[playlistIndex].updatedAt = Date.now()
@@ -130,7 +130,7 @@ export const useVideoStore = defineStore('video', {
 
     // 视频内视频排序
     sortPlaylistVideos(playlistId: number, videos: IVideo[]) {
-      const playlist = this.videoList.find((p) => p.id === playlistId)
+      const playlist = this.videoList.find((p) => p.id == playlistId)
       if (playlist) {
         playlist.list = videos
         playlist.updatedAt = Date.now()

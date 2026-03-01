@@ -82,7 +82,7 @@ const deleteVideo = (video) => {
 }
 
 const currentPlaylist = computed(
-  () => videoList.value?.find((p) => p.id === activeId.value)?.list || []
+  () => videoList.value?.find((p) => p.id == activeId.value)?.list || []
 )
 
 // ---------------------- 播放列表排序 ----------------------
