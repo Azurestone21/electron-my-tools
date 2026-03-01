@@ -3,13 +3,24 @@
 import DropList from '@renderer/components/DropList.vue'
 import ContextMenu from '@renderer/components/ContextMenu.vue'
 
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useVideoStore } from '@renderer/store/modules/video'
 const videoStore = useVideoStore()
 const { videoList } = storeToRefs(videoStore)
 
-const activeId = ref(videoList.value[0]?.id || 0)
+const activeId = ref(0)
+
+// 监听 videoList 变化，自动选中第一个播放列表
+watch(
+  videoList,
+  (newList) => {
+    if (newList.length > 0 && !activeId.value) {
+      activeId.value = newList[0].id
+    }
+  },
+  { immediate: true }
+)
 
 const editingPlaylistId = ref(0)
 const editingPlaylistName = ref('')
