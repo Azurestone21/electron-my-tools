@@ -4,6 +4,7 @@ import path from 'path'
 import ffprobe from '@ffprobe-installer/ffprobe'
 import { spawn } from 'child_process'
 import { VideoMetadata } from '@share/types/video'
+import { generateSimpleId } from '@share/utils/common'
 
 const videoExtensions = ['mp4', 'avi', 'mov', 'mkv', 'flv']
 
@@ -42,16 +43,11 @@ const getFFprobePath = (): string => {
   return defaultPath
 }
 
-// ID 生成器 - 使用递增计数器确保唯一性
-let idCounter = 0
-const generateId = (): number => {
-  const timestamp = Date.now()
-  const counter = idCounter++ % 10000
-  return timestamp + counter
-}
-
 // 获取视频元数据
-export const getVideoMetadata = async (filePath: string): Promise<VideoMetadata | null> => {
+export const getVideoMetadata = async (
+  filePath: string,
+  index: number
+): Promise<VideoMetadata | null> => {
   return new Promise((resolve) => {
     const stats = fs.statSync(filePath)
     const fileName = path.basename(filePath)
@@ -92,7 +88,7 @@ export const getVideoMetadata = async (filePath: string): Promise<VideoMetadata 
         const audioStream = streams.find((s: any) => s.codec_type === 'audio')
 
         const result: VideoMetadata = {
-          id: generateId(),
+          id: generateSimpleId(index),
           fileName,
           filePath,
           fileSize,
@@ -125,7 +121,9 @@ export const selectVideoFile = async (win: BrowserWindow) => {
   })
 
   if (!result.canceled && result.filePaths.length > 0) {
-    const videos = await Promise.all(result.filePaths.map((filePath) => getVideoMetadata(filePath)))
+    const videos = await Promise.all(
+      result.filePaths.map((filePath, index) => getVideoMetadata(filePath, index))
+    )
     return videos.filter((v): v is VideoMetadata => v !== null)
   }
 

@@ -3,16 +3,9 @@ import { handleMusicLyric } from '../../share/utils/musicLyric'
 import { IAudioMetadata } from '../../share/types/music'
 import fs from 'fs'
 import path from 'path'
+import { generateSimpleId } from '@share/utils/common'
 
 const audioExtensions = ['mp3']
-
-// ID 生成器 - 使用递增计数器确保唯一性
-let idCounter = 0
-const generateId = (): number => {
-  const timestamp = Date.now()
-  const counter = (idCounter++ % 10000)
-  return timestamp * 10000 + counter
-}
 
 export const selectAudioFile = async (win: BrowserWindow) => {
   const result = await dialog.showOpenDialog(win, {
@@ -23,7 +16,7 @@ export const selectAudioFile = async (win: BrowserWindow) => {
   if (!result.canceled && result.filePaths.length > 0) {
     const audioFiles =
       result.filePaths
-        .map((filePath) => {
+        .map((filePath, index) => {
           const stats = fs.statSync(filePath)
           const fileName = path.basename(filePath)
           const fileSize = stats.size
@@ -39,7 +32,7 @@ export const selectAudioFile = async (win: BrowserWindow) => {
             songer = '未知歌手'
           }
           return {
-            id: generateId(),
+            id: generateSimpleId(index),
             fileName,
             filePath,
             songName: songName.replace('.mp3', '').trim(),

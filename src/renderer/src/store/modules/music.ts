@@ -1,4 +1,5 @@
 import { IPlayingSong, IPlaylist } from '@share/types/music'
+import { generateSimpleId } from '@share/utils/common'
 import { isArray, isObject } from "lodash"
 
 export const useMusicStore = defineStore('music', {
@@ -56,7 +57,7 @@ export const useMusicStore = defineStore('music', {
     // 新建歌单
     createPlaylist(name: string) {
       const newPlaylist: IPlaylist = {
-        id: Date.now(),
+        id: generateSimpleId(),
         listname: name,
         songs: [],
         createdAt: Date.now(),

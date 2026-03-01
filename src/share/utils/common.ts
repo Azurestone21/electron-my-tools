@@ -39,3 +39,19 @@ export const formatFileSize = (size) => {
     return `${size.toFixed(2)} B`
   }
 }
+
+/**
+ * 生成基础唯一ID
+ * @returns {string} 唯一ID字符串
+ */
+export function generateSimpleId(index?: number) {
+  // 1. 时间戳（毫秒级，纯数字）
+  const timestamp = Date.now()
+  // 2. 6位随机数（0-9999，纯数字）
+  const random = Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(6, '0')
+  // 3. 2位循环索引（00-99，纯数字）
+  const indexStr = (index || 0).toString().padStart(2, '0')
+  return `${timestamp}${random}${indexStr}`
+}
