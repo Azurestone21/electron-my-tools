@@ -182,7 +182,7 @@ const videoContextMenuItems = computed(() => [
           @showContextMenu="(e, item) => showContextMenu(e, item, videoListContextMenuItems)"
         >
           <template #item="{ item }">
-            <div>{{ item.name }}</div>
+            <div>{{ item.name }}{{ item.list.length > 0 ? ` (${item.list.length})` : '' }}</div>
           </template>
         </DropList>
       </div>
