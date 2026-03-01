@@ -19,7 +19,13 @@ const getFFprobePath = (): string => {
     console.log('resources 路径:', resourcesPath)
 
     // 由于 asarUnpack 配置，resources 目录被解包到 app.asar.unpacked
-    const unpackedPath = path.join(resourcesPath, 'app.asar.unpacked', 'resources', 'ffprobe', 'ffprobe.exe')
+    const unpackedPath = path.join(
+      resourcesPath,
+      'app.asar.unpacked',
+      'resources',
+      'ffprobe',
+      'ffprobe.exe'
+    )
     console.log('打包后 ffprobe 路径:', unpackedPath)
 
     // 如果 app.asar.unpacked 目录下有 ffprobe，使用它
