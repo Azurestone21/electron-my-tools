@@ -54,18 +54,27 @@ const deletePlaylist = (playlist) => {
 // --------------------- 视频管理 ---------------------
 // 添加视频
 const addVideoToList = async () => {
+  try {
+    const index = videoList.value.findIndex((p) => p.id == activeId.value)
+    if (index === -1) {
+      ElMessage({
+        message: '请选择视频集合',
+        type: 'warning'
+      })
+      return
+    }
   const videos = await window.videoHandle.selectVideoFile()
   if (videos && videos.length > 0) {
-    if (videoList.value.length === 0) {
-      videoStore.createPlaylist('默认列表')
-    }
-    const listId = activeId.value || videoList.value[0].id
+      const listId = activeId.value
     videos.forEach((video) => {
       videoStore.addVideoToPlaylist(listId, {
         ...video,
         parentId: listId
       })
     })
+    }
+  } catch (error) {
+    ElMessage.error('添加视频失败' + error)
   }
 }
 // 删除视频
