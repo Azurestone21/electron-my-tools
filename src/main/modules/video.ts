@@ -1,4 +1,4 @@
-import { BrowserWindow, dialog, ipcMain } from 'electron'
+import { BrowserWindow, dialog, ipcMain, app } from 'electron'
 import fs from 'fs'
 import path from 'path'
 import ffprobe from '@ffprobe-installer/ffprobe'
@@ -6,6 +6,41 @@ import { spawn } from 'child_process'
 import { VideoMetadata } from '@share/types/video'
 
 const videoExtensions = ['mp4', 'avi', 'mov', 'mkv', 'flv']
+
+// 获取 ffprobe 可执行文件路径
+const getFFprobePath = (): string => {
+  const isPackaged = app.isPackaged
+  console.log('是否打包:', isPackaged)
+
+  if (isPackaged) {
+    // 打包后，从 resources/app.asar.unpacked 目录查找 ffprobe
+    const resourcesPath = process.resourcesPath
+    console.log('resources 路径:', resourcesPath)
+
+    // 由于 asarUnpack 配置，resources 目录被解包到 app.asar.unpacked
+    const unpackedPath = path.join(resourcesPath, 'app.asar.unpacked', 'resources', 'ffprobe', 'ffprobe.exe')
+    console.log('打包后 ffprobe 路径:', unpackedPath)
+
+    // 如果 app.asar.unpacked 目录下有 ffprobe，使用它
+    if (fs.existsSync(unpackedPath)) {
+      return unpackedPath
+    }
+
+    // 尝试直接从 resources 目录查找
+    const directPath = path.join(resourcesPath, 'ffprobe', 'ffprobe.exe')
+    console.log('直接路径:', directPath)
+    if (fs.existsSync(directPath)) {
+      return directPath
+    }
+
+    console.log('打包后未找到 ffprobe，使用 @ffprobe-installer 的路径')
+  }
+
+  // 开发环境或打包后未找到 ffprobe，使用 @ffprobe-installer 的路径
+  const defaultPath = ffprobe.path
+  console.log('默认 ffprobe 路径:', defaultPath)
+  return defaultPath
+}
 
 // ID 生成器 - 使用递增计数器确保唯一性
 let idCounter = 0
@@ -23,7 +58,7 @@ export const getVideoMetadata = async (filePath: string): Promise<VideoMetadata 
     const fileSize = stats.size
     const ext = path.extname(filePath).slice(1).toLowerCase()
 
-    const ffprobePath = ffprobe.path
+    const ffprobePath = getFFprobePath()
     const ffprobeArgs = [
       '-v',
       'quiet',
