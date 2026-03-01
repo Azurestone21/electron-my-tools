@@ -3,6 +3,8 @@ productName: mytoolbox
 directories:
   buildResources: build
 files:
+  - 'out/**/*'
+  - 'resources/**/*'
   - '!**/.vscode/*'
   - '!src/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
